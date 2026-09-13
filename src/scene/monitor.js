@@ -1,154 +1,144 @@
-// Canvas-driven monitor screen.
-// Renders a terminal home view or a software-projects pane onto a CanvasTexture
-// mapped onto the physical monitor mesh in the scene.
-//
-// Usage:
-//   const mon = buildMonitor(THREE, scene);
-//   // mode switch:
-//   mon.setMode('software');  // 'home' | 'software'
-//   // in render loop (blink cursor):
-//   mon.tick(time);
-
+// The monitor is the software layer: a canvas screen with three modes, home (terminal), apps (tiles
+// for every monitor project) and app:<slug> (one project). Click zones are resolved from the UV hit.
 import * as THREE from 'three';
-import { PROJECTS } from '../config.js';
 import { rrect, wrap } from '../ui/utils.js';
 
-export function buildMonitor(scene) {
-  // ---- mesh ----
+const W = 1024, H = 600;
+
+export function buildMonitor(scene, spec) {
   const matPlastic = new THREE.MeshStandardMaterial({ color: 0x0c0f15, metalness: 0.25, roughness: 0.45 });
   const monG = new THREE.Group();
-  monG.position.set(3.1, 0, -0.8);
-  monG.rotation.y = -0.5;
+  monG.position.set(spec.pos[0], spec.pos[1], spec.pos[2]);
+  monG.rotation.y = spec.rotY;
   scene.add(monG);
 
-  function box(w, h, d, mat, x, y, z) {
-    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat);
-    m.position.set(x, y, z);
-    m.castShadow = true; m.receiveShadow = true;
-    monG.add(m); return m;
-  }
+  const box = (w, h, d, x, y, z) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matPlastic);
+    m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; monG.add(m); return m;
+  };
+  box(1.4, 0.1, 0.5, 0, 0.05, 0);
+  box(0.18, 1.2, 0.18, 0, 0.6, 0);
+  box(3.6, 2.1, 0.14, 0, 2.3, 0);
+  // DisplayPort jack on the back of the panel.
+  const jack = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.06, 0.04), new THREE.MeshStandardMaterial({ color: 0x0a0d14, metalness: 0.4, roughness: 0.6 }));
+  jack.position.set(0.55, 1.85, -0.09); monG.add(jack);
 
-  box(1.4, 0.1, 0.5, matPlastic, 0, 0.07, 0);       // base
-  box(0.18, 1.2, 0.18, matPlastic, 0, 0.6, 0);       // stem
-  box(3.6, 2.1, 0.14, matPlastic, 0, 2.3, 0);        // bezel
-
-  // canvas texture
-  const mc = document.createElement('canvas');
-  mc.width = 1024; mc.height = 600;
-  const mctx = mc.getContext('2d');
-  const monTex = new THREE.CanvasTexture(mc);
-  monTex.colorSpace = THREE.SRGBColorSpace;
-
-  const screen = new THREE.Mesh(
-    new THREE.PlaneGeometry(3.34, 1.86),
-    new THREE.MeshBasicMaterial({ map: monTex })
-  );
+  const mc = document.createElement('canvas'); mc.width = W; mc.height = H;
+  const g = mc.getContext('2d');
+  const tex = new THREE.CanvasTexture(mc); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 4;
+  const screen = new THREE.Mesh(new THREE.PlaneGeometry(3.34, 1.86), new THREE.MeshBasicMaterial({ map: tex }));
   screen.position.set(0, 2.3, 0.075);
+  screen.userData.monitorScreen = true;
   monG.add(screen);
 
-  // world-space position + normal (used by camera dive)
   scene.updateMatrixWorld(true);
-  const screenWorld  = new THREE.Vector3();
-  screen.getWorldPosition(screenWorld);
+  const screenWorld = new THREE.Vector3(); screen.getWorldPosition(screenWorld);
   const screenNormal = new THREE.Vector3(0, 0, 1).applyQuaternion(monG.quaternion).normalize();
 
-  // ---- drawing ----
-  let monMode = 'home';
-  let blink   = true;
-  let blinkTimer = 0;
+  let projects = [];
+  let mode = 'home';
+  let appIdx = -1;
+  let blink = true, blinkTimer = 0;
+  let zones = [];
 
-  function drawMon() {
-    mctx.clearRect(0, 0, 1024, 600);
-    mctx.fillStyle = '#060c16';
-    mctx.fillRect(0, 0, 1024, 600);
-    // scan lines
-    mctx.strokeStyle = 'rgba(120,150,200,.12)';
-    mctx.lineWidth = 1;
-    for (let y = 0; y < 600; y += 4) {
-      mctx.beginPath(); mctx.moveTo(0, y); mctx.lineTo(1024, y); mctx.stroke();
-    }
-
-    if (monMode === 'home') {
-      mctx.fillStyle = '#c8893f';
-      mctx.font = "600 26px 'IBM Plex Mono',monospace";
-      mctx.fillText('lauai@guelph ~ $', 40, 60);
-
-      mctx.fillStyle = '#e9eefb';
-      mctx.font = "700 78px 'Chakra Petch',sans-serif";
-      mctx.fillText('LAUAI.ALERFI', 40, 160);
-
-      mctx.fillStyle = '#4fd8e0';
-      mctx.font = "400 27px 'IBM Plex Mono',monospace";
-      mctx.fillText('SYSTEMS ENGINEER', 42, 214);
-
-      mctx.fillStyle = '#7286a8';
-      mctx.font = "400 24px 'IBM Plex Mono',monospace";
-      [
-        '> VLSI · FPGA · EMBEDDED · CONTROL · SW',
-        '> click a part to dive the wires',
-        '> software modules render here',
-      ].forEach((l, i) => mctx.fillText(l, 42, 290 + i * 40));
-
-      mctx.fillStyle = '#a7d96a';
-      mctx.fillText(blink ? '▮' : ' ', 42, 290 + 3 * 40);
-    } else {
-      // software window
-      mctx.fillStyle = '#0a1018'; mctx.fillRect(0, 0, 1024, 600);
-      mctx.fillStyle = '#0e1726'; mctx.fillRect(0, 0, 1024, 52);
-      mctx.fillStyle = '#a7d96a';
-      mctx.font = "600 22px 'IBM Plex Mono',monospace";
-      mctx.fillText('● software/, 2 modules', 24, 34);
-      mctx.fillStyle = '#48597a';
-      mctx.font = "400 16px 'IBM Plex Mono',monospace";
-      mctx.fillText('lauai@guelph', 880, 34);
-
-      PROJECTS.software.forEach((p, i) => {
-        const y = 78 + i * 250;
-        mctx.fillStyle = 'rgba(167,217,106,.06)';
-        rrect(mctx, 24, y, 976, 232, 14); mctx.fill();
-        mctx.strokeStyle = 'rgba(167,217,106,.4)'; mctx.lineWidth = 1.5;
-        rrect(mctx, 24, y, 976, 232, 14); mctx.stroke();
-
-        mctx.fillStyle = '#a7d96a';
-        mctx.font = "600 18px 'IBM Plex Mono',monospace";
-        mctx.fillText('0' + (i + 1), 46, y + 38);
-
-        mctx.fillStyle = '#e9eefb';
-        mctx.font = "700 30px 'Chakra Petch',sans-serif";
-        mctx.fillText(p.t, 92, y + 40);
-
-        mctx.fillStyle = '#a7d96a';
-        mctx.font = "400 18px 'IBM Plex Mono',monospace";
-        mctx.fillText(p.spec, 94, y + 72);
-
-        mctx.fillStyle = '#9fb0cc';
-        mctx.font = "400 19px Inter,sans-serif";
-        wrap(mctx, p.d, 94, y + 104, 880, 28, 4);
-
-        mctx.fillStyle = '#5d6f8f';
-        mctx.font = "400 15px 'IBM Plex Mono',monospace";
-        mctx.fillText(p.tags.join('   ·   '), 94, y + 208);
-      });
-    }
-
-    monTex.needsUpdate = true;
+  function bg() {
+    g.clearRect(0, 0, W, H);
+    g.fillStyle = '#060c16'; g.fillRect(0, 0, W, H);
+    g.strokeStyle = 'rgba(120,150,200,.10)'; g.lineWidth = 1;
+    for (let y = 0; y < H; y += 4) { g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke(); }
   }
 
-  drawMon();
+  function drawHome() {
+    bg();
+    g.fillStyle = '#c8893f'; g.font = "600 26px 'IBM Plex Mono',monospace"; g.fillText('lauai@guelph ~ $', 40, 60);
+    g.fillStyle = '#e9eefb'; g.font = "700 78px 'Chakra Petch',sans-serif"; g.fillText('LAUAI.ALERFI', 40, 160);
+    g.fillStyle = '#4fd8e0'; g.font = "400 27px 'IBM Plex Mono',monospace"; g.fillText('SYSTEMS ENGINEER', 42, 214);
+    g.fillStyle = '#7286a8'; g.font = "400 24px 'IBM Plex Mono',monospace";
+    ['> software runs here, hardware sits on the desk', '> click the monitor to open the software modules', `> ${projects.length} modules installed`]
+      .forEach((l, i) => g.fillText(l, 42, 290 + i * 40));
+    g.fillStyle = '#a7d96a'; g.fillText(blink ? '▮' : ' ', 42, 410);
+  }
 
-  function setMode(m) {
-    monMode = m;
-    drawMon();
+  function drawApps() {
+    bg(); zones = [];
+    g.fillStyle = '#0e1726'; g.fillRect(0, 0, W, 52);
+    g.fillStyle = '#a7d96a'; g.font = "600 22px 'IBM Plex Mono',monospace"; g.fillText(`● software/  ·  ${projects.length} modules`, 24, 34);
+    g.fillStyle = '#48597a'; g.font = "400 16px 'IBM Plex Mono',monospace"; g.fillText('lauai@guelph', 880, 34);
+    const cols = 2, tw = (W - 72) / cols, th = 160, gap = 24;
+    projects.forEach((p, i) => {
+      const x = 24 + (i % cols) * (tw + gap), y = 72 + Math.floor(i / cols) * (th + gap);
+      if (y + th > H) return;
+      const accent = p.accent || '#a7d96a';
+      g.fillStyle = 'rgba(167,217,106,.06)'; rrect(g, x, y, tw, th, 12); g.fill();
+      g.strokeStyle = accent + '66'; g.lineWidth = 1.5; rrect(g, x, y, tw, th, 12); g.stroke();
+      g.fillStyle = accent; g.font = "600 16px 'IBM Plex Mono',monospace"; g.fillText(String(i + 1).padStart(2, '0'), x + 18, y + 32);
+      g.fillStyle = '#e9eefb'; g.font = "700 24px 'Chakra Petch',sans-serif"; wrap(g, p.title, x + 56, y + 34, tw - 76, 28, 2);
+      g.fillStyle = accent; g.font = "400 15px 'IBM Plex Mono',monospace"; wrap(g, p.spec, x + 56, y + 92, tw - 76, 20, 2);
+      g.fillStyle = '#5d6f8f'; g.font = "400 13px 'IBM Plex Mono',monospace"; g.fillText(p.tags.slice(0, 4).join('  ·  '), x + 56, y + th - 18);
+      zones.push({ x, y, w: tw, h: th, action: 'app', idx: i });
+    });
+  }
+
+  function drawApp() {
+    bg(); zones = [];
+    const p = projects[appIdx]; if (!p) { drawApps(); return; }
+    const accent = p.accent || '#a7d96a';
+    g.fillStyle = '#0e1726'; g.fillRect(0, 0, W, 52);
+    g.fillStyle = accent; g.font = "600 20px 'IBM Plex Mono',monospace"; g.fillText('◄ apps', 24, 34);
+    zones.push({ x: 0, y: 0, w: 160, h: 52, action: 'apps' });
+    g.fillStyle = '#48597a'; g.font = "400 16px 'IBM Plex Mono',monospace"; g.fillText(p.domain || '', 200, 34);
+    g.fillStyle = '#e9eefb'; g.font = "700 40px 'Chakra Petch',sans-serif"; let y = wrap(g, p.title, 32, 108, 940, 44, 2);
+    g.fillStyle = accent; g.font = "400 19px 'IBM Plex Mono',monospace"; y = wrap(g, p.spec, 32, y + 4, 940, 26, 2);
+    g.fillStyle = '#aeb9d2'; g.font = "400 19px Inter,sans-serif";
+    y += 10;
+    for (const b of p.bullets.slice(0, 4)) {
+      if (y > H - 90) break;
+      g.fillStyle = accent; g.fillText('▸', 32, y);
+      g.fillStyle = '#aeb9d2'; y = wrap(g, b, 56, y, 920, 25, 3) + 6;
+    }
+    g.fillStyle = '#5d6f8f'; g.font = "400 14px 'IBM Plex Mono',monospace"; g.fillText(p.tags.join('  ·  '), 32, H - 26);
+    if (p.links?.length) {
+      const bx = W - 232, by = H - 58, bw = 200, bh = 40;
+      g.fillStyle = accent; rrect(g, bx, by, bw, bh, 8); g.fill();
+      g.fillStyle = '#06101c'; g.font = "700 16px 'IBM Plex Mono',monospace"; g.textAlign = 'center';
+      g.fillText('OPEN ' + p.links[0].label.toUpperCase().slice(0, 14) + ' ↗', bx + bw / 2, by + 26); g.textAlign = 'left';
+      zones.push({ x: bx, y: by, w: bw, h: bh, action: 'link', url: p.links[0].url });
+    }
+  }
+
+  function draw() {
+    if (mode === 'home') drawHome(); else if (mode === 'apps') drawApps(); else drawApp();
+    tex.needsUpdate = true;
+  }
+
+  function setProjects(list) { projects = list; draw(); }
+
+  function setMode(m, idx) {
+    if (typeof m === 'string' && m.startsWith('app:')) {
+      const slug = m.slice(4);
+      appIdx = projects.findIndex((p) => p.slug === slug);
+      mode = appIdx >= 0 ? 'app' : 'apps';
+    } else if (m === 'app' && idx !== undefined) { appIdx = idx; mode = 'app'; }
+    else mode = m;
+    draw();
+  }
+
+  function handleScreenClick(uv) {
+    const x = uv.x * W, y = (1 - uv.y) * H;
+    if (mode === 'home') { setMode('apps'); return { action: 'apps' }; }
+    const z = zones.find((r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h);
+    if (!z) return null;
+    if (z.action === 'app') { setMode('app', z.idx); return { action: 'app', idx: z.idx, project: projects[z.idx] }; }
+    if (z.action === 'apps') { setMode('apps'); return { action: 'apps' }; }
+    if (z.action === 'link') { window.open(z.url, '_blank', 'noopener'); return { action: 'link', url: z.url }; }
+    return null;
   }
 
   function tick(dt) {
     blinkTimer += dt;
-    if (blinkTimer > 0.56) {
-      blinkTimer = 0;
-      blink = !blink;
-      if (monMode === 'home') drawMon();
-    }
+    if (blinkTimer > 0.56) { blinkTimer = 0; blink = !blink; if (mode === 'home') draw(); }
   }
 
-  return { monG, screen, screenWorld, screenNormal, setMode, tick };
+  draw();
+  return { monG, screen, screenWorld, screenNormal, setMode, setProjects, handleScreenClick, tick, get mode() { return mode; }, get projects() { return projects; } };
 }

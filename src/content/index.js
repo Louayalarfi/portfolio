@@ -44,3 +44,9 @@ export function groupedMounts() {
 export function unmounted() {
   return PROJECTS.filter((p) => !MOUNTS[p.slug]).map((p) => p.slug);
 }
+
+// Devices whose only projects are drafts, expected to sit empty until the copy is reviewed.
+export const DRAFT_DEVICES = new Set(
+  EXTRAS.filter((p) => p.draft && MOUNTS[p.slug]).map((p) => MOUNTS[p.slug].device)
+    .filter((dev) => !PROJECTS.some((p) => MOUNTS[p.slug]?.device === dev))
+);

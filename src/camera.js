@@ -1,28 +1,19 @@
-// Orbit, spark race and dive camera state machine.
+// Orbit, spark race and dive camera state machine over the world's mounts.
 //
-// Click a component: 'spark-race' (sparks run the cable) then 'dive' (fly the plasma tunnel)
-// then 'orbit' settled on the component with its holo cards and the tablet.
-// Esc or the Up button pops one depth. Deep links can freeze a dive at any t.
+// Click a device: 'spark-race' (sparks run its cable) then 'dive' (fly the cable's tunnel) then 'orbit'
+// settled on the device with its holo cards and the tablet. Esc or Up pops one depth.
+// Deep links freeze a dive at any t or jump to an arrival.
 
 import * as THREE from 'three';
-import { PROJECTS } from './config.js';
 
 const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 const RACE_DUR = reduce ? 0.001 : 0.55;
 
-// Until the world registries land, mount ids from mounts.js resolve to the rig regions.
-const REGION_OF = {
-  stm32_nucleo: 'embedded', stm32_disco: 'embedded', k60: 'embedded', printer: 'embedded', headset: 'embedded',
-  zedboard: 'fpga', de1soc: 'fpga', nexys: 'fpga',
-  maglev_rig: 'control',
-  cpu: 'vlsi', pc45: 'vlsi', sram130: 'vlsi',
-  monitor: 'software'
-};
-
-export function buildCamera(camera, renderer, components, holo, monitor, cables, tablet, post) {
+export function buildCamera(camera, renderer, world, holo, tablet, labels, post) {
   const BASE_FOV = camera.fov;
+  const { mounts, monitor } = world;
 
-  const home = { target: new THREE.Vector3(0.2, 2.0, 0), r: 11, theta: 0.62, phi: 1.0 };
+  const home = { target: new THREE.Vector3(0.6, 1.9, 0.2), r: 12.5, theta: 0.55, phi: 1.02 };
   const cam  = { target: home.target.clone(), r: home.r, theta: home.theta, phi: home.phi };
 
   let mode = 'orbit';
@@ -35,6 +26,7 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
 
   const warpEl = document.getElementById('warp');
   const hintEl = document.getElementById('hint');
+  const HOME_HINT = 'drag to orbit · scroll to zoom · <b>click a device to dive through its cable</b>';
 
   function applyOrbit() {
     const sp = Math.sin(cam.phi), cp = Math.cos(cam.phi);
@@ -69,53 +61,54 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
     applyOrbit();
   }
 
+  function setHint(html) { if (hintEl) { hintEl.innerHTML = html; hintEl.style.opacity = '1'; } }
+
   // Dive.
-  function startDive(region, opts = {}) {
-    const c = components[region];
-    if (!c || !c.dive) return;
-    mode = 'dive'; orbitAnim = null; focus = region;
-    dive = {
-      region, curve: c.dive, t: 0, dur: reduce ? 0.001 : 2.0,
-      fromPos: camera.position.clone(), tunnel: c.tunnel, tmat: c.tmat, center: c.center
-    };
-    c.tunnel.visible = true;
+  function startDive(mount, opts = {}) {
+    if (!mount.curve) { arrive(mount); return; }
+    mode = 'dive'; orbitAnim = null; focus = mount;
+    labels.hide();
+    dive = { mount, curve: mount.curve, t: 0, dur: reduce ? 0.001 : 2.2, fromPos: camera.position.clone(), tunnel: mount.tunnel, tmat: mount.tmat };
+    mount.tunnel.visible = true;
+    if (mount.internal) world.liftPanel(true);
     if (warpEl) warpEl.classList.add('on');
     if (opts.t != null) { dive.t = opts.t; frozen = true; updateDive(0); return; }
     if (reduce) endDive();
   }
 
-  function arrive(region) {
-    const c = components[region];
-    depth.push(region);
-    if (region === 'software') {
+  function arrive(mount) {
+    depth.push(mount.id);
+    focus = mount;
+    if (mount.kind === 'monitor') {
       const sw = monitor.screenWorld;
       deriveOrbit(sw, camera.position);
-      orbitTo({ target: sw.clone(), r: 2.7, theta: cam.theta, phi: cam.phi });
-      monitor.setMode('software');
+      const n = monitor.screenNormal;
+      orbitTo({ target: sw.clone(), r: mount.orbitR, theta: Math.atan2(n.x, n.z), phi: 1.45 });
+      monitor.setMode('apps');
+      holo.clearHolos();
     } else {
-      deriveOrbit(c.center, camera.position);
-      const n = PROJECTS[region].length;
-      orbitTo({ target: c.center.clone(), r: 3.0 + n * 0.4, theta: cam.theta, phi: Math.min(1.25, cam.phi) });
-      holo.buildProjectHolos(region);
+      deriveOrbit(mount.center, camera.position);
+      const n = mount.projects.length;
+      orbitTo({ target: mount.center.clone().add(new THREE.Vector3(0, 0.45, 0)), r: mount.orbitR + n * 0.35, theta: cam.theta, phi: Math.min(1.25, Math.max(1.0, cam.phi)) });
+      holo.buildProjectHolos(mount.projects, mount.center, mount.accent);
     }
-    if (tablet) tablet.showRegion(region);
-    if (hintEl) hintEl.innerHTML = '<b>Esc</b> or Up to pull back · click a card to open it';
-    if (hintEl) hintEl.style.opacity = '1';
+    if (tablet) tablet.showMount(mount);
+    setHint('<b>Esc</b> or Up to pull back · click a card or the tablet to read a project');
   }
 
   function endDive() {
-    const c = components[dive.region], region = dive.region;
-    c.tunnel.visible = false;
+    const mount = dive.mount;
+    mount.tunnel.visible = false;
     if (warpEl) warpEl.classList.remove('on');
     camera.fov = BASE_FOV; camera.updateProjectionMatrix();
     mode = 'orbit'; frozen = false;
     dive = null;
-    arrive(region);
+    arrive(mount);
   }
 
   function updateDive(dt) {
     if (!frozen) dive.t = Math.min(1, dive.t + dt / dive.dur);
-    const t = dive.t, pre = 0.15, curve = dive.curve;
+    const t = dive.t, pre = 0.18, curve = dive.curve;
     const look = new THREE.Vector3();
     if (t < pre) {
       const u = t / pre;
@@ -124,7 +117,7 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
     } else {
       const u = (t - pre) / (1 - pre), e = easeIO(u);
       camera.position.copy(curve.getPointAt(e));
-      look.copy(curve.getPointAt(Math.min(1, e + 0.05)));
+      look.copy(curve.getPointAt(Math.min(1, e + 0.04)));
     }
     camera.lookAt(look);
     const warp = Math.sin(t * Math.PI);
@@ -135,35 +128,35 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
   }
 
   function cancelDive() {
-    if (cables) cables.cancelSparkRace();
+    world.cablesSys.cancelSparkRace();
     if (dive) dive.tunnel.visible = false;
     dive = null; sparkRace = null; frozen = false;
-    if (mode !== 'orbit') mode = 'orbit';
+    mode = 'orbit';
     if (warpEl) warpEl.classList.remove('on');
     if (camera.fov !== BASE_FOV) { camera.fov = BASE_FOV; camera.updateProjectionMatrix(); }
   }
 
   // Spark race then dive.
-  function diveTo(region) {
-    const c = components[region]; if (!c || !c.dive) return;
+  function diveTo(mountId) {
+    const mount = typeof mountId === 'string' ? world.mountFor(mountId) : mountId;
+    if (!mount) return;
     if (mode === 'dive' || mode === 'spark-race') return;
 
-    mode = 'spark-race';
-    focus = region;
     holo.clearHolos();
     holo.introGroup.visible = false;
+    labels.hide();
     if (hintEl) hintEl.style.opacity = '0';
     if (tablet) tablet.hide();
 
-    const targetPt = c.dive.getPointAt(0.5);
-    orbitTo({ target: targetPt.clone(), r: cam.r * 0.85, theta: cam.theta, phi: Math.max(0.7, cam.phi) });
+    if (!mount.cable) { focus = mount; depth.length = 0; arrive(mount); return; }
 
-    sparkRace = { region, t: 0, dur: RACE_DUR };
-    if (cables) {
-      cables.startSparkRace(region, () => { sparkRace = null; orbitAnim = null; startDive(region); });
-    } else {
-      setTimeout(() => { sparkRace = null; startDive(region); }, 10);
-    }
+    mode = 'spark-race';
+    focus = mount;
+    const targetPt = mount.cable.curve.getPointAt(0.5);
+    orbitTo({ target: targetPt.clone(), r: Math.max(4, cam.r * 0.8), theta: cam.theta, phi: Math.max(0.7, cam.phi) }, 0.6);
+
+    sparkRace = { mount, t: 0, dur: RACE_DUR };
+    world.cablesSys.startSparkRace(mount.cable, () => { sparkRace = null; orbitAnim = null; startDive(mount); });
   }
 
   function goOverview() {
@@ -172,30 +165,30 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
     holo.clearHolos();
     monitor.setMode('home');
     holo.introGroup.visible = true;
+    world.liftPanel(false);
     if (tablet) tablet.hide();
-    if (hintEl) { hintEl.innerHTML = 'drag to orbit · scroll to zoom · <b>click a component to dive through the wires</b>'; hintEl.style.opacity = '1'; }
+    setHint(HOME_HINT);
     orbitTo(home);
   }
 
   function goUp() {
     if (mode !== 'orbit') { cancelDive(); goOverview(); return; }
-    if (depth.length) { depth.pop(); goOverview(); return; }
+    if (focus?.kind === 'monitor' && monitor.mode === 'app') { monitor.setMode('apps'); return; }
     goOverview();
   }
 
-  // Deep links: jump straight to a state and settle it so a screenshot is deterministic.
+  // Deep links: jump to a state and settle it so a screenshot is deterministic.
   function shot(link) {
     if (!link) return;
-    const region = REGION_OF[link.id] || link.id;
     if (link.kind === 'desk') { goOverview(); settleOrbit(); return; }
-    if (!components[region]) { console.warn('[camera] unknown mount', link.id); goOverview(); settleOrbit(); return; }
+    const mount = world.mountFor(link.id);
+    if (!mount) { console.warn('[camera] unknown mount', link.id); goOverview(); settleOrbit(); return; }
     holo.clearHolos(); holo.introGroup.visible = false; if (tablet) tablet.hide();
-    if (link.kind === 'dive') { focus = region; startDive(region, { t: link.t ?? 0.5 }); return; }
+    if (link.kind === 'dive') { focus = mount; if (mount.internal) { world.liftPanel(true); } startDive(mount, { t: link.t ?? 0.5 }); return; }
     if (link.kind === 'board' || link.kind === 'die') {
-      focus = region;
-      const c = components[region];
-      camera.position.copy(c.center).add(new THREE.Vector3(2.2, 1.6, 2.6));
-      arrive(region);
+      if (mount.internal) world.liftPanel(true);
+      camera.position.copy(mount.center).add(new THREE.Vector3(1.8, 1.4, 2.2));
+      arrive(mount);
       settleOrbit();
     }
   }
@@ -211,16 +204,8 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
     return ray.intersectObjects(list, false);
   }
 
-  const clickable = [];
-  function rebuildClickable() {
-    clickable.length = 0;
-    for (const k in components) {
-      components[k].group.traverse((o) => { if (o.isMesh) { o.userData.region = k; clickable.push(o); } });
-    }
-    if (monitor.monG) monitor.monG.traverse((o) => { if (o.isMesh) { o.userData.region = 'software'; clickable.push(o); } });
-  }
-  rebuildClickable();
-
+  const clickable = world.clickables;
+  const screenPick = [monitor.screen];
   let dragging = false, moved = 0, lx = 0, ly = 0, pinch = 0;
 
   canvas.addEventListener('pointerdown', (e) => {
@@ -241,6 +226,10 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
       const tabPick = tablet?.PICK?.length ? pickFrom(e.clientX, e.clientY, tablet.PICK) : [];
       const hC = hH.length || tabPick.length ? [] : pickFrom(e.clientX, e.clientY, clickable);
       canvas.style.cursor = (hH.length || hC.length || tabPick.length) ? 'pointer' : 'grab';
+      if (hC.length && !focus) {
+        const m = world.mountAt(hC[0].object);
+        if (m) labels.show(m, m.center.clone().add(new THREE.Vector3(0, 0.35, 0))); else labels.hide();
+      } else labels.hide();
     }
   });
 
@@ -256,11 +245,20 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
         if (obj.userData.tabAction === 'screen' && tabHits[0].uv) {
           const r = tablet.handleScreenClick(tabHits[0].uv);
           if (r?.action === 'project') {
-            holo.focusCard(r.region, r.idx);
-            if (r.region === 'software') monitor.setMode('software', r.idx);
+            holo.focusCard(r.idx);
+            if (focus?.kind === 'monitor') monitor.setMode('app', r.idx);
           }
           return;
         }
+      }
+    }
+
+    if (focus?.kind === 'monitor') {
+      const sh = pickFrom(e.clientX, e.clientY, screenPick);
+      if (sh.length && sh[0].uv) {
+        const r = monitor.handleScreenClick(sh[0].uv);
+        if (r?.action === 'app' && tablet) tablet.select(r.idx);
+        return;
       }
     }
 
@@ -269,20 +267,24 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
 
     if (mode === 'orbit') {
       const hC = pickFrom(e.clientX, e.clientY, clickable);
-      if (hC.length) diveTo(hC[0].object.userData.region);
+      if (hC.length) {
+        const m = world.mountAt(hC[0].object);
+        if (m && m !== focus) diveTo(m);
+        else if (m && m.kind === 'monitor' && monitor.mode === 'home') monitor.setMode('apps');
+      }
     }
   });
 
   canvas.addEventListener('wheel', (e) => {
     if (mode !== 'orbit') return;
     e.preventDefault();
-    cam.r = Math.max(2.0, Math.min(20, cam.r + e.deltaY * 0.01)); orbitAnim = null;
+    cam.r = Math.max(1.2, Math.min(24, cam.r + e.deltaY * 0.01)); orbitAnim = null;
   }, { passive: false });
 
   canvas.addEventListener('touchstart', (e) => { if (e.touches.length === 2) pinch = d2(e.touches); }, { passive: true });
   canvas.addEventListener('touchmove', (e) => {
     if (e.touches.length === 2 && mode === 'orbit') {
-      const d = d2(e.touches); cam.r = Math.max(2, Math.min(20, cam.r + (pinch - d) * 0.01)); pinch = d; orbitAnim = null;
+      const d = d2(e.touches); cam.r = Math.max(1.2, Math.min(24, cam.r + (pinch - d) * 0.01)); pinch = d; orbitAnim = null;
     }
   }, { passive: true });
   function d2(t) { return Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY); }
@@ -295,7 +297,6 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
     if (post) post.setSize(innerWidth, innerHeight);
   });
 
-  // Per frame.
   function tick(dt) {
     if (mode === 'dive' && dive) {
       updateDive(dt);
@@ -311,8 +312,8 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
       }
       applyOrbit();
     }
-    if (cables && sparkRace) cables.tickRace(dt);
-
+    if (sparkRace) world.cablesSys.tickRace(dt);
+    labels.tick();
     if (post) {
       if (mode === 'dive') post.setFocus(0.8, 0.0012);
       else post.setFocus(cam.r, focus ? 0.0007 : 0.00025);
@@ -320,8 +321,9 @@ export function buildCamera(camera, renderer, components, holo, monitor, cables,
   }
 
   applyOrbit();
+  setHint(HOME_HINT);
 
-  function state() { return { mode, focus, depth: [...depth], r: cam.r, theta: cam.theta, phi: cam.phi, diveT: dive ? dive.t : null }; }
+  function state() { return { mode, focus: focus?.id || null, depth: [...depth], r: cam.r, theta: cam.theta, phi: cam.phi, diveT: dive ? dive.t : null }; }
 
   return { diveTo, goOverview, goUp, cancelDive, orbitTo, shot, tick, state };
 }

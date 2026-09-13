@@ -4,13 +4,12 @@ import { getQuality, setQuality, nextTier } from './core/quality.js';
 import { createLoader }      from './core/loader.js';
 import { DEEP_LINK, SKIP_BOOT } from './core/deeplink.js';
 import { setupEnvironment }  from './scene/environment.js';
-import { buildRig }          from './scene/rig.js';
-import { buildMonitor }      from './scene/monitor.js';
-import { buildCables }       from './scene/cables.js';
+import { buildWorld }        from './world/world.js';
 import { buildTablet }       from './scene/tablet.js';
 import { buildHoloSystem }   from './holo.js';
 import { buildCamera }       from './camera.js';
 import { createComposer }    from './postprocessing/composer.js';
+import { createLabels }      from './ui/labels.js';
 import { startBoot }         from './ui/boot.js';
 import { makeHaloTexture, halo } from './ui/utils.js';
 
@@ -46,34 +45,18 @@ function build() {
   const haloTex = makeHaloTexture(THREE);
   const haloAt  = (hex, size, x, y, z, parent) => halo(THREE, haloTex, hex, size, x, y, z, parent, scene);
 
-  const { components } = buildRig(scene, { haloAt });
-  if (!quality.fansCastShadow) {
-    for (const k in components) {
-      const c = components[k];
-      (c.fans || (c.fan ? [c.fan] : [])).forEach((f) => f.traverse((o) => { o.castShadow = false; }));
-    }
-  }
+  const world = buildWorld(scene, { quality, haloAt, haloTex, loader });
+  if (!quality.fansCastShadow) world.rig.animated.fans.forEach((f) => f.pivot.traverse((o) => { o.castShadow = false; }));
 
   const pCyan = new THREE.PointLight(0x4fd8e0, 7, 8, 2); pCyan.position.set(-2.6, 2.95, 0.5); scene.add(pCyan);
   const pMag  = new THREE.PointLight(0xe7609f, 6, 8, 2); pMag.position.set(-2.35, 1.55, 0.7); scene.add(pMag);
-  const pAmb  = new THREE.PointLight(0xf0a830, 3, 5, 2); pAmb.position.set(1.5, 1.5, 1.7); scene.add(pAmb);
+  const pAmb  = new THREE.PointLight(0xf0a830, 3, 6, 2); pAmb.position.set(1.2, 1.4, 2.2); scene.add(pAmb);
 
-  [[-2.2, 0, 4.4, 3.0], [1.5, 1.7, 2.2, 1.8], [2.9, 0.95, 2.0, 1.6], [3.1, -0.8, 3.6, 2.4]].forEach(([x, z, sx, sz]) => {
-    const cc = document.createElement('canvas'); cc.width = cc.height = 128;
-    const g = cc.getContext('2d');
-    const rg = g.createRadialGradient(64, 64, 4, 64, 64, 62);
-    rg.addColorStop(0, 'rgba(0,0,0,.65)'); rg.addColorStop(1, 'rgba(0,0,0,0)');
-    g.fillStyle = rg; g.fillRect(0, 0, 128, 128);
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(sx, sz), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cc), transparent: true, depthWrite: false }));
-    m.rotation.x = -Math.PI / 2; m.position.set(x, 0.012, z); scene.add(m);
-  });
-
-  const monitor   = buildMonitor(scene);
-  const holoSys   = buildHoloSystem(scene, camera, components, haloTex, loader);
-  const tablet    = buildTablet(scene, camera);
-  const cablesSys = buildCables(scene, components, monitor.screenWorld, monitor.screenNormal, haloTex, quality.plasmaOctaves);
-  const post      = createComposer(renderer, scene, camera, quality);
-  const cam       = buildCamera(camera, renderer, components, holoSys, monitor, cablesSys, tablet, post);
+  const holoSys = buildHoloSystem(scene, camera, haloTex, loader);
+  const tablet  = buildTablet(scene, camera);
+  const labels  = createLabels(camera);
+  const post    = createComposer(renderer, scene, camera, quality);
+  const cam     = buildCamera(camera, renderer, world, holoSys, tablet, labels, post);
 
   document.getElementById('overview').addEventListener('click', () => cam.goOverview());
   document.getElementById('reboot').addEventListener('click',   () => cam.goOverview());
@@ -96,26 +79,16 @@ function build() {
   let running = false;
 
   function frame() {
-    const dt   = Math.min(clock.getDelta(), 0.05);
+    const dt   = Math.min(clock.getDelta(), 0.1);
     const time = clock.getElapsedTime();
-
     cam.tick(dt);
-    monitor.tick(dt);
-    cablesSys.animateCables(time);
+    world.tick(dt, time);
+    world.monitor.tick(dt);
+    world.cablesSys.animateCables(time);
     tablet.tick(dt, camera);
-
     pCyan.intensity = 6.0 + 1.5 * Math.sin(time * 1.5);
     pMag.intensity  = 5.0 + 1.2 * Math.cos(time * 1.2);
     pAmb.intensity  = 2.5 + 0.8 * Math.sin(time * 0.9 + 1);
-
-    if (components.vlsi?.fan)  components.vlsi.fan.rotation.y = time * 5;
-    if (components.fpga?.fans) components.fpga.fans.forEach((f, i) => (f.rotation.y = time * (i ? -7 : 7)));
-    if (components.control?.lev) {
-      components.control.lev.position.y = 0.62 + Math.sin(time * 1.7) * 0.07;
-      components.control.lev.rotation.y = time * 0.7;
-      components.control.lev.rotation.x = time * 0.4;
-    }
-
     holoSys.animateHolos(time);
     if (post) post.render(); else renderer.render(scene, camera);
     if (running) requestAnimationFrame(frame);
@@ -128,8 +101,10 @@ function build() {
     requestAnimationFrame(frame);
   }
 
-  const app = { renderer, scene, camera, quality, loader, env, components, cam, monitor, holo: holoSys, tablet, post, start, frame };
+  const app = { renderer, scene, camera, quality, loader, env, world, cam, holo: holoSys, tablet, post, start, frame };
   window.__app = app;
+  window.__world = world;
+  if (world.unresolved.length) console.warn('[world] unresolved:', world.unresolved);
   return app;
 }
 
@@ -142,9 +117,7 @@ function build() {
       skip: SKIP_BOOT,
       onEnter: () => {
         app.start();
-        if (DEEP_LINK) {
-          app.loader.whenIdle().then(() => { app.cam.shot(DEEP_LINK); app.frame(); });
-        }
+        if (DEEP_LINK) app.loader.whenIdle().then(() => { app.cam.shot(DEEP_LINK); app.frame(); });
       }
     });
   } catch (e) {

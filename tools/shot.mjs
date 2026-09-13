@@ -21,4 +21,16 @@ await page.screenshot({ path: out });
 const gl = await page.evaluate(() => { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); });
 console.log(`saved ${out}  webgl:${gl}  errors:${errors.length}`);
 for (const e of errors.slice(0, 8)) console.log("  " + e);
+// The world report: every mount with its port, cable and project count, plus anything unresolved.
+const report = await page.evaluate(() => {
+  const w = window.__world; if (!w) return null;
+  const r = w.report();
+  const s = window.__app?.cam?.state?.();
+  return { rows: r.mounts, unresolved: r.unresolved, state: s };
+}).catch(() => null);
+if (report) {
+  for (const m of report.rows) console.log(`  mount ${m.mount.padEnd(14)} ${m.kind.padEnd(7)} ${m.port.padEnd(16)} ${m.cable.padEnd(6)} ${m.device.padEnd(12)} projects:${m.projects} len:${m.cableLen}`);
+  console.log(`  unresolved: ${report.unresolved.length ? report.unresolved.join("; ") : "none"}`);
+  if (report.state) console.log(`  camera: ${JSON.stringify(report.state)}`);
+}
 await browser.close();
