@@ -103,7 +103,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
   function focusBlock(block) {
     if (!block || !focus) return;
     orbitTo({ target: block.center.clone().add(new THREE.Vector3(0, 1.5, 0)), r: block.orbitR, theta: cam.theta, phi: 0.95 }, 0.8);
-    holo.buildProjectHolos([block.project], block.center.clone().add(new THREE.Vector3(0, 3.2, 0)), focus.accent, 3.2);
+    holo.buildProjectHolos([block.project], block.center.clone().add(new THREE.Vector3(0, 1.6, 0)), focus.accent, 2.4);
     if (tablet) tablet.select(block.idx);
     setHint(`<b>${block.label || block.project.title}</b> · Esc or Up to pull back`);
   }
