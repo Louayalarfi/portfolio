@@ -197,7 +197,7 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
 
   function mountFor(id) {
     if (mounts[id]) return mounts[id];
-    return Object.values(mounts).find((m) => m.device.id === id || m.chip === id) || null;
+    return Object.values(mounts).find((m) => m.device.id === id || m.chip === id || m.blocks?.[id]) || null;
   }
 
   // Side panel lift and the small idle animations.
@@ -207,7 +207,7 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
 
   function tick(dt, time) {
     side.position.y += (sideTarget - side.position.y) * Math.min(1, dt * 2.5);
-    if (die?.tick) die.tick(time);
+    if (die?.tick) die.tick(time * 1000);
     for (const f of rig.animated.fans) f.pivot.rotation.y = time * f.speed;
     const ball = devices.maglev_rig?.group.userData.ball;
     if (ball) { ball.position.y = 0.45 + Math.sin(time * 1.7) * 0.03; }

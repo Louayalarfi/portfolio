@@ -23,11 +23,12 @@ if (+w < 700) {
 const errors = [];
 page.on("pageerror", (e) => errors.push("pageerror: " + e.message));
 page.on("console", (m) => { if (m.type() === "error") errors.push("console: " + m.text()); });
-await page.goto(url, { waitUntil: "load", timeout: 90000 });
+// A page that redirects during load (the phone gate) can leave goto waiting, so a timeout is not fatal.
+await page.goto(url, { waitUntil: "load", timeout: 45000 }).catch((e) => console.log("goto: " + e.message.split("\n")[0]));
 await new Promise((r) => setTimeout(r, +waitMs));
 await page.screenshot({ path: out });
 const gl = await page.evaluate(() => { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); });
-console.log(`saved ${out}  webgl:${gl}  errors:${errors.length}`);
+console.log(`saved ${out}  webgl:${gl}  errors:${errors.length}  url:${page.url()}`);
 for (const e of errors.slice(0, 8)) console.log("  " + e);
 // The world report: every mount with its port, cable and project count, plus anything unresolved.
 const report = await page.evaluate(() => {

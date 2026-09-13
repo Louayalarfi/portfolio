@@ -28,12 +28,26 @@ function srgb(tex) {
   return tex;
 }
 
-function schematicInvert(data) {
-  for (let i = 0; i < data.length; i += 4) {
+function schematicInvert(data, w, h) {
+  const lum = new Uint8ClampedArray(w * h);
+  for (let i = 0, p = 0; i < data.length; i += 4, p++) {
     const l = 255 - (0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]);
-    const v = Math.min(255, Math.max(0, (l - 12) * 2.2));
-    data[i] = data[i + 1] = data[i + 2] = v;
-    data[i + 3] = 255;
+    lum[p] = (l - 52) * 3.4;
+  }
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+      let m = 0;
+      for (let dy = -1; dy <= 1; dy++) {
+        const yy = y + dy; if (yy < 0 || yy >= h) continue;
+        for (let dx = -1; dx <= 1; dx++) {
+          const xx = x + dx; if (xx < 0 || xx >= w) continue;
+          const v = lum[yy * w + xx]; if (v > m) m = v;
+        }
+      }
+      const i = (y * w + x) * 4;
+      data[i] = data[i + 1] = data[i + 2] = m;
+      data[i + 3] = 255;
+    }
   }
 }
 
@@ -75,7 +89,7 @@ function makeProcessedLoader(loader) {
       const ctx = c.getContext('2d');
       ctx.drawImage(img, 0, 0);
       const id = ctx.getImageData(0, 0, c.width, c.height);
-      process(id.data);
+      process(id.data, c.width, c.height);
       ctx.putImageData(id, 0, 0);
       after?.(ctx, c.width, c.height);
       const tex = srgb(new THREE.CanvasTexture(c));
@@ -158,7 +172,10 @@ function labelPlane(title, sub, accent, width) {
     ctx.font = '700 84px "Chakra Petch", "Segoe UI", sans-serif';
     ctx.fillText(title, 80, 110);
     ctx.fillStyle = '#d6e6f0';
-    ctx.font = '400 38px "IBM Plex Mono", Consolas, monospace';
+    let px = 38;
+    ctx.font = `400 ${px}px "IBM Plex Mono", Consolas, monospace`;
+    const wide = ctx.measureText(sub).width;
+    if (wide > 900) { px = Math.floor(px * 900 / wide); ctx.font = `400 ${px}px "IBM Plex Mono", Consolas, monospace`; }
     ctx.fillText(sub, 82, 205);
     tex.needsUpdate = true;
   };
@@ -210,12 +227,15 @@ function buildCore(load, quality, group) {
   const body = slab(W, H, D, 0x0b1218);
   core.add(body);
   const topMat = new THREE.MeshStandardMaterial({
-    color: 0x0d1a20, roughness: 0.5, metalness: 0.3,
-    emissive: new THREE.Color(CYAN), emissiveIntensity: 1.6
+    color: 0x06090c, roughness: 0.9, metalness: 0,
+    emissive: new THREE.Color(CYAN), emissiveIntensity: 1.8
   });
+  const TOP_REPEAT = 0.62, TOP_OFF = [0.2, 0.1];
+  let carve = null;
   load(IMG.top, {
     process: schematicInvert,
-    setup: (t) => { t.repeat.set(0.62, 0.62); t.offset.set(0.2, 0.1); },
+    after: (ctx, w, h) => carve?.(ctx.getImageData(0, 0, w, h).data, w, h),
+    setup: (t) => { t.repeat.set(TOP_REPEAT, TOP_REPEAT); t.offset.set(TOP_OFF[0], TOP_OFF[1]); },
     apply: applyMaps(topMat)
   });
   const top = flatPlane(W - 0.3, D - 0.3, topMat);
@@ -233,8 +253,8 @@ function buildCore(load, quality, group) {
     b.position.set(s.x, H + SH / 2, s.z);
     core.add(b);
     const dm = new THREE.MeshStandardMaterial({
-      color: 0x0d1a20, roughness: 0.5, metalness: 0.3,
-      emissive: new THREE.Color(CYAN), emissiveIntensity: 1.7
+      color: 0x06090c, roughness: 0.9, metalness: 0,
+      emissive: new THREE.Color(CYAN), emissiveIntensity: 2.0
     });
     load(s.url, {
       process: schematicInvert,
@@ -251,11 +271,12 @@ function buildCore(load, quality, group) {
     const p = flatPlane(s.w - 0.16, s.d - 0.16, dm);
     p.position.set(s.x, H + SH + 0.002, s.z);
     core.add(p);
-    const edge = new THREE.Mesh(
-      new THREE.BoxGeometry(s.w + 0.06, 0.02, s.d + 0.06),
-      new THREE.MeshBasicMaterial({ color: CYAN, transparent: true, opacity: 0.35 })
+    const edge = new THREE.LineSegments(
+      new THREE.EdgesGeometry(new THREE.PlaneGeometry(s.w, s.d)),
+      new THREE.LineBasicMaterial({ color: CYAN, transparent: true, opacity: 0.6 })
     );
-    edge.position.set(s.x, H + SH + 0.01, s.z);
+    edge.rotation.x = -Math.PI / 2;
+    edge.position.set(s.x, H + SH + 0.004, s.z);
     core.add(edge);
   }
 
@@ -270,6 +291,7 @@ function buildCore(load, quality, group) {
   const pos = new THREE.Vector3(), scl = new THREE.Vector3(), quat = new THREE.Quaternion();
   const inside = (x, z) => subs.some((s) => Math.abs(x - s.x) < s.w / 2 + 0.12 && Math.abs(z - s.z) < s.d / 2 + 0.12);
   let placed = 0, guard = 0;
+  const spots = [];
   while (placed < count && guard++ < count * 20) {
     const row = Math.floor(r() * 70);
     const z = -D / 2 + 0.3 + row * ((D - 0.6) / 69);
@@ -281,10 +303,30 @@ function buildCore(load, quality, group) {
     pos.set(x, H + h / 2, z);
     m4.compose(pos, quat, scl);
     cells.setMatrixAt(placed++, m4);
+    spots.push(x, z);
   }
   cells.count = placed;
   cells.instanceMatrix.needsUpdate = true;
   core.add(cells);
+  carve = (data, w, h) => {
+    const pw = W - 0.3, pd = D - 0.3;
+    const zero = new THREE.Matrix4().makeScale(0, 0, 0);
+    for (let i = 0; i < placed; i++) {
+      const x = spots[i * 2], z = spots[i * 2 + 1];
+      const tu = TOP_OFF[0] + TOP_REPEAT * ((x + pw / 2) / pw);
+      const tv = TOP_OFF[1] + TOP_REPEAT * (1 - (z + pd / 2) / pd);
+      const px = Math.min(w - 1, Math.max(0, Math.round(tu * w)));
+      const py = Math.min(h - 1, Math.max(0, Math.round((1 - tv) * h)));
+      let hit = false;
+      for (let dy = -3; dy <= 3 && !hit; dy++) for (let dx = -3; dx <= 3; dx++) {
+        const xx = px + dx, yy = py + dy;
+        if (xx < 0 || yy < 0 || xx >= w || yy >= h) continue;
+        if (data[(yy * w + xx) * 4] > 60) { hit = true; break; }
+      }
+      if (hit) cells.setMatrixAt(i, zero);
+    }
+    cells.instanceMatrix.needsUpdate = true;
+  };
 
   const y = H + SH + 0.16;
   const routes = [
@@ -431,7 +473,7 @@ export function buildDie({ quality, loader } = {}) {
     const t = (time || 0) * 0.001;
     const dt = last ? Math.min(0.1, t - last) : 0;
     last = t;
-    core.topMat.emissiveIntensity = 1.6 + 0.35 * Math.sin(t * 2.2);
+    core.topMat.emissiveIntensity = 1.8 + 0.35 * Math.sin(t * 2.2);
     for (const s of core.sparks) {
       s.t = (s.t + dt * s.speed * s.dir + 1) % 1;
       s.path.getPointAt(s.t, s.sp.position);

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>die preview</title>
+  <link rel="icon" href="data:," />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@700&family=IBM+Plex+Mono&display=swap" rel="stylesheet" />
+  <style>html,body{margin:0;height:100%;background:#02030a;overflow:hidden;font-family:monospace;color:#9fb3c8}#info{position:fixed;top:8px;left:10px;font-size:12px;white-space:pre}</style>
+</head>
+<body>
+  <div id="info"></div>
+  <script type="module">
+    // Dev page: /die.html?chip=pc45|sram130|all
+    import * as THREE from 'three';
+    import { buildDie } from '/src/world/die.js';
+    const p = new URLSearchParams(location.search);
+    const chip = p.get('chip') || 'all';
+    const tier = p.get('q') || 'high';
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight); renderer.setPixelRatio(1);
+    renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.1;
+    document.body.appendChild(renderer.domElement);
+    const scene = new THREE.Scene(); scene.background = new THREE.Color(0x02030a);
+    scene.add(new THREE.HemisphereLight(0x8fa6c4, 0x05070c, 0.7));
+    const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(12, 24, 14); scene.add(key);
+    const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.05, 400);
+
+    const die = buildDie({ quality: { tier, plasmaOctaves: 5 } });
+    scene.add(die.group);
+    window.__die = die;
+
+    const block = die.blocks[chip];
+    if (block) {
+      const d = block.orbitR * Math.SQRT1_2;
+      camera.position.set(block.center.x, block.center.y + d, block.center.z + d);
+      camera.lookAt(block.center);
+      document.getElementById('info').textContent = `${chip}\n${block.label}\nentry ${block.entry.toArray().map((v) => v.toFixed(1)).join(', ')}  orbitR ${block.orbitR}`;
+    } else {
+      camera.position.set(6, 30, 34);
+      camera.lookAt(0, 0, 0);
+      document.getElementById('info').textContent = 'all: die overview';
+    }
+
+    addEventListener('resize', () => {
+      camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+      renderer.setSize(innerWidth, innerHeight);
+    });
+    function frame(time) {
+      die.tick(time);
+      renderer.render(scene, camera);
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  </script>
+</body>
+</html>
