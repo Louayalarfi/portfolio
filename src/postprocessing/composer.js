@@ -27,7 +27,7 @@ export function createComposer(renderer, scene, camera, quality) {
   }
 
   if (quality.passes.includes('bloom')) {
-    bloom = new UnrealBloomPass(new THREE.Vector2(w, h), 0.85, 0.55, 0.78);
+    bloom = new UnrealBloomPass(new THREE.Vector2(w, h), 0.55, 0.5, 0.92);
     composer.addPass(bloom);
   }
 

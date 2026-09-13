@@ -6,7 +6,9 @@ import { DEVICES } from './devices.js';
 import { routeCable, divePath } from './routing.js';
 import { buildCase } from './procedural/case.js';
 import { buildBoard } from './procedural/pcb.js';
-import { buildScope, buildPrinter, buildHeadset, buildMaglev, buildWing } from './procedural/props.js';
+import { buildScope, buildPrinter, buildHeadset, buildMaglev, buildWing, buildRoom } from './procedural/props.js';
+import { placeModel } from './placeModel.js';
+import { DECOR } from './decor.js';
 import { buildMonitor } from '../scene/monitor.js';
 import { buildCables } from '../scene/cables.js';
 import { makeDive } from '../scene/dive.js';
@@ -14,8 +16,9 @@ import { GROUP_COLOR, DRAFT_DEVICES, groupedMounts, unmounted } from '../content
 
 const BUILDERS = { board: buildBoard, scope: buildScope, printer: buildPrinter, headset: buildHeadset, maglev: buildMaglev, wing: buildWing };
 
-export function buildWorld(scene, { quality, haloAt, haloTex }) {
+export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
   const rig = buildCase(scene, quality, haloAt);
+  buildRoom(scene, quality);
   const cablesSys = buildCables(scene, haloTex);
   const monitor = buildMonitor(scene, DEVICES.monitor);
   const devices = {};
@@ -104,6 +107,42 @@ export function buildWorld(scene, { quality, haloAt, haloTex }) {
 
   const monitorMount = Object.values(mounts).find((m) => m.kind === 'monitor');
   if (monitorMount) monitor.setProjects(monitorMount.projects);
+
+  // GLBs stream in behind the procedural stand ins and replace them when they land.
+  function tagDevice(dev) {
+    dev.group.traverse((o) => { if (o.isMesh) { o.userData.deviceId = dev.id; if (dev.mountId) o.userData.mountId = dev.mountId; } });
+  }
+  function swapModel(dev, wrap) {
+    if (dev.spec.proc === 'monitor') { monitor.useModel(wrap, wrap.userData.manifest.screen); }
+    else {
+      const keep = dev.group.children.filter((c) => c.userData.keep);
+      while (dev.group.children.length) dev.group.remove(dev.group.children[0]);
+      keep.forEach((c) => dev.group.add(c));
+      dev.group.add(wrap);
+    }
+    dev.group.updateMatrixWorld(true);
+    if (dev.spec.proc !== 'monitor' && dev.spec.proc !== 'cpu') {
+      dev.center.copy(dev.group.localToWorld(wrap.userData.center.clone()));
+      const m = dev.mountId && mounts[dev.mountId];
+      if (m && m.device === dev) m.center.copy(dev.center);
+    }
+    tagDevice(dev);
+    clickables.length = 0;
+    for (const d of Object.values(devices)) if (d.mountId) d.group.traverse((o) => { if (o.isMesh) clickables.push(o); });
+  }
+  for (const dev of Object.values(devices)) {
+    if (dev.spec.proc === 'cpu') continue;
+    const key = dev.spec.model || dev.id;
+    const fit = dev.spec.scaleBy === 'height' ? dev.spec.height : dev.spec.footprint;
+    placeModel(key, { loader, footprint: fit, scaleBy: dev.spec.scaleBy }).then((wrap) => { if (wrap) swapModel(dev, wrap); });
+  }
+  for (const d of DECOR) {
+    placeModel(d.key, { loader, footprint: d.footprint, scaleBy: d.scaleBy }).then((wrap) => {
+      if (!wrap) return;
+      wrap.position.set(d.pos[0], d.pos[1], d.pos[2]); wrap.rotation.y = d.rotY || 0;
+      scene.add(wrap);
+    });
+  }
 
   function mountAt(object) {
     let o = object;

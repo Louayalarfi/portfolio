@@ -19,7 +19,21 @@ export const EXTRAS = [
       'Built the stack behind the pages, a C daemon owning lossless capture in a shared memory ring and a Python HTTP and WebSocket bridge streaming live label updates, proven with all 32 labels bit exact from transmit through the wire to the dashboard',
       'Directed AI coding agents across the RTL, verification and hardware bring up while owning the architecture and every design decision, gating changes through an audit, judge, fix and verify pipeline that closed 18 of 18 checks on the board'
     ],
-    imgs: [], alts: [], links: [],
+    imgs: [
+      '/images/arinc_01_system_diagram.webp',
+      '/images/arinc_02_software_stack.webp',
+      '/images/arinc_03_wire_capture.webp',
+      '/images/arinc_04_ram_bench.webp',
+      '/images/arinc_05_label_dump.webp'
+    ],
+    alts: [
+      'Full system diagram, browser and test clients over the ARM Linux stack, two ARINC 429 lanes in the FPGA joined only through AXI and /dev/mem',
+      'Processing system software stack, ICD file to arinc_icd.py, C capture daemon into shared memory, Python server streaming to the browser',
+      'One ARINC 429 word captured on the wire from the Zedboard PL, 5 us pulses and 10 us bits, 2171 words all odd parity',
+      'FPGA RAM access benchmark from Python over /dev/mem, poll scan at 1457 scans per second with 14.6x headroom over the 10 ms label rate',
+      'Receive RAM dump on the board, all 32 labels decoded in engineering units with measured rates matching the ICD'
+    ],
+    links: [],
     tags: ['VHDL', 'AXI4-Lite', 'Zynq', 'PetaLinux', 'C', 'Python', 'WebSocket', 'Shared Memory']
   },
   {

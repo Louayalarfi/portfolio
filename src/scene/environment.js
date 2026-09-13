@@ -26,7 +26,9 @@ export function setupEnvironment(renderer, scene, quality, loader) {
   scene.add(fill);
 
   const state = { key, fill, hdri: null, source: 'procedural' };
-  const file = `/hdri/${quality.hdri}.hdr`;
+  // ?hdri=workshop swaps the room prefix so two candidate HDRIs can be compared without a rebuild.
+  const prefix = new URLSearchParams(location.search).get('hdri') || 'room';
+  const file = `/hdri/${quality.hdri.replace(/^room/, prefix)}.hdr`;
 
   const useProcedural = () => {
     scene.environment = bakeProceduralEnv(renderer);
@@ -44,9 +46,12 @@ export function setupEnvironment(renderer, scene, quality, loader) {
         scene.environment = env;
         if (quality.hdriBackground) {
           scene.background = env;
-          scene.backgroundBlurriness = 0.35;
-          scene.backgroundIntensity = 0.35;
+          scene.backgroundBlurriness = 0.5;
+          scene.backgroundIntensity = 0.06;
         }
+        // Studio HDRIs are bright, the desk scene is meant to read as a dim room lit by its screens.
+        renderer.toneMappingExposure = 0.78;
+        key.intensity = 0.9;
         hdr.dispose(); pmrem.dispose();
         state.hdri = file; state.source = 'hdri';
       },

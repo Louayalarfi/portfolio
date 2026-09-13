@@ -8,6 +8,7 @@ export default defineConfig({
     emptyOutDir: true,
     assetsInlineLimit: 0,
     rollupOptions: {
+      input: { main: 'index.html', preview: 'preview.html', die: 'die.html' },
       output: {
         manualChunks: { three: ['three'] }
       }

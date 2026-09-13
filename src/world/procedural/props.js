@@ -91,6 +91,19 @@ export function buildWing(spec, quality) {
   return g;
 }
 
+// A back wall and a side wall so the desk sits in a room rather than on an infinite floor.
+export function buildRoom(scene, quality) {
+  const M = mats(quality);
+  const wallMat = std({ color: 0x0b0f17, metalness: 0.05, roughness: 0.95 });
+  const back = new THREE.Mesh(new THREE.PlaneGeometry(44, 14), wallMat);
+  back.position.set(0.4, 7, -4.6); back.receiveShadow = true; scene.add(back);
+  const side = new THREE.Mesh(new THREE.PlaneGeometry(30, 14), wallMat);
+  side.position.set(-9.5, 7, 6); side.rotation.y = Math.PI / 2; side.receiveShadow = true; scene.add(side);
+  const skirting = new THREE.Mesh(new THREE.BoxGeometry(44, 0.25, 0.06), M.caseEdge);
+  skirting.position.set(0.4, 0.125, -4.57); scene.add(skirting);
+  return { back, side };
+}
+
 export function labelPlane(text, sub, accent, w = 0.5) {
   const m = new THREE.Mesh(new THREE.PlaneGeometry(w, w * 0.5), new THREE.MeshBasicMaterial({ map: labelTexture(text, sub, accent), transparent: true, depthWrite: false }));
   m.rotation.x = -Math.PI / 2;

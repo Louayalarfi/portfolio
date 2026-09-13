@@ -12,16 +12,17 @@ export function buildMonitor(scene, spec) {
   monG.rotation.y = spec.rotY;
   scene.add(monG);
 
+  const bodyG = new THREE.Group(); monG.add(bodyG);
   const box = (w, h, d, x, y, z) => {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), matPlastic);
-    m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; monG.add(m); return m;
+    m.position.set(x, y, z); m.castShadow = true; m.receiveShadow = true; bodyG.add(m); return m;
   };
   box(1.4, 0.1, 0.5, 0, 0.05, 0);
   box(0.18, 1.2, 0.18, 0, 0.6, 0);
   box(3.6, 2.1, 0.14, 0, 2.3, 0);
   // DisplayPort jack on the back of the panel.
   const jack = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.06, 0.04), new THREE.MeshStandardMaterial({ color: 0x0a0d14, metalness: 0.4, roughness: 0.6 }));
-  jack.position.set(0.55, 1.85, -0.09); monG.add(jack);
+  jack.position.set(0.55, 1.85, -0.09); bodyG.add(jack);
 
   const mc = document.createElement('canvas'); mc.width = W; mc.height = H;
   const g = mc.getContext('2d');
@@ -139,6 +140,20 @@ export function buildMonitor(scene, spec) {
     if (blinkTimer > 0.56) { blinkTimer = 0; blink = !blink; if (mode === 'home') draw(); }
   }
 
+  // Swap the procedural body for a GLB and move our screen plane onto its display rectangle.
+  function useModel(wrap, screenSpec) {
+    bodyG.visible = false;
+    wrap.traverse((o) => { if (o.isMesh) o.userData.monitorBody = true; });
+    monG.add(wrap);
+    if (screenSpec) {
+      screen.geometry.dispose();
+      screen.geometry = new THREE.PlaneGeometry(screenSpec.w, screenSpec.h);
+      screen.position.set(screenSpec.x || 0, screenSpec.y, screenSpec.z + 0.004);
+    }
+    scene.updateMatrixWorld(true);
+    screen.getWorldPosition(screenWorld);
+  }
+
   draw();
-  return { monG, screen, screenWorld, screenNormal, setMode, setProjects, handleScreenClick, tick, get mode() { return mode; }, get projects() { return projects; } };
+  return { monG, bodyG, screen, screenWorld, screenNormal, setMode, setProjects, handleScreenClick, useModel, tick, get mode() { return mode; }, get projects() { return projects; } };
 }

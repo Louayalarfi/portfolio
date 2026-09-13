@@ -15,7 +15,7 @@ await page.setViewport({ width: +w, height: +h, deviceScaleFactor: 1 });
 const errors = [];
 page.on("pageerror", (e) => errors.push("pageerror: " + e.message));
 page.on("console", (m) => { if (m.type() === "error") errors.push("console: " + m.text()); });
-await page.goto(url, { waitUntil: "networkidle2", timeout: 60000 });
+await page.goto(url, { waitUntil: "load", timeout: 90000 });
 await new Promise((r) => setTimeout(r, +waitMs));
 await page.screenshot({ path: out });
 const gl = await page.evaluate(() => { const c = document.createElement("canvas"); return !!(c.getContext("webgl2") || c.getContext("webgl")); });

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>model preview</title>
+  <style>html,body{margin:0;height:100%;background:#1a1f2a;overflow:hidden;font-family:monospace;color:#cfd8e6}#info{position:fixed;top:8px;left:10px;font-size:12px;white-space:pre}</style>
+</head>
+<body>
+  <div id="info"></div>
+  <script type="module">
+    // Dev page: /preview.html?model=monitor&view=front|side|top&footprint=1.2&scaleBy=width
+    import * as THREE from 'three';
+    import { placeModel } from '/src/world/placeModel.js';
+    const p = new URLSearchParams(location.search);
+    const key = p.get('model') || 'monitor';
+    const view = p.get('view') || 'iso';
+    const footprint = p.get('footprint') ? +p.get('footprint') : undefined;
+    const scaleBy = p.get('scaleBy') || undefined;
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(innerWidth, innerHeight); renderer.setPixelRatio(1);
+    renderer.outputColorSpace = THREE.SRGBColorSpace; renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    document.body.appendChild(renderer.domElement);
+    const scene = new THREE.Scene(); scene.background = new THREE.Color(0x1a1f2a);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x334455, 1.2));
+    const key1 = new THREE.DirectionalLight(0xffffff, 2.0); key1.position.set(3, 6, 4); scene.add(key1);
+    scene.add(new THREE.GridHelper(4, 40, 0x557799, 0x334466));
+    scene.add(new THREE.AxesHelper(1));
+    const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.01, 100);
+
+    const model = await placeModel(key, { footprint, scaleBy });
+    const info = document.getElementById('info');
+    if (!model) { info.textContent = `no model "${key}" in manifest`; }
+    else {
+      scene.add(model);
+      const s = model.userData.size, m = model.userData.manifest;
+      info.textContent = `${key}  ${m.title || ''}\nsize W ${s.x.toFixed(2)} H ${s.y.toFixed(2)} D ${s.z.toFixed(2)}\nrotY ${m.rotationY} rotX ${m.rotationX} scaleBy ${m.scaleBy}\nred +x   green +y   blue +z (front should face +z or +x, see devices.js jack normals)`;
+      const r = Math.max(s.x, s.y, s.z) * 1.9 + 0.2;
+      const c = new THREE.Vector3(0, s.y / 2, 0);
+      if (view === 'front') camera.position.set(0, s.y / 2, r);
+      else if (view === 'side') camera.position.set(r, s.y / 2, 0);
+      else if (view === 'top') camera.position.set(0.001, r, 0);
+      else camera.position.set(r * 0.7, r * 0.6, r * 0.7);
+      camera.lookAt(c);
+    }
+    renderer.render(scene, camera);
+    window.__preview = { model };
+  </script>
+</body>
+</html>

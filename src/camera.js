@@ -13,7 +13,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
   const BASE_FOV = camera.fov;
   const { mounts, monitor } = world;
 
-  const home = { target: new THREE.Vector3(0.6, 1.9, 0.2), r: 12.5, theta: 0.55, phi: 1.02 };
+  const home = { target: new THREE.Vector3(0.6, 1.7, 0.2), r: 13.5, theta: 0.42, phi: 0.98 };
   const cam  = { target: home.target.clone(), r: home.r, theta: home.theta, phi: home.phi };
 
   let mode = 'orbit';
