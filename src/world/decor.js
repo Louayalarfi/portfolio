@@ -7,5 +7,5 @@ export const DECOR = [
   { key: 'lamp',      pos: [ 5.55, 0.18, -2.05], rotY:  2.4,  footprint: 3.0,  scaleBy: 'height' },
   { key: 'plant',     pos: [-6.75, 0.00,  1.20], rotY:  0.3,  footprint: 3.2,  scaleBy: 'height' },
   { key: 'bookshelf', pos: [-3.20, 0.00, -4.15], rotY:  0.0,  footprint: 6.0,  scaleBy: 'width' },
-  { key: 'chair',     pos: [-1.60, 0.00,  4.70], rotY:  2.75, footprint: 4.6, scaleBy: 'width' }
+  { key: 'chair',     pos: [-5.40, 0.00,  4.90], rotY:  2.3,  footprint: 4.6, scaleBy: 'width' }
 ];

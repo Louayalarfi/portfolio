@@ -68,7 +68,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
     if (!mount.curve) { arrive(mount); return; }
     mode = 'dive'; orbitAnim = null; focus = mount;
     labels.hide();
-    dive = { mount, curve: mount.curve, t: 0, dur: reduce ? 0.001 : 2.2, fromPos: camera.position.clone(), tunnel: mount.tunnel, tmat: mount.tmat };
+    dive = { mount, curve: mount.curve, t: 0, dur: reduce ? 0.001 : (mount.curve2 ? 3.0 : 2.2), fromPos: camera.position.clone(), tunnel: mount.tunnel, tmat: mount.tmat, switched: false };
     mount.tunnel.visible = true;
     if (mount.internal) world.liftPanel(true);
     if (warpEl) warpEl.classList.add('on');
@@ -86,6 +86,10 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
       orbitTo({ target: sw.clone(), r: mount.orbitR, theta: Math.atan2(n.x, n.z), phi: 1.45 });
       monitor.setMode('apps');
       holo.clearHolos();
+    } else if (mount.kind === 'die' && mount.dieCenter) {
+      deriveOrbit(mount.dieCenter, camera.position);
+      orbitTo({ target: mount.dieCenter.clone(), r: mount.dieOrbitR, theta: cam.theta, phi: 1.0 });
+      holo.buildProjectHolos(mount.projects, mount.dieCenter.clone().add(new THREE.Vector3(0, 5, 0)), mount.accent, 5);
     } else {
       deriveOrbit(mount.center, camera.position);
       const n = mount.projects.length;
@@ -96,9 +100,18 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
     setHint('<b>Esc</b> or Up to pull back · click a card or the tablet to read a project');
   }
 
+  function focusBlock(block) {
+    if (!block || !focus) return;
+    orbitTo({ target: block.center.clone().add(new THREE.Vector3(0, 1.5, 0)), r: block.orbitR, theta: cam.theta, phi: 0.95 }, 0.8);
+    holo.buildProjectHolos([block.project], block.center.clone().add(new THREE.Vector3(0, 3.2, 0)), focus.accent, 3.2);
+    if (tablet) tablet.select(block.idx);
+    setHint(`<b>${block.label || block.project.title}</b> · Esc or Up to pull back`);
+  }
+
   function endDive() {
     const mount = dive.mount;
     mount.tunnel.visible = false;
+    if (mount.tunnel2) mount.tunnel2.visible = false;
     if (warpEl) warpEl.classList.remove('on');
     camera.fov = BASE_FOV; camera.updateProjectionMatrix();
     mode = 'orbit'; frozen = false;
@@ -108,15 +121,23 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
 
   function updateDive(dt) {
     if (!frozen) dive.t = Math.min(1, dive.t + dt / dive.dur);
-    const t = dive.t, pre = 0.18, curve = dive.curve;
+    const t = dive.t, pre = 0.18, curve = dive.curve, m = dive.mount;
     const look = new THREE.Vector3();
+    const twoStage = !!m.curve2;
     if (t < pre) {
       const u = t / pre;
       camera.position.lerpVectors(dive.fromPos, curve.getPointAt(0), easeIO(u));
       look.copy(curve.getPointAt(0.03));
+    } else if (twoStage && t >= 0.5) {
+      // Second half runs inside the die world, the jump happens at the warp peak where the FOV is widest.
+      if (!dive.switched) { dive.switched = true; m.tunnel.visible = false; m.tunnel2.visible = true; }
+      const u = (t - 0.5) / 0.5, e = 1 - Math.pow(1 - u, 2);
+      camera.position.copy(m.curve2.getPointAt(e));
+      look.copy(m.curve2.getPointAt(Math.min(1, e + 0.04)));
     } else {
-      const u = (t - pre) / (1 - pre), e = easeIO(u);
-      camera.position.copy(curve.getPointAt(e));
+      const span = twoStage ? 0.5 - pre : 1 - pre;
+      const u = (t - pre) / span, e = twoStage ? u * u : easeIO(u);
+      camera.position.copy(curve.getPointAt(Math.min(1, e)));
       look.copy(curve.getPointAt(Math.min(1, e + 0.04)));
     }
     camera.lookAt(look);
@@ -124,12 +145,13 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
     camera.fov = BASE_FOV + warp * 22; camera.updateProjectionMatrix();
     if (!frozen) camera.rotation.z += Math.sin(t * 46) * 0.004 * warp;
     dive.tmat.uniforms.uTime.value += dt;
+    if (m.tmat2) m.tmat2.uniforms.uTime.value += dt;
     if (t >= 1 && !frozen) endDive();
   }
 
   function cancelDive() {
     world.cablesSys.cancelSparkRace();
-    if (dive) dive.tunnel.visible = false;
+    if (dive) { dive.tunnel.visible = false; if (dive.mount.tunnel2) dive.mount.tunnel2.visible = false; }
     dive = null; sparkRace = null; frozen = false;
     mode = 'orbit';
     if (warpEl) warpEl.classList.remove('on');
@@ -161,6 +183,11 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
 
   function goOverview() {
     cancelDive();
+    if (focus?.kind === 'die') {
+      // Coming back from 300 units below the desk: jump, then ease the last bit.
+      cam.target.copy(home.target); cam.r = home.r * 1.6; cam.theta = home.theta; cam.phi = home.phi;
+      applyOrbit();
+    }
     focus = null; depth.length = 0;
     holo.clearHolos();
     monitor.setMode('home');
@@ -187,9 +214,11 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
     if (link.kind === 'dive') { focus = mount; if (mount.internal) { world.liftPanel(true); } startDive(mount, { t: link.t ?? 0.5 }); return; }
     if (link.kind === 'board' || link.kind === 'die') {
       if (mount.internal) world.liftPanel(true);
-      camera.position.copy(mount.center).add(new THREE.Vector3(1.8, 1.4, 2.2));
+      const from = mount.kind === 'die' && mount.dieCenter ? mount.dieCenter : mount.center;
+      camera.position.copy(from).add(new THREE.Vector3(1.8, 1.4, 2.2));
       arrive(mount);
       settleOrbit();
+      if (link.kind === 'die' && mount.blocks?.[link.id]) { focusBlock(mount.blocks[link.id]); settleOrbit(); }
     }
   }
 
@@ -260,6 +289,13 @@ export function buildCamera(camera, renderer, world, holo, tablet, labels, post)
         if (r?.action === 'app' && tablet) tablet.select(r.idx);
         return;
       }
+    }
+
+    if (focus?.kind === 'die' && world.die) {
+      ndc.x = (e.clientX / innerWidth) * 2 - 1; ndc.y = -(e.clientY / innerHeight) * 2 + 1;
+      ray.setFromCamera(ndc, camera);
+      const hits = ray.intersectObject(world.die.group, true);
+      if (hits.length) { focusBlock(world.blockAt(hits[0].point)); return; }
     }
 
     const hH = holo.HOLO_PICK.length ? pickFrom(e.clientX, e.clientY, holo.HOLO_PICK) : [];

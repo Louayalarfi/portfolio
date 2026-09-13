@@ -143,7 +143,13 @@ export function buildMonitor(scene, spec) {
   // Swap the procedural body for a GLB and move our screen plane onto its display rectangle.
   function useModel(wrap, screenSpec) {
     bodyG.visible = false;
-    wrap.traverse((o) => { if (o.isMesh) o.userData.monitorBody = true; });
+    wrap.traverse((o) => {
+      if (!o.isMesh) return;
+      o.userData.monitorBody = true;
+      // The model's own display quad becomes the black glass behind our canvas.
+      const c = o.material?.color;
+      if (c && c.b > 0.6 && c.r < 0.3) { o.material = o.material.clone(); o.material.color.set(0x03050a); o.material.roughness = 0.2; o.material.metalness = 0.4; }
+    });
     monG.add(wrap);
     if (screenSpec) {
       screen.geometry.dispose();

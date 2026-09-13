@@ -11,7 +11,15 @@ const browser = await puppeteer.launch({
          "--ignore-gpu-blocklist", "--no-sandbox", `--window-size=${w},${h}`],
 });
 const page = await browser.newPage();
-await page.setViewport({ width: +w, height: +h, deviceScaleFactor: 1 });
+// Narrow sizes emulate a phone (touch, mobile UA) so the WebGL2 and phone gate in index.html is exercised.
+if (+w < 700) {
+  await page.emulate({
+    viewport: { width: +w, height: +h, deviceScaleFactor: 2, isMobile: true, hasTouch: true },
+    userAgent: "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1"
+  });
+} else {
+  await page.setViewport({ width: +w, height: +h, deviceScaleFactor: 1 });
+}
 const errors = [];
 page.on("pageerror", (e) => errors.push("pageerror: " + e.message));
 page.on("console", (m) => { if (m.type() === "error") errors.push("console: " + m.text()); });

@@ -14,6 +14,6 @@ export const DEVICES = {
   printer:      { label: 'Pellet printer',    proc: 'printer', footprint: [3.20, 3.20], height: 4.0, scaleBy: 'height', pos: [ 6.95, 0.00,  0.40], rotY: -0.90, jack: { pos: [-1.30, 0.60,  0.00], normal: [-1, 0, 0] }, orbitR: 5.0, floor: true },
   maglev_rig:   { label: 'MAGLEV rig',        proc: 'maglev', footprint: [0.62, 0.62], pos: [-4.55, 0.18, -1.55], rotY:  0.35, jack: { pos: [ 0.30, 0.16,  0.00], normal: [ 1, 0, 0] }, orbitR: 2.8 },
   rocket_wing:  { label: 'Rocket wing',       proc: 'wing', footprint: [0.75, 0.35], pos: [ 5.25, 0.18,  0.35], rotY:  0.50, orbitR: 2.2 },
-  monitor:      { label: 'Monitor',           proc: 'monitor', footprint: [1.40, 0.50], pos: [ 3.10, 0.18, -0.80], rotY: -0.50, jack: { pos: [ 0.55, 1.85, -0.09], normal: [ 0, 0, -1] }, orbitR: 2.7 },
+  monitor:      { label: 'Monitor',           proc: 'monitor', footprint: [3.60, 0.50], pos: [ 3.10, 0.18, -0.80], rotY: -0.50, jack: { pos: [ 0.55, 1.85, -0.09], normal: [ 0, 0, -1] }, orbitR: 3.7 },
   cpu:          { label: 'CPU',               proc: 'cpu', footprint: [0.82, 0.82], pos: [-2.50, 2.29, -0.25], rotY: 0, jack: { pos: [ 0.00, 0.00,  0.30], normal: [ 0, 0, 1] }, orbitR: 2.2, internal: true }
 };

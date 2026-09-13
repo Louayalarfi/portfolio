@@ -58,14 +58,14 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
     return t;
   }
 
-  function buildProjectHolos(list, center, accent) {
+  function buildProjectHolos(list, center, accent, scale = 1) {
     clearHolos();
     current = list;
     const col = new THREE.Color(accent);
     const dirToCam = new THREE.Vector3().subVectors(camera.position, center).normalize();
     const right = new THREE.Vector3().setFromMatrixColumn(camera.matrixWorld, 0).normalize();
-    const base = center.clone().add(dirToCam.multiplyScalar(0.45)).add(new THREE.Vector3(0, 0.95, 0));
-    const n = list.length, spacing = 1.28, cw = 1.12, ch = 0.708;
+    const base = center.clone().add(dirToCam.multiplyScalar(0.45 * scale)).add(new THREE.Vector3(0, 0.95 * scale, 0));
+    const n = list.length, spacing = 1.28 * scale, cw = 1.12 * scale, ch = 0.708 * scale;
 
     list.forEach((p, i) => {
       const g = new THREE.Group();
@@ -75,7 +75,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
       g.add(panel); HOLO_PICK.push(panel);
       const fr = new THREE.Mesh(new THREE.PlaneGeometry(cw + 0.06, ch + 0.06), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.18, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
       fr.position.z = -0.01; g.add(fr);
-      const hb = halo(THREE, haloTex, accent, 0.26, 0, -ch / 2, 0.02, g);
+      const hb = halo(THREE, haloTex, accent, 0.26 * scale, 0, -ch / 2, 0.02, g);
       hb.material.opacity = 0.5;
 
       if (p.imgs?.length) {
@@ -194,7 +194,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
     fr.position.z = -0.01; introGroup.add(fr);
     halo(THREE, haloTex, 0x4fd8e0, 0.8, -w / 2, h / 2, 0.02, introGroup);
     halo(THREE, haloTex, 0x4fd8e0, 0.8, w / 2, -h / 2, 0.02, introGroup);
-    introGroup.position.set(1.4, 5.6, -1.2);
+    introGroup.position.set(1.4, 4.9, -1.2);
     drawIntro();
     if (document.fonts?.ready) document.fonts.ready.then(drawIntro);
   }
@@ -207,7 +207,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
     });
     if (introGroup.visible) {
       introGroup.quaternion.copy(camera.quaternion);
-      introGroup.position.y = 5.6 + Math.sin(time * 0.8) * 0.08;
+      introGroup.position.y = 4.9 + Math.sin(time * 0.8) * 0.08;
     }
   }
 

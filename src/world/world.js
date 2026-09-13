@@ -12,7 +12,11 @@ import { DECOR } from './decor.js';
 import { buildMonitor } from '../scene/monitor.js';
 import { buildCables } from '../scene/cables.js';
 import { makeDive } from '../scene/dive.js';
-import { GROUP_COLOR, DRAFT_DEVICES, groupedMounts, unmounted } from '../content/index.js';
+import { GROUP_COLOR, DRAFT_DEVICES, MOUNTS, groupedMounts, unmounted } from '../content/index.js';
+import { buildDie } from './die.js';
+
+// The die world lives far below the desk so nothing overlaps; the dive teleports into it at the warp peak.
+const DIE_Y = -300;
 
 const BUILDERS = { board: buildBoard, scope: buildScope, printer: buildPrinter, headset: buildHeadset, maglev: buildMaglev, wing: buildWing };
 
@@ -108,6 +112,47 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
   const monitorMount = Object.values(mounts).find((m) => m.kind === 'monitor');
   if (monitorMount) monitor.setProjects(monitorMount.projects);
 
+  // Die world for the CPU mount: blocks per project chip, a second dive curve that drops into it.
+  let die = null;
+  const dieMount = Object.values(mounts).find((m) => m.kind === 'die');
+  if (dieMount) {
+    try { die = buildDie({ quality, loader }); } catch (e) { console.warn('[world] die world failed', e); }
+    if (die) {
+      die.group.position.set(0, DIE_Y, 0);
+      scene.add(die.group);
+      dieMount.die = die;
+      dieMount.blocks = {};
+      dieMount.projects.forEach((p, i) => {
+        const chip = MOUNTS[p.slug]?.chip;
+        const b = chip && die.blocks[chip];
+        if (!b) return;
+        dieMount.blocks[chip] = { chip, project: p, idx: i, label: b.label, orbitR: b.orbitR || 10, center: b.center.clone().add(die.group.position) };
+      });
+      const centers = Object.values(dieMount.blocks).map((b) => b.center);
+      dieMount.dieCenter = centers.length
+        ? centers.reduce((a, c) => a.add(c), new THREE.Vector3()).multiplyScalar(1 / centers.length)
+        : die.group.position.clone();
+      const c = dieMount.dieCenter;
+      const pts = [
+        c.clone().add(new THREE.Vector3(-4, 46, -6)),
+        c.clone().add(new THREE.Vector3(-2, 34, -3)),
+        c.clone().add(new THREE.Vector3(3, 22, 5)),
+        c.clone().add(new THREE.Vector3(9, 13, 12)),
+        c.clone().add(new THREE.Vector3(13, 9, 17))
+      ];
+      const dv2 = makeDive(scene, pts, dieMount.hex, 2.6, quality.plasmaOctaves);
+      dieMount.curve2 = dv2.curve; dieMount.tunnel2 = dv2.tunnel; dieMount.tmat2 = dv2.tmat;
+      dieMount.dieOrbitR = 26;
+    }
+  }
+
+  function blockAt(point) {
+    if (!dieMount?.blocks) return null;
+    let best = null, bd = Infinity;
+    for (const b of Object.values(dieMount.blocks)) { const d = b.center.distanceTo(point); if (d < bd) { bd = d; best = b; } }
+    return bd < 14 ? best : null;
+  }
+
   // GLBs stream in behind the procedural stand ins and replace them when they land.
   function tagDevice(dev) {
     dev.group.traverse((o) => { if (o.isMesh) { o.userData.deviceId = dev.id; if (dev.mountId) o.userData.mountId = dev.mountId; } });
@@ -162,6 +207,7 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
 
   function tick(dt, time) {
     side.position.y += (sideTarget - side.position.y) * Math.min(1, dt * 2.5);
+    if (die?.tick) die.tick(time);
     for (const f of rig.animated.fans) f.pivot.rotation.y = time * f.speed;
     const ball = devices.maglev_rig?.group.userData.ball;
     if (ball) { ball.position.y = 0.45 + Math.sin(time * 1.7) * 0.03; }
@@ -180,5 +226,5 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
     return { mounts: rows, unresolved, drafts };
   }
 
-  return { mounts, devices, monitor, cablesSys, rig, clickables, mountAt, mountFor, liftPanel, tick, report, unresolved };
+  return { mounts, devices, monitor, cablesSys, rig, die, dieMount, clickables, mountAt, mountFor, blockAt, liftPanel, tick, report, unresolved };
 }
