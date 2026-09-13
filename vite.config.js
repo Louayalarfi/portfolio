@@ -1,0 +1,16 @@
+import { defineConfig } from 'vite';
+
+export default defineConfig({
+  base: '/',
+  build: {
+    target: 'es2020',
+    outDir: 'dist',
+    emptyOutDir: true,
+    assetsInlineLimit: 0,
+    rollupOptions: {
+      output: {
+        manualChunks: { three: ['three'] }
+      }
+    }
+  }
+});

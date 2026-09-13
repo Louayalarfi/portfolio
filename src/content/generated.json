@@ -1,0 +1,1321 @@
+{
+  "generatedAt": "2026-09-13T06:48:04.909Z",
+  "source": "public/classic/index.html",
+  "hero": {
+    "name": "LAUAI ALERFI",
+    "title": "SYSTEMS ENGINEER",
+    "desc": "VLSI / IC Design · FPGA / HDL · Embedded Systems · Control Systems · Software Dev · Guelph, Canada",
+    "stats": [
+      {
+        "value": "4x",
+        "label": "Dean's List"
+      },
+      {
+        "value": "3.7",
+        "label": "GPA / 4.0"
+      },
+      {
+        "value": "13",
+        "label": "projects"
+      },
+      {
+        "value": "5yr",
+        "label": "teaching"
+      }
+    ],
+    "overview": [
+      "I'm a Systems Engineering graduate from the University of Guelph (B.Eng, April 2026), specializing in the intersection of hardware design and software development.",
+      "I work at every layer of the stack, from designing CMOS circuits at the transistor level in Cadence Virtuoso to implementing FPGA SoC systems in VHDL/Verilog to building enterprise apps in C# and ASP.NET.",
+      "Currently a Software/Systems Developer at ECNG Energy Group, building AI-powered pipelines with the Claude API and Python automation. I love engineering problems that live at the boundary of hardware and software, where the logic meets the physics. Originally from Damascus, Syria, now building things in Canada."
+    ]
+  },
+  "experience": [
+    {
+      "accent": "green",
+      "dates": "MAY 2025 to PRESENT",
+      "title": "Software / Systems Developer",
+      "org": "ECNG Energy Group",
+      "desc": "AI invoice extraction service (Python, FastAPI, Claude API) feeding a C# billing app, 97% match across 265 utilities with a 22 invoice regression suite; daily IESO price alert pipeline with per client thresholds, in production since May 2026; Playwright portal automation across 110 customer accounts with zero errors; Selenium scraper fixes taking 208 monthly reports from 27 failures to zero; Microsoft Graph mailbox service filing utility reports into SQL Server.",
+      "tags": [
+        "Claude API",
+        "Python",
+        "FastAPI",
+        "C#",
+        "VB.NET",
+        "SQL Server",
+        "Playwright",
+        "Selenium"
+      ]
+    },
+    {
+      "accent": "green",
+      "dates": "DEC 2024 to APR 2025",
+      "title": "Teaching Assistant, Electric Circuits",
+      "org": "University of Guelph",
+      "desc": "Nodal/mesh analysis, superposition, Thevenin/Norton; DC/AC, op-amp and 1st/2nd-order circuit labs; oscilloscope and instrumentation training.",
+      "tags": [
+        "Circuits",
+        "AC/DC",
+        "Op-Amps",
+        "Oscilloscope"
+      ]
+    },
+    {
+      "accent": "green",
+      "dates": "SEP 2024 to DEC 2024",
+      "title": "Teaching Assistant, Engineering Systems Analysis",
+      "org": "University of Guelph",
+      "desc": "Dynamic-system modelling; Laplace methods for impulse/step/frequency response; mechanical, electrical, thermal and hydraulic systems.",
+      "tags": [
+        "Control Systems",
+        "Laplace",
+        "Dynamics"
+      ]
+    },
+    {
+      "accent": "green",
+      "dates": "SEP 2024 to APR 2026",
+      "title": "Co-Leader, SolidWorks User Group",
+      "org": "University of Guelph",
+      "desc": "Organized workshops and tutorials to strengthen 3D modelling and CAD skills across the engineering student community.",
+      "tags": [
+        "SolidWorks",
+        "CAD",
+        "Leadership"
+      ]
+    },
+    {
+      "accent": "purple",
+      "dates": "NOV 2023 to JUN 2024",
+      "title": "Robotics Instructor",
+      "org": "Exceed Robotics",
+      "desc": "SolidWorks, Inventor, Mindstorms, Arduino; led students in IoT smart-house projects; supervised FDM/SLA printing; led team to regional VEX success.",
+      "tags": [
+        "Robotics",
+        "Arduino",
+        "VEX",
+        "SolidWorks"
+      ]
+    },
+    {
+      "accent": "purple",
+      "dates": "MAY 2017 to AUG 2022",
+      "title": "Robotics & Mathematics Teacher",
+      "org": "Alwataniah Syria National School",
+      "desc": "Coding, robotics and mathematics to students aged 5 to 15; LEGO Mindstorms, Scratch, Arduino; adjusted methodology per student feedback over 5 years.",
+      "tags": [
+        "Teaching",
+        "Robotics",
+        "Mathematics",
+        "Arduino"
+      ]
+    }
+  ],
+  "education": {
+    "degree": "Bachelor of Engineering",
+    "line": "Major: Engineering Systems & Computing · University of Guelph · Guelph, Canada · Sep 2022, Apr 2026",
+    "badges": [
+      "4× Dean's Honor List",
+      "GPA 3.7 / 4.0",
+      "$8,500 Entrance Scholarship"
+    ],
+    "focus": "Focus areas: VLSI · FPGA · Embedded Systems · Control Theory · Software Engineering",
+    "courses": [
+      {
+        "code": "ENGG4550",
+        "term": "W26",
+        "name": "VLSI Digital Design",
+        "note": "Custom IC · CMOS logic",
+        "grade": 72
+      },
+      {
+        "code": "ENGG4560",
+        "term": "W26",
+        "name": "Embedded System Design",
+        "note": "ARM · FreeRTOS · HAL",
+        "grade": 92
+      },
+      {
+        "code": "ENGG4420",
+        "term": "F25",
+        "name": "Real-Time Systems Design",
+        "note": "RTOS · scheduling · timing",
+        "grade": 93
+      },
+      {
+        "code": "ENGG4490",
+        "term": "W26",
+        "name": "Sampled Data Control Design",
+        "note": "Digital control · Z-domain",
+        "grade": 92
+      },
+      {
+        "code": "ENGG3410",
+        "term": "W25",
+        "name": "Systems and Control Theory",
+        "note": "PID · Bode · state-space",
+        "grade": 89
+      },
+      {
+        "code": "ENGG3050",
+        "term": "F25",
+        "name": "Embedded Reconfigurable Computing",
+        "note": "FPGA · Verilog/VHDL · HLS",
+        "grade": 86
+      },
+      {
+        "code": "ENGG2410",
+        "term": "F23",
+        "name": "Digital Systems Design",
+        "note": "FPGA · FSM · datapath",
+        "grade": 77
+      },
+      {
+        "code": "ENGG3380",
+        "term": "W25",
+        "name": "Computer Organization & Design",
+        "note": "CPU architecture · ISA · pipeline",
+        "grade": 76
+      },
+      {
+        "code": "ENGG3390",
+        "term": "F24",
+        "name": "Signal Processing",
+        "note": "DSP · Fourier · filter design",
+        "grade": 87
+      },
+      {
+        "code": "ENGG3640",
+        "term": "F24",
+        "name": "Microcomputer Interfacing",
+        "note": "SPI · I2C · UART · peripherals",
+        "grade": 72
+      },
+      {
+        "code": "ENGG4450",
+        "term": "F24",
+        "name": "Large-Scale Software Architecture",
+        "note": "Design patterns · UML",
+        "grade": 87
+      },
+      {
+        "code": "ENGG3130",
+        "term": "W25",
+        "name": "Modelling Complex Systems",
+        "note": "Agent-based · ABM · emergence",
+        "grade": 82
+      },
+      {
+        "code": "ENGG2450",
+        "term": "W24",
+        "name": "Electric Circuits",
+        "note": "AC/DC · op-amps · resonance",
+        "grade": 80
+      },
+      {
+        "code": "ENGG2400",
+        "term": "F23",
+        "name": "Engineering Systems Analysis",
+        "note": "Laplace · dynamic models",
+        "grade": 75
+      },
+      {
+        "code": "CIS2520",
+        "term": "F23",
+        "name": "Data Structures",
+        "note": "C · trees · graphs · hashing",
+        "grade": 69
+      },
+      {
+        "code": "ENGG4120",
+        "term": "W26",
+        "name": "Systems & Comp Eng Design IV",
+        "note": "Capstone · 3D printer project",
+        "grade": 86
+      }
+    ],
+    "certs": [
+      {
+        "name": "Dean's Honor List, Winter 2026",
+        "org": "University of Guelph",
+        "date": ""
+      },
+      {
+        "name": "Dean's Honor List, Fall 2025",
+        "org": "University of Guelph",
+        "date": ""
+      },
+      {
+        "name": "Dean's Honor List, Winter 2025",
+        "org": "University of Guelph",
+        "date": ""
+      },
+      {
+        "name": "Dean's Honor List, Winter 2024",
+        "org": "University of Guelph",
+        "date": ""
+      },
+      {
+        "name": "Lean Six Sigma Green Belt",
+        "org": "Six Sigma Global Institute",
+        "date": "May 2024 · ID: 103865537"
+      },
+      {
+        "name": "Lean Six Sigma Yellow Belt",
+        "org": "Six Sigma Global Institute",
+        "date": "May 2024 · ID: 102896996"
+      },
+      {
+        "name": "CSWA, Mechanical Design",
+        "org": "Dassault Systèmes (SolidWorks)",
+        "date": "Mar 2024 · ID: C-53MSNXF87E"
+      },
+      {
+        "name": "VEX Coach Certification 2023 to 24",
+        "org": "Robotics Education & Competition Foundation",
+        "date": ""
+      },
+      {
+        "name": "Intro to Responsible AI",
+        "org": "CARE-AI, University of Guelph",
+        "date": "Jan 2024"
+      }
+    ]
+  },
+  "skills": [
+    {
+      "group": "VLSI / PHYSICAL DESIGN",
+      "tags": [
+        "Cadence Virtuoso",
+        "Magic 8.3",
+        "ngspice",
+        "Sky130",
+        "CMOS",
+        "DRC / LVS",
+        "Spectre"
+      ]
+    },
+    {
+      "group": "FPGA / HDL",
+      "tags": [
+        "VHDL",
+        "Verilog",
+        "Vivado",
+        "Vivado HLS",
+        "ModelSim",
+        "Quartus",
+        "Zynq SoC"
+      ]
+    },
+    {
+      "group": "EMBEDDED",
+      "tags": [
+        "C / C++",
+        "STM32",
+        "FreeRTOS",
+        "ARM Cortex-M",
+        "Keil",
+        "SPI / I2C / UART"
+      ]
+    },
+    {
+      "group": "AI & SOFTWARE",
+      "tags": [
+        "Claude API",
+        "AI Agents",
+        "Python",
+        "C#",
+        "ASP.NET",
+        "SQL / T-SQL",
+        "Selenium",
+        "Git"
+      ]
+    },
+    {
+      "group": "TOOLS & OTHER",
+      "tags": [
+        "MATLAB / Simulink",
+        "QUARC",
+        "SSMS",
+        "Linux",
+        "SolidWorks",
+        "JIRA",
+        "DevExpress"
+      ]
+    }
+  ],
+  "contact": [
+    {
+      "label": "EMAIL",
+      "value": "louayalarfi@gmail.com",
+      "href": "mailto:louayalarfi@gmail.com"
+    },
+    {
+      "label": "GITHUB",
+      "value": "github.com/Louayalarfi",
+      "href": "https://github.com/Louayalarfi"
+    },
+    {
+      "label": "LINKEDIN",
+      "value": "linkedin.com/in/lauaialerfi",
+      "href": "https://www.linkedin.com/in/lauaialerfi"
+    },
+    {
+      "label": "PHONE",
+      "value": "+1 (519) 993-5859",
+      "href": ""
+    },
+    {
+      "label": "LOCATION",
+      "value": "Guelph, Ontario · Canada",
+      "href": ""
+    }
+  ],
+  "groups": [
+    {
+      "id": "vlsi",
+      "ref": "U1",
+      "name": "VLSI / IC",
+      "sub": "Transistor-level · 45nm · Sky130",
+      "col": "#4fd8e0",
+      "projects": [
+        {
+          "slug": "8-bit-cmos-program-counter",
+          "group": "vlsi",
+          "title": "8-bit CMOS Program Counter",
+          "spec": "906 ps · 58.08 µW · 1.10 GHz · gpdk045 45nm",
+          "domain": "VLSI · IC Design · Cadence",
+          "bullets": [
+            "Designed a fully functional 8-bit Program Counter at the transistor level using Cadence Virtuoso with the gpdk045 45nm CMOS process",
+            "Implemented three sub-modules from scratch: a CMOS transmission gate multiplexer, a mirror adder ripple carry full adder, and a master-slave D flip-flop register",
+            "Achieved a critical path delay of 906 ps, meeting the 1 GHz minimum frequency requirement with a theoretical maximum operating frequency of 1.10 GHz",
+            "Measured average power consumption of 58.08 µW through Spectre transient simulation",
+            "Characterized each module individually for worst-case propagation delay: 738 ps (full adder), 394 ps (register CLK-to-Q), and 143 ps (multiplexer)",
+            "Verified correct sequential increment and branch operation through full top-level transient simulation",
+            "Documented design decisions, timing analysis, and simulation results in a 17-page technical report"
+          ],
+          "imgs": [
+            "/classic/images/TOPLEVELTEST.png",
+            "/classic/images/8BITREGTEST.png",
+            "/classic/images/TOP_LEVEL_SCHEMATIC.png",
+            "/classic/images/1BITFA_SCHEMATIC.png"
+          ],
+          "alts": [
+            "Top-level Spectre transient simulation",
+            "8-bit register transient simulation",
+            "Top-level Cadence schematic",
+            "1-bit mirror adder schematic"
+          ],
+          "links": [],
+          "tags": [
+            "Cadence Virtuoso",
+            "Spectre",
+            "45nm CMOS",
+            "DFF",
+            "Transmission Gate MUX"
+          ]
+        },
+        {
+          "slug": "8x8-6t-sram-macro-sky130",
+          "group": "vlsi",
+          "title": "8×8 6T SRAM Macro, Sky130",
+          "spec": "716 mV SNM · DRC/LVS-clean · AI-agent driven · 130nm",
+          "domain": "VLSI · Physical Design · SkyWater",
+          "bullets": [
+            "Designed a full-custom 6T SRAM macro (64-bit, 8×8) from scratch in SkyWater Sky130 130nm PDK, every transistor hand-placed in Magic, no standard cells",
+            "Built and verified the complete cell library bottom-up: 6T bit cell, 3-to-8 row decoder, precharge/equalize, write driver, and cross-coupled sense amplifier, all DRC-clean, LVS-matched, and SPICE-verified",
+            "Integrated decoder + 8×8 array + read/write data-path periphery into a single DRC-clean macro; characterized static noise margin via butterfly curves (716 mV hold / 311 mV read)",
+            "Used Claude AI agents as the execution layer, directing them to author Magic/ngspice scripts and run DRC checks, layout extractions, and SPICE simulations in parallel across background jobs, iterating far faster than a manual GUI flow while steering the architecture and verification calls",
+            "Drove the entire flow headlessly and reproducibly, layout, DRC, extraction, and simulation all scripted (Magic + ngspice), so every result is one command away from being regenerated",
+            "Whole-macro extraction caught a bug a clean DRC missed: the decoder-to-array word-line routing was design-rule-clean but electrically open, found it, fixed the routing, confirmed connectivity",
+            "Simulating the extracted layout surfaced a real cell write-ability margin between schematic and silicon, exactly the schematic-vs-extracted gap that full-custom verification exists to catch"
+          ],
+          "imgs": [
+            "/classic/images/01_bitcell_layout.png",
+            "/classic/images/02_bitcell_sim.png",
+            "/classic/images/03_array_layout.png",
+            "/classic/images/04_macro_layout.png",
+            "/classic/images/05_senseamp_sim.png",
+            "/classic/images/06_decoder.png",
+            "/classic/images/07_snm_butterfly.png",
+            "/classic/images/08_periphery_column_sim.png",
+            "/classic/images/09_macro_read_write.png"
+          ],
+          "alts": [
+            "6T SRAM bit cell layout, Magic 8.3",
+            "Bit cell transient simulation",
+            "8×8 array layout, DRC clean",
+            "Full macro layout with row decoder",
+            "Sense amplifier simulation",
+            "3-to-8 row decoder",
+            "SNM butterfly curves, 716 mV / 311 mV",
+            "Column periphery simulation",
+            "Full macro read/write simulation"
+          ],
+          "links": [
+            {
+              "label": "View Engineering Report",
+              "url": "/classic/images/SRAM_Report.pdf"
+            }
+          ],
+          "tags": [
+            "Magic 8.3",
+            "ngspice",
+            "SkyWater Sky130",
+            "6T SRAM",
+            "DRC/LVS",
+            "SNM",
+            "AI Agents",
+            "130nm"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fpga",
+      "ref": "U2",
+      "name": "FPGA / RTL",
+      "sub": "HDL · HLS · Zynq SoC",
+      "col": "#e7609f",
+      "projects": [
+        {
+          "slug": "aes-128-hardware-coprocessor",
+          "group": "fpga",
+          "title": "AES-128 Hardware Coprocessor",
+          "spec": "NIST verified · APB-integrated · CBC/OFB modes",
+          "domain": "FPGA · Cryptography · HW/SW Co-Design",
+          "bullets": [
+            "Designed and implemented a 128-bit AES encryption coprocessor in Verilog targeting an FPGA-based SoC platform",
+            "Developed a custom APB (Advanced Peripheral Bus) IP module and integrated it into the system using Platform Designer",
+            "Built a memory-mapped hardware/software interface enabling communication between the HPS processor and FPGA coprocessor",
+            "Implemented core AES transformations: SubBytes, ShiftRows, MixColumns, and AddRoundKey following NIST standards, plus full key expansion logic for AES-128",
+            "Developed a fully combinational (asynchronous) AES architecture, optimizing latency by eliminating clock dependency in the encryption core",
+            "Supported secure encryption modes (CBC/OFB) for improved data security beyond basic ECB mode",
+            "Verified functionality using official NIST test vectors; debugged and validated system integration across hardware (FPGA) and software (C driver on HPS)"
+          ],
+          "imgs": [
+            "/classic/images/AES1.png",
+            "/classic/images/AES2.png",
+            "/classic/images/AES3.png"
+          ],
+          "alts": [
+            "AES-128 CBC NIST PASS terminal output",
+            "Platform Designer system integration",
+            "AES-128 CBC chained encryption output"
+          ],
+          "links": [],
+          "tags": [
+            "Verilog",
+            "FPGA SoC",
+            "APB",
+            "Quartus",
+            "AES-128",
+            "NIST"
+          ]
+        },
+        {
+          "slug": "custom-synchronous-cpu",
+          "group": "fpga",
+          "title": "Custom Synchronous CPU",
+          "spec": "Full RTL datapath · FSM control · FPGA synthesized",
+          "domain": "FPGA · Digital Design · RTL",
+          "bullets": [
+            "Designed and implemented a custom synchronous CPU at the RTL level using VHDL, targeting FPGA implementation",
+            "Architected a multi-stage datapath including register file, ALU, control unit, and memory interface",
+            "Developed FSM-based control logic to manage instruction fetch, decode, execution, and write-back sequencing",
+            "Applied computer architecture principles to define instruction behavior, datapath/control separation, and signal timing",
+            "Performed functional simulation and waveform-level debugging in ModelSim to verify correctness and timing",
+            "Synthesized and implemented the design in Xilinx Vivado, analyzing timing closure, critical paths, and resource utilization"
+          ],
+          "imgs": [],
+          "alts": [],
+          "links": [],
+          "tags": [
+            "VHDL",
+            "Vivado",
+            "ModelSim",
+            "FPGA",
+            "RTL",
+            "FSM"
+          ]
+        },
+        {
+          "slug": "fpga-accelerator-vivado-hls",
+          "group": "fpga",
+          "title": "FPGA Accelerator, Vivado HLS",
+          "spec": "Loop pipelining · Array partitioning · Dataflow architecture",
+          "domain": "FPGA · HLS · Zynq SoC",
+          "bullets": [
+            "Designed a hardware accelerator kernel in C/C++ and targeted FPGA implementation using Vivado HLS on a Xilinx Zynq SoC",
+            "Applied loop pipelining, loop unrolling, and dataflow architectures to improve throughput and reduce latency of compute-intensive kernels",
+            "Optimized memory access using array partitioning and memory reshaping to remove bandwidth bottlenecks",
+            "Analyzed HLS synthesis and implementation reports to evaluate clock frequency, latency, initiation interval (II), and DSP/LUT/BRAM utilization",
+            "Integrated the accelerator with ARM-side software on Zynq, validating correct HW/SW interaction against C/C++ reference models",
+            "Developed Python scripts to automate performance analysis, compare design variants, and verify functional equivalence"
+          ],
+          "imgs": [],
+          "alts": [],
+          "links": [],
+          "tags": [
+            "Vivado HLS",
+            "Zynq SoC",
+            "C/C++",
+            "Xilinx",
+            "Pipelining",
+            "Dataflow"
+          ]
+        },
+        {
+          "slug": "arinc-429-transmitter-and-receiver",
+          "group": "fpga",
+          "title": "ARINC 429 Transmitter & Receiver",
+          "spec": "Full protocol · FSM-based Rx · Nexys A7",
+          "domain": "FPGA · Aerospace Protocol",
+          "bullets": [
+            "Designed and implemented a complete ARINC 429 transmitter and receiver in VHDL, targeting the Nexys A7 FPGA",
+            "Implemented 32-bit ARINC word formatting including label fields, SDI, data, SSM decoding, and odd parity generation and checking",
+            "Developed an FSM-based receiver for bit timing, word detection, parity validation, and protocol error handling",
+            "Implemented a protocol-compliant transmitter with MSB-first bit ordering and timing behavior aligned with ARINC 429 specifications",
+            "Verified functional correctness and timing behavior through RTL simulation and waveform analysis in ModelSim",
+            "Optimized RTL design in Xilinx Vivado, reducing LUT and flip-flop utilization while maintaining strict protocol timing constraints"
+          ],
+          "imgs": [],
+          "alts": [],
+          "links": [],
+          "tags": [
+            "VHDL",
+            "Nexys A7",
+            "ARINC 429",
+            "Vivado",
+            "ModelSim",
+            "Aerospace"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "embedded",
+      "ref": "U3",
+      "name": "EMBEDDED",
+      "sub": "ARM · FreeRTOS · STM32",
+      "col": "#f0a830",
+      "projects": [
+        {
+          "slug": "direct-polymer-extrusion-3d-printer",
+          "group": "embedded",
+          "title": "Direct Polymer Extrusion 3D Printer",
+          "spec": "30 to 50% cost reduction · STM32 SKR Mini E3 · Capstone",
+          "domain": "Embedded · Mechatronics · Capstone",
+          "bullets": [
+            "Designed and implemented a Direct Polymer Extrusion system by modifying a Creality 3D printer to print directly from raw polymer material, eliminating the need for filament",
+            "Replaced the stock control board with an STM32-based controller (SKR Mini E3) to support custom hardware integration",
+            "Configured and modified Marlin firmware to enable compatibility with a non-standard extrusion system",
+            "Integrated and configured a custom display interface to ensure seamless operation with the upgraded control board",
+            "Tuned key system parameters including extrusion rate, temperature profiles, and motion synchronization to achieve stable and consistent printing performance",
+            "Solved system-level challenges involving hardware, software integration, real-time control, and thermal management",
+            "Enabled multi-material printing and direct use of recycled plastics; achieved 30 to 50% cost reduction with up to 75% savings when using bulk polymer pellets"
+          ],
+          "imgs": [
+            "/classic/images/Capstone2.jpg",
+            "/classic/images/Capstone1.png",
+            "/classic/images/Capstone.png"
+          ],
+          "alts": [
+            "Direct polymer extrusion printer build",
+            "Capstone Design Day presentation",
+            "System overview"
+          ],
+          "links": [
+            {
+              "label": "View Design Day Poster",
+              "url": "/classic/images/G41ENGG41XX_POSTER (1).pdf"
+            }
+          ],
+          "tags": [
+            "STM32",
+            "Marlin",
+            "C",
+            "FDM",
+            "Capstone",
+            "Firmware"
+          ]
+        },
+        {
+          "slug": "real-time-hot-air-plant-control",
+          "group": "embedded",
+          "title": "Real-Time Hot Air Plant Control",
+          "spec": "FreeRTOS tasks · Closed-loop PID · Queue/Semaphore sync",
+          "domain": "Embedded · RTOS · ARM Cortex",
+          "bullets": [
+            "Developed real-time embedded firmware in C for an ARM-based microcontroller using FreeRTOS, built and debugged with Keil and STM32CubeIDE",
+            "Architected a task-based RTOS system with dedicated tasks for temperature sensing, control computation, actuator output, and system monitoring",
+            "Interfaced temperature sensors via ADC, implemented signal conditioning, and validated sensor accuracy and response time",
+            "Implemented closed-loop control logic to regulate air temperature by dynamically adjusting heater power and fan operation under real-time constraints",
+            "Used FreeRTOS inter-task communication mechanisms (queues and semaphores) to ensure deterministic data flow between sensing, control, and actuation",
+            "Debugged timing, synchronization, and control behavior using oscilloscope-based measurements and runtime task analysis"
+          ],
+          "imgs": [
+            "/classic/images/Realtime.jpg",
+            "/classic/images/Realtime1.jpg",
+            "/classic/images/Realtime2.jpg"
+          ],
+          "alts": [
+            "Real-time hot air plant control setup",
+            "FreeRTOS task timing and sensor output",
+            "PID closed-loop response validation"
+          ],
+          "links": [],
+          "tags": [
+            "FreeRTOS",
+            "ARM Cortex-M",
+            "C",
+            "Keil",
+            "STM32CubeIDE",
+            "PID",
+            "ADC"
+          ]
+        },
+        {
+          "slug": "guide-wearable-lidar-system",
+          "group": "embedded",
+          "title": "G.U.I.D.E., Wearable LiDAR System",
+          "spec": "360° LiDAR oscillation · Haptic feedback · ~12 hr battery",
+          "domain": "Systems Design · Accessibility",
+          "bullets": [
+            "Designed a wearable real-time obstacle detection system combining a 360° 2D LiDAR mounted on a motorized oscillation mechanism to achieve effective 3D spatial sensing for head- and body-level hazards",
+            "Developed control logic to process LiDAR distance, angle data, convert polar measurements into real-world coordinates, and classify actionable obstacles using calibrated reference thresholds",
+            "Implemented a stepper-motor, driven scanning architecture, synchronizing motor position, IMU orientation, and LiDAR sampling to maintain consistent spatial mapping during user motion",
+            "Designed a ground-level hazard detection subsystem using a cane-mounted rotary encoder and contact switch to detect traction loss and slippery surfaces in real time",
+            "Engineered directional haptic feedback logic, mapping obstacle proximity and direction to multiple vibration motors to deliver intuitive, low-latency tactile alerts",
+            "Performed system-level validation including torque calculations, battery life modeling (~12 hours), sensitivity analysis, and compliance with accessibility standards (Accessible Canada Act, EN 301 549)"
+          ],
+          "imgs": [
+            "/classic/images/GUIDE.jpg",
+            "/classic/images/GUIDE1.jpg",
+            "/classic/images/GUIDE2.jpg",
+            "/classic/images/GUIDE3.jpg",
+            "/classic/images/GUIDE4.jpg",
+            "/classic/images/GUIDE5.jpg"
+          ],
+          "alts": [
+            "Wearable system overview",
+            "LiDAR oscillation mechanism",
+            "Haptic feedback cane mount",
+            "System block diagram",
+            "Prototype assembly",
+            "Field testing"
+          ],
+          "links": [],
+          "tags": [
+            "LiDAR",
+            "Arduino",
+            "Haptics",
+            "Stepper Motor",
+            "IMU",
+            "C++",
+            "Accessibility"
+          ]
+        },
+        {
+          "slug": "embedded-digital-voltmeter-system",
+          "group": "embedded",
+          "title": "Embedded Digital Voltmeter System",
+          "spec": "STM32 · ADC/SPI/I2C · signal conditioning · oscilloscope validated",
+          "domain": "Embedded · Low-Level Firmware · Peripherals",
+          "bullets": [
+            "Developed embedded firmware in C for an ARM-based STM32 microcontroller to measure and display analog voltages",
+            "Implemented and validated ADC sampling, signal scaling, and calibration logic to ensure accurate voltage measurements",
+            "Wrote low-level peripheral drivers and configured registers for ADC, GPIO, SPI, and I2C operation from scratch",
+            "Integrated SPI and I2C peripherals to interface with external displays and analog-to-digital converters",
+            "Implemented data formatting and conversion logic to translate raw ADC readings into user-readable voltage output",
+            "Debugged noise, timing, and communication issues using oscilloscopes and logic analyzers, improving measurement stability and reliability"
+          ],
+          "imgs": [],
+          "alts": [],
+          "links": [],
+          "tags": [
+            "STM32",
+            "C",
+            "ADC",
+            "SPI",
+            "I2C",
+            "Keil",
+            "ARM Cortex-M",
+            "Peripherals"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "control",
+      "ref": "U4",
+      "name": "CONTROL DSP",
+      "sub": "MATLAB · Simulink · QUARC",
+      "col": "#9d84ef",
+      "projects": [
+        {
+          "slug": "maglev-control-system",
+          "group": "control",
+          "title": "MAGLEV Control System",
+          "spec": "PI + PID+FF cascade · QUARC hardware · ~1.5% overshoot",
+          "domain": "Control Systems · Real-Time",
+          "bullets": [
+            "Modeled and analyzed a nonlinear magnetic levitation system, capturing both electrical and electro-mechanical dynamics",
+            "Derived system equations using first principles (Newton's laws & circuit laws) and linearized the model for control design",
+            "Designed a hierarchical control system with inner-loop PI current controller (fast response, ~1.5% overshoot, near-zero steady-state error) and outer-loop PID + feedforward ball position controller",
+            "Tuned controller parameters to meet performance specs including low overshoot, fast settling time, and zero steady-state error",
+            "Validated system performance by comparing Simulink simulations with real experimental results, identifying effects like sensor noise and system nonlinearities",
+            "Implemented real-time control using MATLAB/Simulink with QUARC, interfacing directly with the physical MAGLEV hardware",
+            "Analyzed trade-offs between response speed, damping, and accuracy during controller tuning"
+          ],
+          "imgs": [
+            "/classic/images/Maglev.jpg",
+            "/classic/images/Maglev1.jpg",
+            "/classic/images/Maglev2.jpg"
+          ],
+          "alts": [
+            "MAGLEV hardware setup",
+            "Simulink model and control loops",
+            "Step response, ~1.5% overshoot"
+          ],
+          "links": [],
+          "tags": [
+            "MATLAB",
+            "Simulink",
+            "QUARC",
+            "PID",
+            "PI",
+            "Feedforward",
+            "Control Theory"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "software",
+      "ref": "U5",
+      "name": "SOFTWARE",
+      "sub": "Python · AI · ASP.NET",
+      "col": "#a7d96a",
+      "projects": [
+        {
+          "slug": "diet-optimization-sugarscape-simulation",
+          "group": "software",
+          "title": "Diet Optimization, Sugarscape Simulation",
+          "spec": "Stable optimum: ~40% protein · 39% carbs · 21% fats",
+          "domain": "Simulation · Agent-Based Modelling",
+          "bullets": [
+            "Designed and implemented an agent-based Sugarscape simulation to study how macronutrient distributions (protein, carbohydrates, fats) impact long-term fat loss outcomes",
+            "Modeled human metabolism using Basal Metabolic Rate (BMR), caloric intake, caloric deficit, and body-fat dynamics grounded in established nutritional science",
+            "Implemented dynamic agent behavior where movement range, activity level, and survival depended on available energy from carbohydrates and fats within a regenerating nutrient environment",
+            "Developed a quantitative scoring metric based on proximity to a target body-fat percentage (15.5%) to evaluate diet effectiveness across thousands of simulation time steps",
+            "Identified a stable optimal macronutrient distribution of approximately 40% protein, 39% carbohydrates, and 21% fats; validated results against real-world nutritional guidelines",
+            "Produced data visualizations tracking population dynamics, nutrient distributions, and steady-state behavior",
+            "Built the simulation as a scalable framework extensible to gender-specific models, additional metabolic variables, and personalized diet optimization"
+          ],
+          "imgs": [
+            "/classic/images/Modelling.jpg",
+            "/classic/images/Modelling1.jpg",
+            "/classic/images/Modelling2.jpg"
+          ],
+          "alts": [
+            "Sugarscape simulation results",
+            "Macronutrient distribution over time",
+            "Population convergence to optimal ratio"
+          ],
+          "links": [],
+          "tags": [
+            "Python",
+            "Agent-Based Modelling",
+            "Sugarscape",
+            "Matplotlib",
+            "NumPy",
+            "Simulation"
+          ]
+        },
+        {
+          "slug": "enhanced-system-monitoring-glances",
+          "group": "software",
+          "title": "Enhanced System Monitoring, Glances",
+          "spec": "NVMe metrics · Full test coverage · UML architecture",
+          "domain": "Software · Open Source · SCRUM",
+          "bullets": [
+            "Utilized UML to extract and document the architectural design of an open-source system monitoring tool, highlighting class structures and subsystem interactions",
+            "Addressed critical user feedback by developing features to improve data visibility and usability, including file system descriptions and optimized metric displays",
+            "Designed and implemented NVMe-specific metrics such as temperature, health status, and performance tracking to modernize hardware monitoring capabilities",
+            "Collaborated within a team using SCRUM methodology, managed sprints via JIRA, and utilized GitHub for version control",
+            "Developed and executed automated test suites, achieving comprehensive test coverage for newly introduced features"
+          ],
+          "imgs": [
+            "/classic/images/app.jpg"
+          ],
+          "alts": [
+            "Glances system monitor with NVMe and enhanced metrics"
+          ],
+          "links": [],
+          "tags": [
+            "Python",
+            "UML",
+            "JIRA",
+            "SCRUM",
+            "GitHub",
+            "NVMe",
+            "TDD",
+            "Open Source"
+          ]
+        }
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "slug": "8-bit-cmos-program-counter",
+      "group": "vlsi",
+      "title": "8-bit CMOS Program Counter",
+      "spec": "906 ps · 58.08 µW · 1.10 GHz · gpdk045 45nm",
+      "domain": "VLSI · IC Design · Cadence",
+      "bullets": [
+        "Designed a fully functional 8-bit Program Counter at the transistor level using Cadence Virtuoso with the gpdk045 45nm CMOS process",
+        "Implemented three sub-modules from scratch: a CMOS transmission gate multiplexer, a mirror adder ripple carry full adder, and a master-slave D flip-flop register",
+        "Achieved a critical path delay of 906 ps, meeting the 1 GHz minimum frequency requirement with a theoretical maximum operating frequency of 1.10 GHz",
+        "Measured average power consumption of 58.08 µW through Spectre transient simulation",
+        "Characterized each module individually for worst-case propagation delay: 738 ps (full adder), 394 ps (register CLK-to-Q), and 143 ps (multiplexer)",
+        "Verified correct sequential increment and branch operation through full top-level transient simulation",
+        "Documented design decisions, timing analysis, and simulation results in a 17-page technical report"
+      ],
+      "imgs": [
+        "/classic/images/TOPLEVELTEST.png",
+        "/classic/images/8BITREGTEST.png",
+        "/classic/images/TOP_LEVEL_SCHEMATIC.png",
+        "/classic/images/1BITFA_SCHEMATIC.png"
+      ],
+      "alts": [
+        "Top-level Spectre transient simulation",
+        "8-bit register transient simulation",
+        "Top-level Cadence schematic",
+        "1-bit mirror adder schematic"
+      ],
+      "links": [],
+      "tags": [
+        "Cadence Virtuoso",
+        "Spectre",
+        "45nm CMOS",
+        "DFF",
+        "Transmission Gate MUX"
+      ]
+    },
+    {
+      "slug": "8x8-6t-sram-macro-sky130",
+      "group": "vlsi",
+      "title": "8×8 6T SRAM Macro, Sky130",
+      "spec": "716 mV SNM · DRC/LVS-clean · AI-agent driven · 130nm",
+      "domain": "VLSI · Physical Design · SkyWater",
+      "bullets": [
+        "Designed a full-custom 6T SRAM macro (64-bit, 8×8) from scratch in SkyWater Sky130 130nm PDK, every transistor hand-placed in Magic, no standard cells",
+        "Built and verified the complete cell library bottom-up: 6T bit cell, 3-to-8 row decoder, precharge/equalize, write driver, and cross-coupled sense amplifier, all DRC-clean, LVS-matched, and SPICE-verified",
+        "Integrated decoder + 8×8 array + read/write data-path periphery into a single DRC-clean macro; characterized static noise margin via butterfly curves (716 mV hold / 311 mV read)",
+        "Used Claude AI agents as the execution layer, directing them to author Magic/ngspice scripts and run DRC checks, layout extractions, and SPICE simulations in parallel across background jobs, iterating far faster than a manual GUI flow while steering the architecture and verification calls",
+        "Drove the entire flow headlessly and reproducibly, layout, DRC, extraction, and simulation all scripted (Magic + ngspice), so every result is one command away from being regenerated",
+        "Whole-macro extraction caught a bug a clean DRC missed: the decoder-to-array word-line routing was design-rule-clean but electrically open, found it, fixed the routing, confirmed connectivity",
+        "Simulating the extracted layout surfaced a real cell write-ability margin between schematic and silicon, exactly the schematic-vs-extracted gap that full-custom verification exists to catch"
+      ],
+      "imgs": [
+        "/classic/images/01_bitcell_layout.png",
+        "/classic/images/02_bitcell_sim.png",
+        "/classic/images/03_array_layout.png",
+        "/classic/images/04_macro_layout.png",
+        "/classic/images/05_senseamp_sim.png",
+        "/classic/images/06_decoder.png",
+        "/classic/images/07_snm_butterfly.png",
+        "/classic/images/08_periphery_column_sim.png",
+        "/classic/images/09_macro_read_write.png"
+      ],
+      "alts": [
+        "6T SRAM bit cell layout, Magic 8.3",
+        "Bit cell transient simulation",
+        "8×8 array layout, DRC clean",
+        "Full macro layout with row decoder",
+        "Sense amplifier simulation",
+        "3-to-8 row decoder",
+        "SNM butterfly curves, 716 mV / 311 mV",
+        "Column periphery simulation",
+        "Full macro read/write simulation"
+      ],
+      "links": [
+        {
+          "label": "View Engineering Report",
+          "url": "/classic/images/SRAM_Report.pdf"
+        }
+      ],
+      "tags": [
+        "Magic 8.3",
+        "ngspice",
+        "SkyWater Sky130",
+        "6T SRAM",
+        "DRC/LVS",
+        "SNM",
+        "AI Agents",
+        "130nm"
+      ]
+    },
+    {
+      "slug": "aes-128-hardware-coprocessor",
+      "group": "fpga",
+      "title": "AES-128 Hardware Coprocessor",
+      "spec": "NIST verified · APB-integrated · CBC/OFB modes",
+      "domain": "FPGA · Cryptography · HW/SW Co-Design",
+      "bullets": [
+        "Designed and implemented a 128-bit AES encryption coprocessor in Verilog targeting an FPGA-based SoC platform",
+        "Developed a custom APB (Advanced Peripheral Bus) IP module and integrated it into the system using Platform Designer",
+        "Built a memory-mapped hardware/software interface enabling communication between the HPS processor and FPGA coprocessor",
+        "Implemented core AES transformations: SubBytes, ShiftRows, MixColumns, and AddRoundKey following NIST standards, plus full key expansion logic for AES-128",
+        "Developed a fully combinational (asynchronous) AES architecture, optimizing latency by eliminating clock dependency in the encryption core",
+        "Supported secure encryption modes (CBC/OFB) for improved data security beyond basic ECB mode",
+        "Verified functionality using official NIST test vectors; debugged and validated system integration across hardware (FPGA) and software (C driver on HPS)"
+      ],
+      "imgs": [
+        "/classic/images/AES1.png",
+        "/classic/images/AES2.png",
+        "/classic/images/AES3.png"
+      ],
+      "alts": [
+        "AES-128 CBC NIST PASS terminal output",
+        "Platform Designer system integration",
+        "AES-128 CBC chained encryption output"
+      ],
+      "links": [],
+      "tags": [
+        "Verilog",
+        "FPGA SoC",
+        "APB",
+        "Quartus",
+        "AES-128",
+        "NIST"
+      ]
+    },
+    {
+      "slug": "custom-synchronous-cpu",
+      "group": "fpga",
+      "title": "Custom Synchronous CPU",
+      "spec": "Full RTL datapath · FSM control · FPGA synthesized",
+      "domain": "FPGA · Digital Design · RTL",
+      "bullets": [
+        "Designed and implemented a custom synchronous CPU at the RTL level using VHDL, targeting FPGA implementation",
+        "Architected a multi-stage datapath including register file, ALU, control unit, and memory interface",
+        "Developed FSM-based control logic to manage instruction fetch, decode, execution, and write-back sequencing",
+        "Applied computer architecture principles to define instruction behavior, datapath/control separation, and signal timing",
+        "Performed functional simulation and waveform-level debugging in ModelSim to verify correctness and timing",
+        "Synthesized and implemented the design in Xilinx Vivado, analyzing timing closure, critical paths, and resource utilization"
+      ],
+      "imgs": [],
+      "alts": [],
+      "links": [],
+      "tags": [
+        "VHDL",
+        "Vivado",
+        "ModelSim",
+        "FPGA",
+        "RTL",
+        "FSM"
+      ]
+    },
+    {
+      "slug": "fpga-accelerator-vivado-hls",
+      "group": "fpga",
+      "title": "FPGA Accelerator, Vivado HLS",
+      "spec": "Loop pipelining · Array partitioning · Dataflow architecture",
+      "domain": "FPGA · HLS · Zynq SoC",
+      "bullets": [
+        "Designed a hardware accelerator kernel in C/C++ and targeted FPGA implementation using Vivado HLS on a Xilinx Zynq SoC",
+        "Applied loop pipelining, loop unrolling, and dataflow architectures to improve throughput and reduce latency of compute-intensive kernels",
+        "Optimized memory access using array partitioning and memory reshaping to remove bandwidth bottlenecks",
+        "Analyzed HLS synthesis and implementation reports to evaluate clock frequency, latency, initiation interval (II), and DSP/LUT/BRAM utilization",
+        "Integrated the accelerator with ARM-side software on Zynq, validating correct HW/SW interaction against C/C++ reference models",
+        "Developed Python scripts to automate performance analysis, compare design variants, and verify functional equivalence"
+      ],
+      "imgs": [],
+      "alts": [],
+      "links": [],
+      "tags": [
+        "Vivado HLS",
+        "Zynq SoC",
+        "C/C++",
+        "Xilinx",
+        "Pipelining",
+        "Dataflow"
+      ]
+    },
+    {
+      "slug": "arinc-429-transmitter-and-receiver",
+      "group": "fpga",
+      "title": "ARINC 429 Transmitter & Receiver",
+      "spec": "Full protocol · FSM-based Rx · Nexys A7",
+      "domain": "FPGA · Aerospace Protocol",
+      "bullets": [
+        "Designed and implemented a complete ARINC 429 transmitter and receiver in VHDL, targeting the Nexys A7 FPGA",
+        "Implemented 32-bit ARINC word formatting including label fields, SDI, data, SSM decoding, and odd parity generation and checking",
+        "Developed an FSM-based receiver for bit timing, word detection, parity validation, and protocol error handling",
+        "Implemented a protocol-compliant transmitter with MSB-first bit ordering and timing behavior aligned with ARINC 429 specifications",
+        "Verified functional correctness and timing behavior through RTL simulation and waveform analysis in ModelSim",
+        "Optimized RTL design in Xilinx Vivado, reducing LUT and flip-flop utilization while maintaining strict protocol timing constraints"
+      ],
+      "imgs": [],
+      "alts": [],
+      "links": [],
+      "tags": [
+        "VHDL",
+        "Nexys A7",
+        "ARINC 429",
+        "Vivado",
+        "ModelSim",
+        "Aerospace"
+      ]
+    },
+    {
+      "slug": "direct-polymer-extrusion-3d-printer",
+      "group": "embedded",
+      "title": "Direct Polymer Extrusion 3D Printer",
+      "spec": "30 to 50% cost reduction · STM32 SKR Mini E3 · Capstone",
+      "domain": "Embedded · Mechatronics · Capstone",
+      "bullets": [
+        "Designed and implemented a Direct Polymer Extrusion system by modifying a Creality 3D printer to print directly from raw polymer material, eliminating the need for filament",
+        "Replaced the stock control board with an STM32-based controller (SKR Mini E3) to support custom hardware integration",
+        "Configured and modified Marlin firmware to enable compatibility with a non-standard extrusion system",
+        "Integrated and configured a custom display interface to ensure seamless operation with the upgraded control board",
+        "Tuned key system parameters including extrusion rate, temperature profiles, and motion synchronization to achieve stable and consistent printing performance",
+        "Solved system-level challenges involving hardware, software integration, real-time control, and thermal management",
+        "Enabled multi-material printing and direct use of recycled plastics; achieved 30 to 50% cost reduction with up to 75% savings when using bulk polymer pellets"
+      ],
+      "imgs": [
+        "/classic/images/Capstone2.jpg",
+        "/classic/images/Capstone1.png",
+        "/classic/images/Capstone.png"
+      ],
+      "alts": [
+        "Direct polymer extrusion printer build",
+        "Capstone Design Day presentation",
+        "System overview"
+      ],
+      "links": [
+        {
+          "label": "View Design Day Poster",
+          "url": "/classic/images/G41ENGG41XX_POSTER (1).pdf"
+        }
+      ],
+      "tags": [
+        "STM32",
+        "Marlin",
+        "C",
+        "FDM",
+        "Capstone",
+        "Firmware"
+      ]
+    },
+    {
+      "slug": "real-time-hot-air-plant-control",
+      "group": "embedded",
+      "title": "Real-Time Hot Air Plant Control",
+      "spec": "FreeRTOS tasks · Closed-loop PID · Queue/Semaphore sync",
+      "domain": "Embedded · RTOS · ARM Cortex",
+      "bullets": [
+        "Developed real-time embedded firmware in C for an ARM-based microcontroller using FreeRTOS, built and debugged with Keil and STM32CubeIDE",
+        "Architected a task-based RTOS system with dedicated tasks for temperature sensing, control computation, actuator output, and system monitoring",
+        "Interfaced temperature sensors via ADC, implemented signal conditioning, and validated sensor accuracy and response time",
+        "Implemented closed-loop control logic to regulate air temperature by dynamically adjusting heater power and fan operation under real-time constraints",
+        "Used FreeRTOS inter-task communication mechanisms (queues and semaphores) to ensure deterministic data flow between sensing, control, and actuation",
+        "Debugged timing, synchronization, and control behavior using oscilloscope-based measurements and runtime task analysis"
+      ],
+      "imgs": [
+        "/classic/images/Realtime.jpg",
+        "/classic/images/Realtime1.jpg",
+        "/classic/images/Realtime2.jpg"
+      ],
+      "alts": [
+        "Real-time hot air plant control setup",
+        "FreeRTOS task timing and sensor output",
+        "PID closed-loop response validation"
+      ],
+      "links": [],
+      "tags": [
+        "FreeRTOS",
+        "ARM Cortex-M",
+        "C",
+        "Keil",
+        "STM32CubeIDE",
+        "PID",
+        "ADC"
+      ]
+    },
+    {
+      "slug": "guide-wearable-lidar-system",
+      "group": "embedded",
+      "title": "G.U.I.D.E., Wearable LiDAR System",
+      "spec": "360° LiDAR oscillation · Haptic feedback · ~12 hr battery",
+      "domain": "Systems Design · Accessibility",
+      "bullets": [
+        "Designed a wearable real-time obstacle detection system combining a 360° 2D LiDAR mounted on a motorized oscillation mechanism to achieve effective 3D spatial sensing for head- and body-level hazards",
+        "Developed control logic to process LiDAR distance, angle data, convert polar measurements into real-world coordinates, and classify actionable obstacles using calibrated reference thresholds",
+        "Implemented a stepper-motor, driven scanning architecture, synchronizing motor position, IMU orientation, and LiDAR sampling to maintain consistent spatial mapping during user motion",
+        "Designed a ground-level hazard detection subsystem using a cane-mounted rotary encoder and contact switch to detect traction loss and slippery surfaces in real time",
+        "Engineered directional haptic feedback logic, mapping obstacle proximity and direction to multiple vibration motors to deliver intuitive, low-latency tactile alerts",
+        "Performed system-level validation including torque calculations, battery life modeling (~12 hours), sensitivity analysis, and compliance with accessibility standards (Accessible Canada Act, EN 301 549)"
+      ],
+      "imgs": [
+        "/classic/images/GUIDE.jpg",
+        "/classic/images/GUIDE1.jpg",
+        "/classic/images/GUIDE2.jpg",
+        "/classic/images/GUIDE3.jpg",
+        "/classic/images/GUIDE4.jpg",
+        "/classic/images/GUIDE5.jpg"
+      ],
+      "alts": [
+        "Wearable system overview",
+        "LiDAR oscillation mechanism",
+        "Haptic feedback cane mount",
+        "System block diagram",
+        "Prototype assembly",
+        "Field testing"
+      ],
+      "links": [],
+      "tags": [
+        "LiDAR",
+        "Arduino",
+        "Haptics",
+        "Stepper Motor",
+        "IMU",
+        "C++",
+        "Accessibility"
+      ]
+    },
+    {
+      "slug": "embedded-digital-voltmeter-system",
+      "group": "embedded",
+      "title": "Embedded Digital Voltmeter System",
+      "spec": "STM32 · ADC/SPI/I2C · signal conditioning · oscilloscope validated",
+      "domain": "Embedded · Low-Level Firmware · Peripherals",
+      "bullets": [
+        "Developed embedded firmware in C for an ARM-based STM32 microcontroller to measure and display analog voltages",
+        "Implemented and validated ADC sampling, signal scaling, and calibration logic to ensure accurate voltage measurements",
+        "Wrote low-level peripheral drivers and configured registers for ADC, GPIO, SPI, and I2C operation from scratch",
+        "Integrated SPI and I2C peripherals to interface with external displays and analog-to-digital converters",
+        "Implemented data formatting and conversion logic to translate raw ADC readings into user-readable voltage output",
+        "Debugged noise, timing, and communication issues using oscilloscopes and logic analyzers, improving measurement stability and reliability"
+      ],
+      "imgs": [],
+      "alts": [],
+      "links": [],
+      "tags": [
+        "STM32",
+        "C",
+        "ADC",
+        "SPI",
+        "I2C",
+        "Keil",
+        "ARM Cortex-M",
+        "Peripherals"
+      ]
+    },
+    {
+      "slug": "maglev-control-system",
+      "group": "control",
+      "title": "MAGLEV Control System",
+      "spec": "PI + PID+FF cascade · QUARC hardware · ~1.5% overshoot",
+      "domain": "Control Systems · Real-Time",
+      "bullets": [
+        "Modeled and analyzed a nonlinear magnetic levitation system, capturing both electrical and electro-mechanical dynamics",
+        "Derived system equations using first principles (Newton's laws & circuit laws) and linearized the model for control design",
+        "Designed a hierarchical control system with inner-loop PI current controller (fast response, ~1.5% overshoot, near-zero steady-state error) and outer-loop PID + feedforward ball position controller",
+        "Tuned controller parameters to meet performance specs including low overshoot, fast settling time, and zero steady-state error",
+        "Validated system performance by comparing Simulink simulations with real experimental results, identifying effects like sensor noise and system nonlinearities",
+        "Implemented real-time control using MATLAB/Simulink with QUARC, interfacing directly with the physical MAGLEV hardware",
+        "Analyzed trade-offs between response speed, damping, and accuracy during controller tuning"
+      ],
+      "imgs": [
+        "/classic/images/Maglev.jpg",
+        "/classic/images/Maglev1.jpg",
+        "/classic/images/Maglev2.jpg"
+      ],
+      "alts": [
+        "MAGLEV hardware setup",
+        "Simulink model and control loops",
+        "Step response, ~1.5% overshoot"
+      ],
+      "links": [],
+      "tags": [
+        "MATLAB",
+        "Simulink",
+        "QUARC",
+        "PID",
+        "PI",
+        "Feedforward",
+        "Control Theory"
+      ]
+    },
+    {
+      "slug": "diet-optimization-sugarscape-simulation",
+      "group": "software",
+      "title": "Diet Optimization, Sugarscape Simulation",
+      "spec": "Stable optimum: ~40% protein · 39% carbs · 21% fats",
+      "domain": "Simulation · Agent-Based Modelling",
+      "bullets": [
+        "Designed and implemented an agent-based Sugarscape simulation to study how macronutrient distributions (protein, carbohydrates, fats) impact long-term fat loss outcomes",
+        "Modeled human metabolism using Basal Metabolic Rate (BMR), caloric intake, caloric deficit, and body-fat dynamics grounded in established nutritional science",
+        "Implemented dynamic agent behavior where movement range, activity level, and survival depended on available energy from carbohydrates and fats within a regenerating nutrient environment",
+        "Developed a quantitative scoring metric based on proximity to a target body-fat percentage (15.5%) to evaluate diet effectiveness across thousands of simulation time steps",
+        "Identified a stable optimal macronutrient distribution of approximately 40% protein, 39% carbohydrates, and 21% fats; validated results against real-world nutritional guidelines",
+        "Produced data visualizations tracking population dynamics, nutrient distributions, and steady-state behavior",
+        "Built the simulation as a scalable framework extensible to gender-specific models, additional metabolic variables, and personalized diet optimization"
+      ],
+      "imgs": [
+        "/classic/images/Modelling.jpg",
+        "/classic/images/Modelling1.jpg",
+        "/classic/images/Modelling2.jpg"
+      ],
+      "alts": [
+        "Sugarscape simulation results",
+        "Macronutrient distribution over time",
+        "Population convergence to optimal ratio"
+      ],
+      "links": [],
+      "tags": [
+        "Python",
+        "Agent-Based Modelling",
+        "Sugarscape",
+        "Matplotlib",
+        "NumPy",
+        "Simulation"
+      ]
+    },
+    {
+      "slug": "enhanced-system-monitoring-glances",
+      "group": "software",
+      "title": "Enhanced System Monitoring, Glances",
+      "spec": "NVMe metrics · Full test coverage · UML architecture",
+      "domain": "Software · Open Source · SCRUM",
+      "bullets": [
+        "Utilized UML to extract and document the architectural design of an open-source system monitoring tool, highlighting class structures and subsystem interactions",
+        "Addressed critical user feedback by developing features to improve data visibility and usability, including file system descriptions and optimized metric displays",
+        "Designed and implemented NVMe-specific metrics such as temperature, health status, and performance tracking to modernize hardware monitoring capabilities",
+        "Collaborated within a team using SCRUM methodology, managed sprints via JIRA, and utilized GitHub for version control",
+        "Developed and executed automated test suites, achieving comprehensive test coverage for newly introduced features"
+      ],
+      "imgs": [
+        "/classic/images/app.jpg"
+      ],
+      "alts": [
+        "Glances system monitor with NVMe and enhanced metrics"
+      ],
+      "links": [],
+      "tags": [
+        "Python",
+        "UML",
+        "JIRA",
+        "SCRUM",
+        "GitHub",
+        "NVMe",
+        "TDD",
+        "Open Source"
+      ]
+    }
+  ]
+}

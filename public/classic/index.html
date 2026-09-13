@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lauai Alerfi · Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Chakra+Petch:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+html,body{background:#060f07;color:#e5f0e8;font-family:'IBM Plex Mono',monospace;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* ─── HERO ──────────────────────────────────────────────────────── */
+#s-hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:80px 70px;position:relative;border-bottom:1px solid #152618}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(20,55,26,.28)1px,transparent 1px),
+    linear-gradient(90deg,rgba(20,55,26,.28)1px,transparent 1px);
+  background-size:40px 40px}
+.h-ref{font-size:10px;color:#c8b87a;letter-spacing:.1em;margin-bottom:16px;animation:fadein .8s ease both}
+.h-name{font-size:clamp(52px,9vw,108px);font-weight:700;font-family:'Chakra Petch',sans-serif;
+  color:#e5f0e8;letter-spacing:.02em;line-height:.95;animation:fadein .8s .15s ease both}
+.h-title{font-size:clamp(14px,2vw,22px);color:#3fcf8e;margin-top:14px;letter-spacing:.1em;
+  animation:fadein .8s .3s ease both}
+.h-desc{font-size:12px;color:#3a5a3e;margin-top:6px;letter-spacing:.05em;animation:fadein .8s .4s ease both}
+.h-stats{display:flex;gap:40px;margin-top:44px;animation:fadein .8s .55s ease both}
+.hs-v{font-size:28px;font-weight:700;color:#3fcf8e;font-family:'Chakra Petch',sans-serif}
+.hs-l{font-size:8px;color:#2a4a2e;margin-top:2px;letter-spacing:.07em}
+.h-overview{max-width:680px;margin-top:36px;animation:fadein .8s .7s ease both}
+.h-overview p{font-size:12px;color:#6a8a72;line-height:1.85;margin-bottom:10px}
+.h-overview p:last-child{margin-bottom:0}
+.h-overview em{color:#a0c8a8;font-style:normal}
+.h-arrow{position:absolute;bottom:28px;left:70px;font-size:10px;color:#2a4a2e;animation:pulse 2s ease-in-out infinite}
+@keyframes fadein{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:.9}}
+
+/* ─── SECTIONS ───────────────────────────────────────────────────── */
+.sec-wrap{border-bottom:1px solid #152618}
+.sec{max-width:1060px;margin:0 auto;padding:70px 70px;width:100%}
+.sec-head{margin-bottom:36px}
+.sec-ref{display:block;font-size:9px;color:#c8b87a;letter-spacing:.1em;margin-bottom:6px}
+.sec-title{font-size:26px;font-weight:700;font-family:'Chakra Petch',sans-serif;color:#e5f0e8}
+.sec-sub{font-size:11px;color:#3a5a3e;margin-top:5px}
+
+/* ─── EXPERIENCE ─────────────────────────────────────────────────── */
+.timeline{display:flex;flex-direction:column;gap:13px}
+.xcard{border:1px solid #152618;padding:18px 22px;position:relative;background:#06100706;transition:border-color .2s}
+.xcard:hover{border-color:#1e3a20}
+.xcard::before{content:'';position:absolute;top:0;left:0;bottom:0;width:2px}
+.xcard.green::before{background:#3fcf8e}.xcard.purple::before{background:#9d84ef}.xcard.blue::before{background:#4fd8e0}
+.xdate{font-size:9px;color:#c8b87a;letter-spacing:.07em;margin-bottom:4px}
+.xtitle{font-size:14px;font-weight:600;font-family:'Chakra Petch',sans-serif;color:#e5f0e8;margin-bottom:2px}
+.xorg{font-size:10px;margin-bottom:8px}
+.xdesc{font-size:11px;color:#6a8a72;line-height:1.75}
+.xtags{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.xtag{font-size:9px;border:1px solid #1a3320;color:#3a5a3e;padding:2px 7px}
+
+/* ─── EDUCATION ──────────────────────────────────────────────────── */
+.edu-main{border:1px solid #1a3a22;padding:24px 26px;position:relative;margin-bottom:26px}
+.edu-main::before{content:'';position:absolute;top:0;left:0;bottom:0;width:3px;background:#4fd8e0}
+.edu-deg{font-size:18px;font-weight:700;font-family:'Chakra Petch',sans-serif;color:#e5f0e8;margin-bottom:3px}
+.edu-uni{font-size:11px;color:#4fd8e0;margin-bottom:12px}
+.edu-badges{display:flex;flex-wrap:wrap;gap:9px;margin-bottom:10px}
+.edu-badge{border:1px solid;padding:4px 13px;font-size:10px;font-weight:600}
+.badge-gold{border-color:#c8b87a;color:#c8b87a;background:rgba(200,184,122,.06)}
+.badge-cyan{border-color:#4fd8e0;color:#4fd8e0;background:rgba(79,216,224,.06)}
+.edu-focus{font-size:9px;color:#3a5a3e;margin-top:6px}
+
+.courses-hd{font-size:9px;color:#c8b87a;letter-spacing:.1em;margin-bottom:12px}
+.courses-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:9px}
+.ccard{border:1px solid #152618;padding:11px 14px}
+.ccode{font-size:8px;color:#4fd8e0;letter-spacing:.09em;margin-bottom:2px}
+.cname{font-size:10px;color:#a0bca8;line-height:1.4}
+.cnote{font-size:8px;color:#3a5a3e;margin-top:2px}
+
+.certs-hd{font-size:9px;color:#c8b87a;letter-spacing:.1em;margin:24px 0 12px}
+.certs-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:9px}
+.cert{border:1px solid #152618;padding:12px 14px}
+.cert-name{font-size:11px;color:#e5f0e8;margin-bottom:2px}
+.cert-org{font-size:9px;color:#4a6252;margin-bottom:1px}
+.cert-date{font-size:8px;color:#2a4a2e}
+
+/* ─── PCB SECTION ────────────────────────────────────────────────── */
+.sec-no-bottom{border-bottom:none}
+.sec-no-bottom .sec{padding-bottom:28px}
+#s-pcb{position:relative;height:100vh;overflow:hidden;border-bottom:1px solid #152618}
+.pcb-label{position:absolute;z-index:4;font-size:9px;color:#1e3a22;letter-spacing:.09em;pointer-events:none}
+#pcb-lbl-tl{top:16px;left:20px}#pcb-lbl-tr{top:16px;right:20px}
+#bg-c,#fx-c{position:absolute;top:0;left:0}
+#bg-c{z-index:1}#fx-c{z-index:2;pointer-events:none}
+#chips-div{position:absolute;inset:0;z-index:3}
+#pcb-hint{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:11px;color:#1e3a22;letter-spacing:.06em;pointer-events:none;z-index:4;transition:opacity .5s}
+
+/* ─── CHIP ───────────────────────────────────────────────────────── */
+.chip{position:absolute;transform:translate(-50%,-50%);cursor:pointer;user-select:none}
+.chip-wrap{display:flex;align-items:center}
+.chip-body{background:#050e06;border:1.5px solid var(--cc);min-width:116px;transition:box-shadow .2s,border-color .2s}
+.chip:hover .chip-body{box-shadow:0 0 20px var(--cg),0 0 42px var(--cg2)}
+.chip.lit .chip-body{box-shadow:0 0 28px var(--cg),0 0 60px var(--cg2);border-color:#e5f0e8}
+.chip-ref{position:absolute;top:-17px;left:0;font-size:8px;color:#c8b87a;white-space:nowrap;letter-spacing:.04em}
+.ch-inner{padding:10px 14px;text-align:center}
+.ch-name{font-size:10px;font-weight:600;color:var(--cc);letter-spacing:.09em}
+.ch-proj{font-size:7px;color:#2e4e32;margin-top:2px}
+.pins-l,.pins-r{display:flex;flex-direction:column;justify-content:space-around;padding:6px 0;gap:4px}
+.pins-l{align-items:flex-end}.pins-r{align-items:flex-start}
+.pin{display:flex;align-items:center}
+.pline{width:12px;height:1.5px;background:var(--cc);opacity:.6}
+.plbl{font-size:6px;color:var(--cc);opacity:.45;padding:0 2px}
+
+/* ─── SKILLS / CONTACT ───────────────────────────────────────────── */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:13px}
+.sg{border:1px solid #152618;padding:15px}
+.sg-t{font-size:9px;color:#3fcf8e;letter-spacing:.09em;font-weight:600;margin-bottom:9px}
+.sg-tags{display:flex;flex-wrap:wrap;gap:5px}
+.sgtag{font-size:9px;color:#4a6252;border:1px solid #152618;padding:2px 7px}
+.contact-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:11px}
+.cc{border:1px solid #152618;padding:15px;transition:border-color .15s;display:block}
+.cc:hover{border-color:#1e3a20}
+.cc-l{font-size:9px;color:#3fcf8e;letter-spacing:.1em;margin-bottom:4px}
+.cc-v{font-size:11px;color:#7a9a82;word-break:break-all}
+
+/* ─── SIDE PANEL ─────────────────────────────────────────────────── */
+#panel{position:fixed;top:0;right:0;width:400px;height:100%;background:#060f07;
+  border-left:1.5px solid #1a3320;z-index:200;transform:translateX(100%);
+  transition:transform .32s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column}
+#panel.open{transform:translateX(0)}
+.ph{padding:14px 18px 12px;border-bottom:1px solid #152618;position:sticky;top:0;background:#060f07;z-index:1;display:flex;justify-content:space-between;align-items:flex-start}
+.ph-ref{font-size:9px;color:#c8b87a;margin-bottom:2px}
+.ph-name{font-size:16px;font-weight:700;font-family:'Chakra Petch',sans-serif;color:#e5f0e8;line-height:1.1}
+.ph-sub{font-size:9px;color:var(--pc);margin-top:2px}
+.pcl{background:none;border:1px solid #1e3d24;color:#5a7e62;font-family:'IBM Plex Mono',monospace;font-size:10px;padding:3px 8px;cursor:pointer;transition:all .15s}
+.pcl:hover{border-color:#3fcf8e;color:#3fcf8e}
+.pp{padding:10px 18px;display:flex;flex-direction:column;gap:10px}
+/* mini cards in panel */
+.mini-card{border:1px solid #152618;padding:12px 14px;position:relative;cursor:pointer;transition:border-color .15s}
+.mini-card:hover{border-color:var(--pc)}
+.mini-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--pc);opacity:.6}
+.mc-num{font-size:8px;color:var(--pc);margin-bottom:2px}
+.mc-t{font-size:12px;font-weight:600;font-family:'Chakra Petch',sans-serif;color:#e5f0e8;line-height:1.3;margin-bottom:3px}
+.mc-s{font-size:9px;color:var(--pc);margin-bottom:6px}
+.mc-tags{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px}
+.mc-tag{font-size:8px;border:1px solid #1a3320;color:#3a5a3e;padding:1px 5px}
+.mc-btn{display:inline-block;font-size:9px;border:1px solid;color:var(--pc);padding:3px 10px;letter-spacing:.06em;transition:background .15s}
+.mc-btn:hover{background:rgba(255,255,255,.04)}
+
+/* ─── FULL-PAGE PROJECT VIEW ─────────────────────────────────────── */
+#proj-page{position:fixed;inset:0;z-index:300;background:#060f07;
+  transform:translateY(100%);transition:transform .4s cubic-bezier(.4,0,.2,1);overflow-y:auto}
+#proj-page.open{transform:translateY(0)}
+.pp-nav{position:sticky;top:0;z-index:10;background:rgba(6,15,7,.97);
+  border-bottom:1px solid #152618;padding:12px 60px;display:flex;align-items:center;gap:16px}
+.pp-back{background:none;border:1px solid #1e3d24;color:#5a7e62;font-family:'IBM Plex Mono',monospace;
+  font-size:10px;padding:4px 12px;cursor:pointer;transition:all .15s}
+.pp-back:hover{border-color:#3fcf8e;color:#3fcf8e}
+.pp-nav-title{font-size:11px;color:#3a5a3e;letter-spacing:.05em}
+.pp-body{max-width:980px;margin:0 auto;padding:52px 60px 80px}
+.pp-domain{font-size:9px;color:var(--ppc);letter-spacing:.1em;margin-bottom:10px}
+.pp-title{font-size:clamp(26px,4vw,46px);font-weight:700;font-family:'Chakra Petch',sans-serif;
+  color:#e5f0e8;line-height:1.1;margin-bottom:10px}
+.pp-spec{font-size:13px;color:var(--ppc);margin-bottom:18px}
+.pp-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:40px}
+.pp-tag{font-size:10px;border:1px solid;color:var(--ppc);border-color:var(--ppc);
+  padding:3px 10px;opacity:.7}
+.pp-bullets{margin-bottom:42px}
+.pp-bullets h3{font-size:9px;color:#c8b87a;letter-spacing:.1em;margin-bottom:14px}
+.pp-bullets ul{list-style:none;display:flex;flex-direction:column;gap:10px}
+.pp-bullets li{font-size:13px;color:#8aaa92;line-height:1.75;padding-left:18px;position:relative}
+.pp-bullets li::before{content:'▸';position:absolute;left:0;color:var(--ppc);opacity:.8}
+.pp-images{margin-bottom:42px}
+.pp-images h3{font-size:9px;color:#c8b87a;letter-spacing:.1em;margin-bottom:14px}
+.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px}
+.img-thumb{border:1px solid #152618;overflow:hidden;cursor:pointer;transition:border-color .2s;aspect-ratio:16/10;background:#0a1509}
+.img-thumb:hover{border-color:var(--ppc)}
+.img-thumb img{width:100%;height:100%;object-fit:cover;opacity:.85;transition:opacity .2s}
+.img-thumb:hover img{opacity:1}
+.img-cap{font-size:8px;color:#2a4a2e;padding:5px 7px;border-top:1px solid #152618}
+.pp-links{margin-bottom:42px;display:flex;flex-wrap:wrap;gap:10px}
+.pp-link{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--ppc);
+  color:var(--ppc);font-size:11px;padding:8px 18px;transition:background .15s}
+.pp-link:hover{background:rgba(255,255,255,.04)}
+
+/* ─── LIGHTBOX ───────────────────────────────────────────────────── */
+#lightbox{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.92);
+  display:none;align-items:center;justify-content:center;cursor:pointer}
+#lightbox.open{display:flex}
+#lightbox img{max-width:90vw;max-height:88vh;object-fit:contain;border:1px solid #1a3320}
+#lb-close{position:absolute;top:18px;right:24px;background:none;border:1px solid #1e3d24;
+  color:#8aa890;font-family:'IBM Plex Mono',monospace;font-size:11px;padding:4px 10px;cursor:pointer}
+
+/* ─── TERMINAL ───────────────────────────────────────────────────── */
+.term-box{margin-top:32px;border:1px solid #1a3320;overflow:hidden;max-width:560px;animation:fadein .8s .9s ease both}
+.term-bar{display:flex;align-items:center;gap:6px;padding:7px 12px;background:#040c05;border-bottom:1px solid #1a3320}
+.tdot{width:10px;height:10px;border-radius:50%}
+.td-r{background:#ff5f57}.td-y{background:#ffbd2e}.td-g{background:#28ca41}
+.term-title{font-size:9px;color:#2a4a2e;margin-left:6px;letter-spacing:.05em}
+.term-out{padding:11px 14px 0;min-height:100px;max-height:200px;overflow-y:auto;font-size:11px;line-height:1.75}
+.term-out::-webkit-scrollbar{width:3px}.term-out::-webkit-scrollbar-thumb{background:#1a3320}
+.tl{line-height:1.75;color:#3fcf8e}
+.tc{color:#4fd8e0!important}.tt{color:#c8e0cc!important}.te{color:#e7609f!important}.tmut{color:#2a4a2e!important}
+.term-in-row{display:flex;align-items:center;padding:4px 14px 10px;margin-top:2px}
+.term-prompt{font-size:11px;color:#4fd8e0;white-space:nowrap;margin-right:6px}
+.term-input{flex:1;background:transparent;border:none;outline:none;font-family:'IBM Plex Mono',monospace;font-size:11px;color:#c8e0cc;caret-color:#3fcf8e}
+
+/* ─── CONTACT FORM ───────────────────────────────────────────────── */
+.cf-layout{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.cf-info{display:flex;flex-direction:column;gap:10px}
+.cf-form{display:flex;flex-direction:column;gap:12px}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cf-field{display:flex;flex-direction:column;gap:5px}
+.cf-field label{font-size:9px;color:#c8b87a;letter-spacing:.09em}
+.cf-field input,.cf-field textarea,.cf-field select{
+  background:#060f07;border:1px solid #1a3320;color:#c8e0cc;
+  font-family:'IBM Plex Mono',monospace;font-size:12px;padding:10px 12px;
+  outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.cf-field input:focus,.cf-field textarea:focus{border-color:#3fcf8e;box-shadow:0 0 0 1px #3fcf8e20}
+.cf-field textarea{resize:vertical;min-height:120px}
+.cf-field input::placeholder,.cf-field textarea::placeholder{color:#2a4a2e}
+.cf-submit{background:none;border:1.5px solid #3fcf8e;color:#3fcf8e;
+  font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;letter-spacing:.1em;
+  padding:12px 28px;cursor:pointer;transition:all .2s;align-self:flex-start;margin-top:4px}
+.cf-submit:hover{background:#3fcf8e12;box-shadow:0 0 18px #3fcf8e30}
+.cf-submit:disabled{opacity:.4;cursor:not-allowed}
+.cf-msg{font-size:11px;padding:10px 14px;border:1px solid;display:none}
+.cf-msg.ok{border-color:#3fcf8e;color:#3fcf8e;background:#3fcf8e08}
+.cf-msg.err{border-color:#e7609f;color:#e7609f;background:#e7609f08}
+@media(max-width:700px){.cf-layout{grid-template-columns:1fr}.cf-row{grid-template-columns:1fr}}
+
+/* ─── SKILLS BTN ─────────────────────────────────────────────────── */
+#skillbtn{position:fixed;bottom:22px;left:26px;z-index:190;background:rgba(6,15,7,.92);
+  border:1px solid #1a3320;color:#4a6a52;font-family:'IBM Plex Mono',monospace;font-size:10px;
+  padding:5px 13px;cursor:pointer;transition:all .15s;opacity:0;pointer-events:none}
+#skillbtn.visible{opacity:1;pointer-events:auto}
+#skillbtn:hover{border-color:#3fcf8e;color:#3fcf8e}
+
+/* ─── 3D LINK ────────────────────────────────────────────────────── */
+#open3d{position:absolute;top:28px;right:70px;z-index:2;font-size:10px;letter-spacing:.1em;color:#4fd8e0;
+  border:1px solid #1a3a40;padding:6px 12px;transition:all .15s;animation:fadein .8s .9s ease both}
+#open3d:hover{border-color:#4fd8e0;background:rgba(79,216,224,.06)}
+#open3d.hidden{display:none}
+@media(max-width:700px){#open3d{right:20px;top:16px}}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════ HERO ═══════════════════ -->
+<section id="s-hero">
+  <div class="hero-grid"></div>
+  <div style="position:relative;z-index:1">
+    <div class="h-ref">// LAUAI.ALERFI · SYSTEMS ENGINEER · PCB-PORTFOLIO REV 2.0</div>
+    <h1 class="h-name">LAUAI<br>ALERFI</h1>
+    <div class="h-title">SYSTEMS ENGINEER</div>
+    <div class="h-desc">VLSI / IC Design &nbsp;·&nbsp; FPGA / HDL &nbsp;·&nbsp; Embedded Systems &nbsp;·&nbsp; Control Systems &nbsp;·&nbsp; Software Dev &nbsp;·&nbsp; Guelph, Canada</div>
+    <div class="h-stats">
+      <div><div class="hs-v">4x</div><div class="hs-l">Dean's List</div></div>
+      <div><div class="hs-v">3.7</div><div class="hs-l">GPA / 4.0</div></div>
+      <div><div class="hs-v">13</div><div class="hs-l">projects</div></div>
+      <div><div class="hs-v">5yr</div><div class="hs-l">teaching</div></div>
+    </div>
+    <div class="h-overview">
+      <p>I'm a <em>Systems Engineering graduate</em> from the <em>University of Guelph</em> (B.Eng, April 2026), specializing in the intersection of hardware design and software development.</p>
+      <p>I work at every layer of the stack — from designing <em>CMOS circuits at the transistor level</em> in Cadence Virtuoso to implementing <em>FPGA SoC systems</em> in VHDL/Verilog to building enterprise apps in C# and ASP.NET.</p>
+      <p>Currently a <em>Software/Systems Developer at ECNG Energy Group</em>, building AI-powered pipelines with the Claude API and Python automation. I love engineering problems that live at the boundary of hardware and software — where the logic meets the physics. Originally from <em>Damascus, Syria</em>, now building things in Canada.</p>
+    </div>
+    <div class="term-box" id="term-box">
+      <div class="term-bar">
+        <div class="tdot td-r"></div><div class="tdot td-y"></div><div class="tdot td-g"></div>
+        <div class="term-title">lauai@guelph — bash</div>
+      </div>
+      <div class="term-out" id="tout"></div>
+      <div class="term-in-row">
+        <div class="term-prompt">lauai@guelph ~$&nbsp;</div>
+        <input class="term-input" id="tin" placeholder="type 'help'…" autocomplete="off" spellcheck="false" />
+      </div>
+    </div>
+  </div>
+  <div class="h-arrow">↓ &nbsp;scroll to explore</div>
+  <a id="open3d" href="/?3d=1">⟶ &nbsp;OPEN THE 3D VERSION</a>
+</section>
+
+<!-- ══════════════════════════════════ EXPERIENCE ════════════════ -->
+<div class="sec-wrap"><div class="sec">
+  <div class="sec-head"><span class="sec-ref">// EXP.TIMELINE</span><h2 class="sec-title">Experience</h2></div>
+  <div class="timeline">
+    <div class="xcard green">
+      <div class="xdate">MAY 2025 — PRESENT</div><div class="xtitle">Software / Systems Developer</div>
+      <div class="xorg" style="color:#3fcf8e">ECNG Energy Group</div>
+      <div class="xdesc">AI invoice extraction service (Python, FastAPI, Claude API) feeding a C# billing app, 97% match across 265 utilities with a 22 invoice regression suite; daily IESO price alert pipeline with per client thresholds, in production since May 2026; Playwright portal automation across 110 customer accounts with zero errors; Selenium scraper fixes taking 208 monthly reports from 27 failures to zero; Microsoft Graph mailbox service filing utility reports into SQL Server.</div>
+      <div class="xtags"><span class="xtag">Claude API</span><span class="xtag">Python</span><span class="xtag">FastAPI</span><span class="xtag">C#</span><span class="xtag">VB.NET</span><span class="xtag">SQL Server</span><span class="xtag">Playwright</span><span class="xtag">Selenium</span></div>
+    </div>
+    <div class="xcard green">
+      <div class="xdate">DEC 2024 — APR 2025</div><div class="xtitle">Teaching Assistant — Electric Circuits</div>
+      <div class="xorg" style="color:#3fcf8e">University of Guelph</div>
+      <div class="xdesc">Nodal/mesh analysis, superposition, Thevenin/Norton; DC/AC, op-amp and 1st/2nd-order circuit labs; oscilloscope and instrumentation training.</div>
+      <div class="xtags"><span class="xtag">Circuits</span><span class="xtag">AC/DC</span><span class="xtag">Op-Amps</span><span class="xtag">Oscilloscope</span></div>
+    </div>
+    <div class="xcard green">
+      <div class="xdate">SEP 2024 — DEC 2024</div><div class="xtitle">Teaching Assistant — Engineering Systems Analysis</div>
+      <div class="xorg" style="color:#3fcf8e">University of Guelph</div>
+      <div class="xdesc">Dynamic-system modelling; Laplace methods for impulse/step/frequency response; mechanical, electrical, thermal and hydraulic systems.</div>
+      <div class="xtags"><span class="xtag">Control Systems</span><span class="xtag">Laplace</span><span class="xtag">Dynamics</span></div>
+    </div>
+    <div class="xcard green">
+      <div class="xdate">SEP 2024 — APR 2026</div><div class="xtitle">Co-Leader, SolidWorks User Group</div>
+      <div class="xorg" style="color:#3fcf8e">University of Guelph</div>
+      <div class="xdesc">Organized workshops and tutorials to strengthen 3D modelling and CAD skills across the engineering student community.</div>
+      <div class="xtags"><span class="xtag">SolidWorks</span><span class="xtag">CAD</span><span class="xtag">Leadership</span></div>
+    </div>
+    <div class="xcard purple">
+      <div class="xdate">NOV 2023 — JUN 2024</div><div class="xtitle">Robotics Instructor</div>
+      <div class="xorg" style="color:#9d84ef">Exceed Robotics</div>
+      <div class="xdesc">SolidWorks, Inventor, Mindstorms, Arduino; led students in IoT smart-house projects; supervised FDM/SLA printing; led team to regional VEX success.</div>
+      <div class="xtags"><span class="xtag">Robotics</span><span class="xtag">Arduino</span><span class="xtag">VEX</span><span class="xtag">SolidWorks</span></div>
+    </div>
+    <div class="xcard purple">
+      <div class="xdate">MAY 2017 — AUG 2022</div><div class="xtitle">Robotics &amp; Mathematics Teacher</div>
+      <div class="xorg" style="color:#9d84ef">Alwataniah Syria National School</div>
+      <div class="xdesc">Coding, robotics and mathematics to students aged 5–15; LEGO Mindstorms, Scratch, Arduino; adjusted methodology per student feedback over 5 years.</div>
+      <div class="xtags"><span class="xtag">Teaching</span><span class="xtag">Robotics</span><span class="xtag">Mathematics</span><span class="xtag">Arduino</span></div>
+    </div>
+  </div>
+</div></div>
+
+<!-- ══════════════════════════════════ EDUCATION ═════════════════ -->
+<div class="sec-wrap"><div class="sec">
+  <div class="sec-head"><span class="sec-ref">// EDU.RECORD</span><h2 class="sec-title">Education</h2></div>
+  <div class="edu-main">
+    <div class="edu-deg">Bachelor of Engineering</div>
+    <div class="edu-uni">Major: Engineering Systems &amp; Computing &nbsp;·&nbsp; University of Guelph &nbsp;·&nbsp; Guelph, Canada &nbsp;·&nbsp; Sep 2022 – Apr 2026</div>
+    <div class="edu-badges">
+      <span class="edu-badge badge-gold">4× Dean's Honor List</span>
+      <span class="edu-badge badge-cyan">GPA 3.7 / 4.0</span>
+      <span class="edu-badge badge-gold">$8,500 Entrance Scholarship</span>
+    </div>
+    <div class="edu-focus">Focus areas: VLSI &nbsp;·&nbsp; FPGA &nbsp;·&nbsp; Embedded Systems &nbsp;·&nbsp; Control Theory &nbsp;·&nbsp; Software Engineering</div>
+  </div>
+
+  <div class="courses-hd">// RELEVANT COURSEWORK</div>
+  <div class="courses-grid">
+    <div class="ccard"><div class="ccode">ENGG4550 · W26</div><div class="cname">VLSI Digital Design</div><div class="cnote">Custom IC · CMOS logic · 72%</div></div>
+    <div class="ccard"><div class="ccode">ENGG4560 · W26</div><div class="cname">Embedded System Design</div><div class="cnote">ARM · FreeRTOS · HAL · 92%</div></div>
+    <div class="ccard"><div class="ccode">ENGG4420 · F25</div><div class="cname">Real-Time Systems Design</div><div class="cnote">RTOS · scheduling · timing · 93%</div></div>
+    <div class="ccard"><div class="ccode">ENGG4490 · W26</div><div class="cname">Sampled Data Control Design</div><div class="cnote">Digital control · Z-domain · 92%</div></div>
+    <div class="ccard"><div class="ccode">ENGG3410 · W25</div><div class="cname">Systems and Control Theory</div><div class="cnote">PID · Bode · state-space · 89%</div></div>
+    <div class="ccard"><div class="ccode">ENGG3050 · F25</div><div class="cname">Embedded Reconfigurable Computing</div><div class="cnote">FPGA · Verilog/VHDL · HLS · 86%</div></div>
+    <div class="ccard"><div class="ccode">ENGG2410 · F23</div><div class="cname">Digital Systems Design</div><div class="cnote">FPGA · FSM · datapath · 77%</div></div>
+    <div class="ccard"><div class="ccode">ENGG3380 · W25</div><div class="cname">Computer Organization &amp; Design</div><div class="cnote">CPU architecture · ISA · pipeline · 76%</div></div>
+    <div class="ccard"><div class="ccode">ENGG3390 · F24</div><div class="cname">Signal Processing</div><div class="cnote">DSP · Fourier · filter design · 87%</div></div>
+    <div class="ccard"><div class="ccode">ENGG3640 · F24</div><div class="cname">Microcomputer Interfacing</div><div class="cnote">SPI · I2C · UART · peripherals · 72%</div></div>
+    <div class="ccard"><div class="ccode">ENGG4450 · F24</div><div class="cname">Large-Scale Software Architecture</div><div class="cnote">Design patterns · UML · 87%</div></div>
+    <div class="ccard"><div class="ccode">ENGG3130 · W25</div><div class="cname">Modelling Complex Systems</div><div class="cnote">Agent-based · ABM · emergence · 82%</div></div>
+    <div class="ccard"><div class="ccode">ENGG2450 · W24</div><div class="cname">Electric Circuits</div><div class="cnote">AC/DC · op-amps · resonance · 80%</div></div>
+    <div class="ccard"><div class="ccode">ENGG2400 · F23</div><div class="cname">Engineering Systems Analysis</div><div class="cnote">Laplace · dynamic models · 75%</div></div>
+    <div class="ccard"><div class="ccode">CIS2520 · F23</div><div class="cname">Data Structures</div><div class="cnote">C · trees · graphs · hashing · 69%</div></div>
+    <div class="ccard"><div class="ccode">ENGG4120 · W26</div><div class="cname">Systems &amp; Comp Eng Design IV</div><div class="cnote">Capstone · 3D printer project · 86%</div></div>
+  </div>
+
+  <div class="certs-hd">// CERTIFICATIONS &amp; HONOURS</div>
+  <div class="certs-grid">
+    <div class="cert"><div class="cert-name">Dean's Honor List — Winter 2026</div><div class="cert-org">University of Guelph</div></div>
+    <div class="cert"><div class="cert-name">Dean's Honor List — Fall 2025</div><div class="cert-org">University of Guelph</div></div>
+    <div class="cert"><div class="cert-name">Dean's Honor List — Winter 2025</div><div class="cert-org">University of Guelph</div></div>
+    <div class="cert"><div class="cert-name">Dean's Honor List — Winter 2024</div><div class="cert-org">University of Guelph</div></div>
+    <div class="cert"><div class="cert-name">Lean Six Sigma Green Belt</div><div class="cert-org">Six Sigma Global Institute</div><div class="cert-date">May 2024 · ID: 103865537</div></div>
+    <div class="cert"><div class="cert-name">Lean Six Sigma Yellow Belt</div><div class="cert-org">Six Sigma Global Institute</div><div class="cert-date">May 2024 · ID: 102896996</div></div>
+    <div class="cert"><div class="cert-name">CSWA — Mechanical Design</div><div class="cert-org">Dassault Systèmes (SolidWorks)</div><div class="cert-date">Mar 2024 · ID: C-53MSNXF87E</div></div>
+    <div class="cert"><div class="cert-name">VEX Coach Certification 2023–24</div><div class="cert-org">Robotics Education &amp; Competition Foundation</div></div>
+    <div class="cert"><div class="cert-name">Intro to Responsible AI</div><div class="cert-org">CARE-AI, University of Guelph</div><div class="cert-date">Jan 2024</div></div>
+  </div>
+</div></div>
+
+<!-- ══════════════════════════════════ PROJECTS ══════════════════ -->
+<div class="sec-wrap sec-no-bottom"><div class="sec sec-no-bottom">
+  <div class="sec-head" style="margin-bottom:0">
+    <span class="sec-ref">// PROJ.BOARD</span>
+    <h2 class="sec-title">Projects</h2>
+    <p class="sec-sub">Click any IC chip — then click a project card for the full detail page</p>
+  </div>
+</div></div>
+
+<section id="s-pcb">
+  <div class="pcb-label" id="pcb-lbl-tl">// LAUAI.ALERFI · PROJECTS · CLICK ANY IC</div>
+  <div class="pcb-label" id="pcb-lbl-tr">PCB-PORTFOLIO · REV 2.0</div>
+  <canvas id="bg-c"></canvas><canvas id="fx-c"></canvas>
+  <div id="chips-div"></div>
+  <div id="pcb-hint">click any chip to explore projects</div>
+</section>
+
+<!-- ══════════════════════════════════ SKILLS ════════════════════ -->
+<div class="sec-wrap" id="s-skills"><div class="sec">
+  <div class="sec-head"><span class="sec-ref">// TECH.STACK</span><h2 class="sec-title">Skills</h2></div>
+  <div class="skills-grid">
+    <div class="sg"><div class="sg-t">VLSI / PHYSICAL DESIGN</div><div class="sg-tags"><span class="sgtag">Cadence Virtuoso</span><span class="sgtag">Magic 8.3</span><span class="sgtag">ngspice</span><span class="sgtag">Sky130</span><span class="sgtag">CMOS</span><span class="sgtag">DRC / LVS</span><span class="sgtag">Spectre</span></div></div>
+    <div class="sg"><div class="sg-t">FPGA / HDL</div><div class="sg-tags"><span class="sgtag">VHDL</span><span class="sgtag">Verilog</span><span class="sgtag">Vivado</span><span class="sgtag">Vivado HLS</span><span class="sgtag">ModelSim</span><span class="sgtag">Quartus</span><span class="sgtag">Zynq SoC</span></div></div>
+    <div class="sg"><div class="sg-t">EMBEDDED</div><div class="sg-tags"><span class="sgtag">C / C++</span><span class="sgtag">STM32</span><span class="sgtag">FreeRTOS</span><span class="sgtag">ARM Cortex-M</span><span class="sgtag">Keil</span><span class="sgtag">SPI / I2C / UART</span></div></div>
+    <div class="sg"><div class="sg-t">AI &amp; SOFTWARE</div><div class="sg-tags"><span class="sgtag">Claude API</span><span class="sgtag">AI Agents</span><span class="sgtag">Python</span><span class="sgtag">C#</span><span class="sgtag">ASP.NET</span><span class="sgtag">SQL / T-SQL</span><span class="sgtag">Selenium</span><span class="sgtag">Git</span></div></div>
+    <div class="sg"><div class="sg-t">TOOLS &amp; OTHER</div><div class="sg-tags"><span class="sgtag">MATLAB / Simulink</span><span class="sgtag">QUARC</span><span class="sgtag">SSMS</span><span class="sgtag">Linux</span><span class="sgtag">SolidWorks</span><span class="sgtag">JIRA</span><span class="sgtag">DevExpress</span></div></div>
+  </div>
+</div></div>
+
+<!-- ══════════════════════════════════ CONTACT ═══════════════════ -->
+<div class="sec-wrap"><div class="sec">
+  <div class="sec-head"><span class="sec-ref">// CONTACT.FORM</span><h2 class="sec-title">Contact</h2><p class="sec-sub">Send a message directly — I'll get back to you within 24 hours</p></div>
+  <div class="cf-layout">
+    <!-- Info column -->
+    <div class="cf-info">
+      <a href="mailto:louayalarfi@gmail.com" class="cc"><div class="cc-l">EMAIL</div><div class="cc-v">louayalarfi@gmail.com</div></a>
+      <a href="https://github.com/Louayalarfi" target="_blank" class="cc"><div class="cc-l">GITHUB</div><div class="cc-v">github.com/Louayalarfi</div></a>
+      <a href="https://www.linkedin.com/in/lauaialerfi" target="_blank" class="cc"><div class="cc-l">LINKEDIN</div><div class="cc-v">linkedin.com/in/lauaialerfi</div></a>
+      <div class="cc"><div class="cc-l">PHONE</div><div class="cc-v">+1 (519) 993-5859</div></div>
+      <div class="cc"><div class="cc-l">LOCATION</div><div class="cc-v">Guelph, Ontario · Canada</div></div>
+    </div>
+    <!-- Form column -->
+    <form class="cf-form" id="contact-form" onsubmit="submitForm(event)">
+      <div class="cf-row">
+        <div class="cf-field">
+          <label>NAME</label>
+          <input type="text" name="name" placeholder="Your name" required>
+        </div>
+        <div class="cf-field">
+          <label>EMAIL</label>
+          <input type="email" name="email" placeholder="you@company.com" required>
+        </div>
+      </div>
+      <div class="cf-field">
+        <label>SUBJECT</label>
+        <input type="text" name="subject" placeholder="What's this about?">
+      </div>
+      <div class="cf-field">
+        <label>MESSAGE</label>
+        <textarea name="message" placeholder="Tell me about your project, role, or opportunity..." required></textarea>
+      </div>
+      <div id="cf-ok" class="cf-msg ok">✓ &nbsp;Message sent — I'll be in touch soon.</div>
+      <div id="cf-err" class="cf-msg err">✗ &nbsp;Something went wrong. Try emailing me directly at louayalarfi@gmail.com</div>
+      <button type="submit" class="cf-submit" id="cf-btn">[ SEND MESSAGE ]</button>
+    </form>
+  </div>
+</div></div>
+
+<!-- ══════════════════════════════ SIDE PANEL ════════════════════ -->
+<div id="panel">
+  <div class="ph">
+    <div><div class="ph-ref" id="p-ref"></div><div class="ph-name" id="p-name"></div><div class="ph-sub" id="p-sub"></div></div>
+    <button class="pcl" onclick="closePanel()">[ × ]</button>
+  </div>
+  <div class="pp" id="p-projs"></div>
+</div>
+
+<!-- ══════════════════════════ FULL PROJECT PAGE ═════════════════ -->
+<div id="proj-page">
+  <div class="pp-nav">
+    <button class="pp-back" onclick="closeProjPage()">← BACK</button>
+    <span class="pp-nav-title" id="pp-nav-title"></span>
+  </div>
+  <div class="pp-body">
+    <div class="pp-domain" id="pp-domain"></div>
+    <h1 class="pp-title" id="pp-title"></h1>
+    <div class="pp-spec" id="pp-spec"></div>
+    <div class="pp-tags" id="pp-tags"></div>
+    <div class="pp-bullets"><h3>// WHAT I DID</h3><ul id="pp-bullets"></ul></div>
+    <div class="pp-images" id="pp-images-sec">
+      <h3>// IMAGES</h3>
+      <div class="img-grid" id="pp-imgs"></div>
+    </div>
+    <div class="pp-links" id="pp-links"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════ LIGHTBOX ══════════════════════ -->
+<div id="lightbox" onclick="closeLB()">
+  <button id="lb-close" onclick="closeLB()">[ × CLOSE ]</button>
+  <img id="lb-img" src="" alt="">
+</div>
+
+<button id="skillbtn" onclick="openSkills()">SKILLS &amp; CONTACT ↗</button>
+
+<script>
+const IMG='images/';
+
+const D=[
+  {id:'vlsi',ref:'U1',name:'VLSI / IC',sub:'Transistor-level · 45nm · Sky130',col:'#4fd8e0',px:.22,py:.42,
+   pins:['VDD','VSS','CLK','RST_N'],outs:['OUT[7:0]','EN','TDI','SCAN'],
+   proj:[
+    {t:'8-bit CMOS Program Counter',s:'906 ps · 58.08 µW · 1.10 GHz · gpdk045 45nm',
+     domain:'VLSI · IC Design · Cadence',
+     bullets:['Designed a fully functional 8-bit Program Counter at the transistor level using Cadence Virtuoso with the gpdk045 45nm CMOS process','Implemented three sub-modules from scratch: a CMOS transmission gate multiplexer, a mirror adder ripple carry full adder, and a master-slave D flip-flop register','Achieved a critical path delay of 906 ps, meeting the 1 GHz minimum frequency requirement with a theoretical maximum operating frequency of 1.10 GHz','Measured average power consumption of 58.08 µW through Spectre transient simulation','Characterized each module individually for worst-case propagation delay: 738 ps (full adder), 394 ps (register CLK-to-Q), and 143 ps (multiplexer)','Verified correct sequential increment and branch operation through full top-level transient simulation','Documented design decisions, timing analysis, and simulation results in a 17-page technical report'],
+     imgs:['TOPLEVELTEST.png','8BITREGTEST.png','TOP_LEVEL_SCHEMATIC.png','1BITFA_SCHEMATIC.png'],
+     alts:['Top-level Spectre transient simulation','8-bit register transient simulation','Top-level Cadence schematic','1-bit mirror adder schematic'],
+     links:[],tags:['Cadence Virtuoso','Spectre','45nm CMOS','DFF','Transmission Gate MUX']},
+    {t:'8×8 6T SRAM Macro — Sky130',s:'716 mV SNM · DRC/LVS-clean · AI-agent driven · 130nm',
+     domain:'VLSI · Physical Design · SkyWater',
+     bullets:['Designed a full-custom 6T SRAM macro (64-bit, 8×8) from scratch in SkyWater Sky130 130nm PDK — every transistor hand-placed in Magic, no standard cells','Built and verified the complete cell library bottom-up: 6T bit cell, 3-to-8 row decoder, precharge/equalize, write driver, and cross-coupled sense amplifier — all DRC-clean, LVS-matched, and SPICE-verified','Integrated decoder + 8×8 array + read/write data-path periphery into a single DRC-clean macro; characterized static noise margin via butterfly curves (716 mV hold / 311 mV read)','Used Claude AI agents as the execution layer — directing them to author Magic/ngspice scripts and run DRC checks, layout extractions, and SPICE simulations in parallel across background jobs, iterating far faster than a manual GUI flow while steering the architecture and verification calls','Drove the entire flow headlessly and reproducibly — layout, DRC, extraction, and simulation all scripted (Magic + ngspice), so every result is one command away from being regenerated','Whole-macro extraction caught a bug a clean DRC missed: the decoder-to-array word-line routing was design-rule-clean but electrically open — found it, fixed the routing, confirmed connectivity','Simulating the extracted layout surfaced a real cell write-ability margin between schematic and silicon — exactly the schematic-vs-extracted gap that full-custom verification exists to catch'],
+     imgs:['01_bitcell_layout.png','02_bitcell_sim.png','03_array_layout.png','04_macro_layout.png','05_senseamp_sim.png','06_decoder.png','07_snm_butterfly.png','08_periphery_column_sim.png','09_macro_read_write.png'],
+     alts:['6T SRAM bit cell layout — Magic 8.3','Bit cell transient simulation','8×8 array layout — DRC clean','Full macro layout with row decoder','Sense amplifier simulation','3-to-8 row decoder','SNM butterfly curves — 716 mV / 311 mV','Column periphery simulation','Full macro read/write simulation'],
+     links:[{l:'📄 View Engineering Report',u:IMG+'SRAM_Report.pdf'}],
+     tags:['Magic 8.3','ngspice','SkyWater Sky130','6T SRAM','DRC/LVS','SNM','AI Agents','130nm']}
+   ]},
+  {id:'fpga',ref:'U2',name:'FPGA / RTL',sub:'HDL · HLS · Zynq SoC',col:'#e7609f',px:.53,py:.27,
+   pins:['MCLK','RST_N','CFG','PCLK'],outs:['GPIO[15]','APB','IRQ','JTAG'],
+   proj:[
+    {t:'AES-128 Hardware Coprocessor',s:'NIST verified · APB-integrated · CBC/OFB modes',
+     domain:'FPGA · Cryptography · HW/SW Co-Design',
+     bullets:['Designed and implemented a 128-bit AES encryption coprocessor in Verilog targeting an FPGA-based SoC platform','Developed a custom APB (Advanced Peripheral Bus) IP module and integrated it into the system using Platform Designer','Built a memory-mapped hardware/software interface enabling communication between the HPS processor and FPGA coprocessor','Implemented core AES transformations: SubBytes, ShiftRows, MixColumns, and AddRoundKey following NIST standards, plus full key expansion logic for AES-128','Developed a fully combinational (asynchronous) AES architecture, optimizing latency by eliminating clock dependency in the encryption core','Supported secure encryption modes (CBC/OFB) for improved data security beyond basic ECB mode','Verified functionality using official NIST test vectors; debugged and validated system integration across hardware (FPGA) and software (C driver on HPS)'],
+     imgs:['AES1.png','AES2.png','AES3.png'],
+     alts:['AES-128 CBC NIST PASS terminal output','Platform Designer system integration','AES-128 CBC chained encryption output'],
+     links:[],tags:['Verilog','FPGA SoC','APB','Quartus','AES-128','NIST']},
+    {t:'Custom Synchronous CPU',s:'Full RTL datapath · FSM control · FPGA synthesized',
+     domain:'FPGA · Digital Design · RTL',
+     bullets:['Designed and implemented a custom synchronous CPU at the RTL level using VHDL, targeting FPGA implementation','Architected a multi-stage datapath including register file, ALU, control unit, and memory interface','Developed FSM-based control logic to manage instruction fetch, decode, execution, and write-back sequencing','Applied computer architecture principles to define instruction behavior, datapath/control separation, and signal timing','Performed functional simulation and waveform-level debugging in ModelSim to verify correctness and timing','Synthesized and implemented the design in Xilinx Vivado, analyzing timing closure, critical paths, and resource utilization'],
+     imgs:[],alts:[],links:[],tags:['VHDL','Vivado','ModelSim','FPGA','RTL','FSM']},
+    {t:'FPGA Accelerator — Vivado HLS',s:'Loop pipelining · Array partitioning · Dataflow architecture',
+     domain:'FPGA · HLS · Zynq SoC',
+     bullets:['Designed a hardware accelerator kernel in C/C++ and targeted FPGA implementation using Vivado HLS on a Xilinx Zynq SoC','Applied loop pipelining, loop unrolling, and dataflow architectures to improve throughput and reduce latency of compute-intensive kernels','Optimized memory access using array partitioning and memory reshaping to remove bandwidth bottlenecks','Analyzed HLS synthesis and implementation reports to evaluate clock frequency, latency, initiation interval (II), and DSP/LUT/BRAM utilization','Integrated the accelerator with ARM-side software on Zynq, validating correct HW/SW interaction against C/C++ reference models','Developed Python scripts to automate performance analysis, compare design variants, and verify functional equivalence'],
+     imgs:[],alts:[],links:[],tags:['Vivado HLS','Zynq SoC','C/C++','Xilinx','Pipelining','Dataflow']},
+    {t:'ARINC 429 Transmitter & Receiver',s:'Full protocol · FSM-based Rx · Nexys A7',
+     domain:'FPGA · Aerospace Protocol',
+     bullets:['Designed and implemented a complete ARINC 429 transmitter and receiver in VHDL, targeting the Nexys A7 FPGA','Implemented 32-bit ARINC word formatting including label fields, SDI, data, SSM decoding, and odd parity generation and checking','Developed an FSM-based receiver for bit timing, word detection, parity validation, and protocol error handling','Implemented a protocol-compliant transmitter with MSB-first bit ordering and timing behavior aligned with ARINC 429 specifications','Verified functional correctness and timing behavior through RTL simulation and waveform analysis in ModelSim','Optimized RTL design in Xilinx Vivado, reducing LUT and flip-flop utilization while maintaining strict protocol timing constraints'],
+     imgs:[],alts:[],links:[],tags:['VHDL','Nexys A7','ARINC 429','Vivado','ModelSim','Aerospace']}
+   ]},
+  {id:'embedded',ref:'U3',name:'EMBEDDED',sub:'ARM · FreeRTOS · STM32',col:'#f0a830',px:.77,py:.44,
+   pins:['VCC','UART_TX','SPI_CLK','GND'],outs:['ADC_IN','PWM','I2C','GPIO'],
+   proj:[
+    {t:'Direct Polymer Extrusion 3D Printer',s:'30–50% cost reduction · STM32 SKR Mini E3 · Capstone',
+     domain:'Embedded · Mechatronics · Capstone',
+     bullets:['Designed and implemented a Direct Polymer Extrusion system by modifying a Creality 3D printer to print directly from raw polymer material, eliminating the need for filament','Replaced the stock control board with an STM32-based controller (SKR Mini E3) to support custom hardware integration','Configured and modified Marlin firmware to enable compatibility with a non-standard extrusion system','Integrated and configured a custom display interface to ensure seamless operation with the upgraded control board','Tuned key system parameters including extrusion rate, temperature profiles, and motion synchronization to achieve stable and consistent printing performance','Solved system-level challenges involving hardware–software integration, real-time control, and thermal management','Enabled multi-material printing and direct use of recycled plastics; achieved 30–50% cost reduction with up to 75% savings when using bulk polymer pellets'],
+     imgs:['Capstone2.jpg','Capstone1.png','Capstone.png'],
+     alts:['Direct polymer extrusion printer build','Capstone Design Day presentation','System overview'],
+     links:[{l:'📄 View Design Day Poster',u:IMG+'G41ENGG41XX_POSTER (1).pdf'}],
+     tags:['STM32','Marlin','C','FDM','Capstone','Firmware']},
+    {t:'Real-Time Hot Air Plant Control',s:'FreeRTOS tasks · Closed-loop PID · Queue/Semaphore sync',
+     domain:'Embedded · RTOS · ARM Cortex',
+     bullets:['Developed real-time embedded firmware in C for an ARM-based microcontroller using FreeRTOS, built and debugged with Keil and STM32CubeIDE','Architected a task-based RTOS system with dedicated tasks for temperature sensing, control computation, actuator output, and system monitoring','Interfaced temperature sensors via ADC, implemented signal conditioning, and validated sensor accuracy and response time','Implemented closed-loop control logic to regulate air temperature by dynamically adjusting heater power and fan operation under real-time constraints','Used FreeRTOS inter-task communication mechanisms (queues and semaphores) to ensure deterministic data flow between sensing, control, and actuation','Debugged timing, synchronization, and control behavior using oscilloscope-based measurements and runtime task analysis'],
+     imgs:['Realtime.jpg','Realtime1.jpg','Realtime2.jpg'],
+     alts:['Real-time hot air plant control setup','FreeRTOS task timing and sensor output','PID closed-loop response validation'],
+     links:[],tags:['FreeRTOS','ARM Cortex-M','C','Keil','STM32CubeIDE','PID','ADC']},
+    {t:'G.U.I.D.E. — Wearable LiDAR System',s:'360° LiDAR oscillation · Haptic feedback · ~12 hr battery',
+     domain:'Systems Design · Accessibility',
+     bullets:['Designed a wearable real-time obstacle detection system combining a 360° 2D LiDAR mounted on a motorized oscillation mechanism to achieve effective 3D spatial sensing for head- and body-level hazards','Developed control logic to process LiDAR distance–angle data, convert polar measurements into real-world coordinates, and classify actionable obstacles using calibrated reference thresholds','Implemented a stepper-motor–driven scanning architecture, synchronizing motor position, IMU orientation, and LiDAR sampling to maintain consistent spatial mapping during user motion','Designed a ground-level hazard detection subsystem using a cane-mounted rotary encoder and contact switch to detect traction loss and slippery surfaces in real time','Engineered directional haptic feedback logic, mapping obstacle proximity and direction to multiple vibration motors to deliver intuitive, low-latency tactile alerts','Performed system-level validation including torque calculations, battery life modeling (~12 hours), sensitivity analysis, and compliance with accessibility standards (Accessible Canada Act, EN 301 549)'],
+     imgs:['GUIDE.jpg','GUIDE1.jpg','GUIDE2.jpg','GUIDE3.jpg','GUIDE4.jpg','GUIDE5.jpg'],
+     alts:['Wearable system overview','LiDAR oscillation mechanism','Haptic feedback cane mount','System block diagram','Prototype assembly','Field testing'],
+     links:[],tags:['LiDAR','Arduino','Haptics','Stepper Motor','IMU','C++','Accessibility']},
+    {t:'Embedded Digital Voltmeter System',s:'STM32 · ADC/SPI/I2C · signal conditioning · oscilloscope validated',
+     domain:'Embedded · Low-Level Firmware · Peripherals',
+     bullets:['Developed embedded firmware in C for an ARM-based STM32 microcontroller to measure and display analog voltages','Implemented and validated ADC sampling, signal scaling, and calibration logic to ensure accurate voltage measurements','Wrote low-level peripheral drivers and configured registers for ADC, GPIO, SPI, and I2C operation from scratch','Integrated SPI and I2C peripherals to interface with external displays and analog-to-digital converters','Implemented data formatting and conversion logic to translate raw ADC readings into user-readable voltage output','Debugged noise, timing, and communication issues using oscilloscopes and logic analyzers, improving measurement stability and reliability'],
+     imgs:[],alts:[],links:[],tags:['STM32','C','ADC','SPI','I2C','Keil','ARM Cortex-M','Peripherals']}
+   ]},
+  {id:'control',ref:'U4',name:'CONTROL DSP',sub:'MATLAB · Simulink · QUARC',col:'#9d84ef',px:.53,py:.72,
+   pins:['REF+','REF−','FB_IN','FF'],outs:['PWM_OUT','CURR','POS','ERR'],
+   proj:[
+    {t:'MAGLEV Control System',s:'PI + PID+FF cascade · QUARC hardware · ~1.5% overshoot',
+     domain:'Control Systems · Real-Time',
+     bullets:['Modeled and analyzed a nonlinear magnetic levitation system, capturing both electrical and electro-mechanical dynamics','Derived system equations using first principles (Newton\'s laws & circuit laws) and linearized the model for control design','Designed a hierarchical control system with inner-loop PI current controller (fast response, ~1.5% overshoot, near-zero steady-state error) and outer-loop PID + feedforward ball position controller','Tuned controller parameters to meet performance specs including low overshoot, fast settling time, and zero steady-state error','Validated system performance by comparing Simulink simulations with real experimental results, identifying effects like sensor noise and system nonlinearities','Implemented real-time control using MATLAB/Simulink with QUARC, interfacing directly with the physical MAGLEV hardware','Analyzed trade-offs between response speed, damping, and accuracy during controller tuning'],
+     imgs:['Maglev.jpg','Maglev1.jpg','Maglev2.jpg'],
+     alts:['MAGLEV hardware setup','Simulink model and control loops','Step response — ~1.5% overshoot'],
+     links:[],tags:['MATLAB','Simulink','QUARC','PID','PI','Feedforward','Control Theory']}
+   ]},
+  {id:'software',ref:'U5',name:'SOFTWARE',sub:'Python · AI · ASP.NET',col:'#a7d96a',px:.24,py:.72,
+   pins:['API_IN','DB','AUTH','LOG'],outs:['HTTP','WS','CACHE','ALERT'],
+   proj:[
+    {t:'Diet Optimization — Sugarscape Simulation',s:'Stable optimum: ~40% protein · 39% carbs · 21% fats',
+     domain:'Simulation · Agent-Based Modelling',
+     bullets:['Designed and implemented an agent-based Sugarscape simulation to study how macronutrient distributions (protein, carbohydrates, fats) impact long-term fat loss outcomes','Modeled human metabolism using Basal Metabolic Rate (BMR), caloric intake, caloric deficit, and body-fat dynamics grounded in established nutritional science','Implemented dynamic agent behavior where movement range, activity level, and survival depended on available energy from carbohydrates and fats within a regenerating nutrient environment','Developed a quantitative scoring metric based on proximity to a target body-fat percentage (15.5%) to evaluate diet effectiveness across thousands of simulation time steps','Identified a stable optimal macronutrient distribution of approximately 40% protein, 39% carbohydrates, and 21% fats; validated results against real-world nutritional guidelines','Produced data visualizations tracking population dynamics, nutrient distributions, and steady-state behavior','Built the simulation as a scalable framework extensible to gender-specific models, additional metabolic variables, and personalized diet optimization'],
+     imgs:['Modelling.jpg','Modelling1.jpg','Modelling2.jpg'],
+     alts:['Sugarscape simulation results','Macronutrient distribution over time','Population convergence to optimal ratio'],
+     links:[],tags:['Python','Agent-Based Modelling','Sugarscape','Matplotlib','NumPy','Simulation']},
+    {t:'Enhanced System Monitoring — Glances',s:'NVMe metrics · Full test coverage · UML architecture',
+     domain:'Software · Open Source · SCRUM',
+     bullets:['Utilized UML to extract and document the architectural design of an open-source system monitoring tool, highlighting class structures and subsystem interactions','Addressed critical user feedback by developing features to improve data visibility and usability, including file system descriptions and optimized metric displays','Designed and implemented NVMe-specific metrics such as temperature, health status, and performance tracking to modernize hardware monitoring capabilities','Collaborated within a team using SCRUM methodology, managed sprints via JIRA, and utilized GitHub for version control','Developed and executed automated test suites, achieving comprehensive test coverage for newly introduced features'],
+     imgs:['app.jpg'],
+     alts:['Glances system monitor with NVMe and enhanced metrics'],
+     links:[],tags:['Python','UML','JIRA','SCRUM','GitHub','NVMe','TDD','Open Source']}
+   ]}
+];
+
+const NETS=[
+  {a:'vlsi',b:'fpga',net:'CLK',col:'#4fd8e0'},{a:'fpga',b:'embedded',net:'SPI',col:'#e7609f'},
+  {a:'embedded',b:'control',net:'PWM',col:'#f0a830'},{a:'control',b:'software',net:'DATA',col:'#9d84ef'},
+  {a:'software',b:'vlsi',net:'IRQ',col:'#a7d96a'},{a:'fpga',b:'control',net:'JTAG',col:'#e7609f'},
+  {a:'vlsi',b:'embedded',net:'SCAN',col:'#4fd8e0'},
+];
+
+// ─── CANVAS ──────────────────────────────────────────────────────
+const pcbSec=document.getElementById('s-pcb');
+const bgC=document.getElementById('bg-c'),fxC=document.getElementById('fx-c');
+const bgX=bgC.getContext('2d'),fxX=fxC.getContext('2d');
+let W=0,H=0;
+
+function resize(){
+  W=pcbSec.offsetWidth;H=pcbSec.offsetHeight;
+  bgC.width=fxC.width=W;bgC.height=fxC.height=H;
+  drawBG();posChips();
+}
+window.addEventListener('resize',resize);
+
+function cpt(c){return{x:c.px*W,y:c.py*H};}
+function tpts(a,b){const mx=(a.x+b.x)/2;return[a,{x:mx,y:a.y},{x:mx,y:b.y},b];}
+
+function drawBG(){
+  const g=bgX;g.clearRect(0,0,W,H);g.fillStyle='#060f07';g.fillRect(0,0,W,H);
+  g.strokeStyle='rgba(18,50,24,.3)';g.lineWidth=.5;
+  for(let x=0;x<W;x+=36){g.beginPath();g.moveTo(x,0);g.lineTo(x,H);g.stroke();}
+  for(let y=0;y<H;y+=36){g.beginPath();g.moveTo(0,y);g.lineTo(W,y);g.stroke();}
+  const m=14;
+  g.strokeStyle='#163a1c';g.lineWidth=3;g.strokeRect(m,m,W-m*2,H-m*2);
+  [[m,m],[W-m,m],[W-m,H-m],[m,H-m]].forEach(([cx,cy])=>{
+    g.strokeStyle='#1c4e22';g.lineWidth=1;
+    g.beginPath();g.moveTo(cx-16,cy);g.lineTo(cx+16,cy);g.stroke();
+    g.beginPath();g.moveTo(cx,cy-16);g.lineTo(cx,cy+16);g.stroke();
+    const ox=cx+(cx<W/2?26:-26),oy=cy+(cy<H/2?26:-26);
+    g.beginPath();g.arc(ox,oy,9,0,Math.PI*2);g.strokeStyle='#163a1c';g.lineWidth=2;g.stroke();g.fillStyle='#060f07';g.fill();
+    g.beginPath();g.arc(ox,oy,13,0,Math.PI*2);g.strokeStyle='rgba(200,184,122,.12)';g.lineWidth=.5;g.stroke();
+  });
+  g.strokeStyle='rgba(200,184,122,.12)';g.lineWidth=5;
+  g.beginPath();g.moveTo(m,m+22);g.lineTo(W-m,m+22);g.stroke();
+  g.beginPath();g.moveTo(m,H-m-22);g.lineTo(W-m,H-m-22);g.stroke();
+  g.font='8px IBM Plex Mono,monospace';g.fillStyle='rgba(200,184,122,.4)';
+  g.fillText('+3.3V',m+14,m+16);g.fillText('GND',W-m-44,m+16);g.fillText('+5V',m+14,H-m-12);
+  NETS.forEach(n=>{
+    const ca=D.find(c=>c.id===n.a),cb=D.find(c=>c.id===n.b);if(!ca||!cb)return;
+    const pts=tpts(cpt(ca),cpt(cb));
+    g.lineCap='round';g.lineJoin='round';
+    g.strokeStyle=n.col+'15';g.lineWidth=9;
+    g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.stroke();
+    g.strokeStyle=n.col+'50';g.lineWidth=2;
+    g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.stroke();
+    const mp=pts[1];
+    g.fillStyle=n.col+'88';g.font='8px IBM Plex Mono,monospace';g.fillText(n.net,mp.x+4,mp.y-5);
+    g.beginPath();g.arc(mp.x,mp.y,5,0,Math.PI*2);g.fillStyle='#060f07';g.fill();
+    g.strokeStyle=n.col+'80';g.lineWidth=1.5;g.stroke();
+    g.beginPath();g.arc(mp.x,mp.y,7.5,0,Math.PI*2);g.strokeStyle=n.col+'25';g.lineWidth=.5;g.stroke();
+  });
+
+  // ── VDD POWER RAIL ─────────────────────────────────────────────
+  const rVdd=72, rGnd=H-72;
+  // Rail glow
+  g.strokeStyle='rgba(200,184,122,.07)';g.lineWidth=18;g.lineCap='round';
+  g.beginPath();g.moveTo(m+10,rVdd);g.lineTo(W-m-10,rVdd);g.stroke();
+  // Rail core
+  g.strokeStyle='rgba(200,184,122,.65)';g.lineWidth=3;
+  g.beginPath();g.moveTo(m+10,rVdd);g.lineTo(W-m-10,rVdd);g.stroke();
+  // Rail label
+  g.fillStyle='rgba(200,184,122,.75)';g.font='bold 8px IBM Plex Mono,monospace';
+  g.fillText('VDD  +3.3V ─────────────────────────────────────────────────────────────────',m+16,rVdd-7);
+  // VDD vias every 52px
+  for(let vx=m+42;vx<W-m-20;vx+=52){
+    g.fillStyle='rgba(200,184,122,.55)';g.beginPath();g.arc(vx,rVdd,4.5,0,Math.PI*2);g.fill();
+    g.fillStyle='#060f07';g.beginPath();g.arc(vx,rVdd,2.2,0,Math.PI*2);g.fill();
+    g.strokeStyle='rgba(200,184,122,.18)';g.lineWidth=.8;
+    g.beginPath();g.arc(vx,rVdd,7.5,0,Math.PI*2);g.stroke();
+  }
+
+  // ── GND RAIL ───────────────────────────────────────────────────
+  g.strokeStyle='rgba(46,139,87,.07)';g.lineWidth=16;
+  g.beginPath();g.moveTo(m+10,rGnd);g.lineTo(W-m-10,rGnd);g.stroke();
+  g.strokeStyle='rgba(46,139,87,.55)';g.lineWidth=3;
+  g.beginPath();g.moveTo(m+10,rGnd);g.lineTo(W-m-10,rGnd);g.stroke();
+  g.fillStyle='rgba(46,139,87,.7)';g.font='bold 8px IBM Plex Mono,monospace';
+  g.fillText('GND  ⏚',m+16,rGnd+14);
+  for(let vx=m+42;vx<W-m-20;vx+=52){
+    g.fillStyle='rgba(46,139,87,.5)';g.beginPath();g.arc(vx,rGnd,4.5,0,Math.PI*2);g.fill();
+    g.fillStyle='#060f07';g.beginPath();g.arc(vx,rGnd,2.2,0,Math.PI*2);g.fill();
+    g.strokeStyle='rgba(46,139,87,.16)';g.lineWidth=.8;
+    g.beginPath();g.arc(vx,rGnd,7.5,0,Math.PI*2);g.stroke();
+  }
+
+  // ── POWER TAPS: VDD → chip (with bypass cap) + chip → GND ─────
+  D.forEach(c=>{
+    const cx=c.px*W, cy=c.py*H;
+    const vddX=cx-22, gndX=cx+22;
+
+    // VDD tap trace (dashed)
+    g.setLineDash([3,4]);g.strokeStyle='rgba(200,184,122,.3)';g.lineWidth=1.5;
+    g.beginPath();g.moveTo(vddX,rVdd);g.lineTo(vddX,cy-42);g.stroke();
+    g.setLineDash([]);
+
+    // Bypass capacitor symbol (two parallel plates)
+    const capY=cy-34;
+    g.strokeStyle='rgba(200,184,122,.65)';g.lineWidth=1.8;
+    g.beginPath();g.moveTo(vddX-9,capY-5);g.lineTo(vddX+9,capY-5);g.stroke(); // plate 1
+    g.beginPath();g.moveTo(vddX-9,capY+5);g.lineTo(vddX+9,capY+5);g.stroke(); // plate 2
+    // Cap connecting lines
+    g.strokeStyle='rgba(200,184,122,.2)';g.lineWidth=1;
+    g.beginPath();g.moveTo(vddX,capY-5);g.lineTo(vddX,rVdd);g.stroke();
+    g.beginPath();g.moveTo(vddX,capY+5);g.lineTo(vddX,cy-42);g.stroke();
+    // Cap label
+    g.fillStyle='rgba(200,184,122,.28)';g.font='6px IBM Plex Mono,monospace';
+    g.fillText('100n',vddX+11,capY+2);
+
+    // GND tap trace (dashed)
+    g.setLineDash([3,4]);g.strokeStyle='rgba(46,139,87,.25)';g.lineWidth=1.5;
+    g.beginPath();g.moveTo(gndX,cy+42);g.lineTo(gndX,rGnd);g.stroke();
+    g.setLineDash([]);
+
+    // GND stub symbol (3 lines shrinking)
+    const gs=cy+46;
+    [[16,0],[11,7],[6,14]].forEach(([hw,dy])=>{
+      g.strokeStyle='rgba(46,139,87,.55)';g.lineWidth=1.5;
+      g.beginPath();g.moveTo(gndX-hw,gs+dy);g.lineTo(gndX+hw,gs+dy);g.stroke();
+    });
+  });
+
+  // ── CLOCK OSCILLATOR (OSC1 / Y1) ──────────────────────────────
+  const clkX=W*0.11, clkY=H*0.5;
+  // Silkscreen reference
+  g.fillStyle='rgba(127,255,255,.32)';g.font='8px IBM Plex Mono,monospace';
+  g.fillText('Y1',clkX-26,clkY-28);
+  // Component body (double outline = polarised component)
+  g.fillStyle='#06100a';g.fillRect(clkX-28,clkY-24,56,48);
+  g.strokeStyle='rgba(127,255,255,.15)';g.lineWidth=4;
+  g.strokeRect(clkX-28,clkY-24,56,48);
+  g.strokeStyle='rgba(127,255,255,.6)';g.lineWidth=1.5;
+  g.strokeRect(clkX-28,clkY-24,56,48);
+  // Notch/pin-1 marker
+  g.fillStyle='rgba(127,255,255,.6)';
+  g.beginPath();g.arc(clkX-22,clkY-18,2.5,0,Math.PI*2);g.fill();
+  // Labels
+  g.textAlign='center';
+  g.fillStyle='rgba(127,255,255,.9)';g.font='bold 8px IBM Plex Mono,monospace';
+  g.fillText('OSC1',clkX,clkY-7);
+  g.fillStyle='rgba(127,255,255,.55)';g.font='7px IBM Plex Mono,monospace';
+  g.fillText('25 MHz',clkX,clkY+5);
+  g.fillText('CMOS TTL',clkX,clkY+16);
+  g.textAlign='left';
+  // Output pin stub
+  g.strokeStyle='rgba(127,255,255,.45)';g.lineWidth=1.5;
+  g.beginPath();g.moveTo(clkX+28,clkY);g.lineTo(clkX+52,clkY);g.stroke();
+  // Via on output
+  g.fillStyle='rgba(127,255,255,.45)';g.beginPath();g.arc(clkX+52,clkY,4,0,Math.PI*2);g.fill();
+  g.fillStyle='#060f07';g.beginPath();g.arc(clkX+52,clkY,2,0,Math.PI*2);g.fill();
+  g.fillStyle='rgba(127,255,255,.3)';g.font='7px IBM Plex Mono,monospace';
+  g.fillText('CLK_OUT',clkX+56,clkY+3);
+
+  // ── CLOCK DISTRIBUTION TREE ────────────────────────────────────
+  const clkSrcPt={x:clkX+52,y:clkY};
+  D.forEach(c=>{
+    const dst={x:c.px*W, y:c.py*H};
+    const pts=tpts(clkSrcPt,dst);
+    // Glow
+    g.strokeStyle='rgba(127,255,255,.05)';g.lineWidth=10;g.lineCap='round';g.lineJoin='round';
+    g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.stroke();
+    // Core (dashed — clock net style)
+    g.strokeStyle='rgba(127,255,255,.25)';g.lineWidth=1.5;g.setLineDash([7,4]);
+    g.beginPath();pts.forEach((p,i)=>i?g.lineTo(p.x,p.y):g.moveTo(p.x,p.y));g.stroke();
+    g.setLineDash([]);
+    // Branch-point via (where H-segment meets V-segment)
+    const jp=pts[1];
+    g.fillStyle='rgba(127,255,255,.45)';g.beginPath();g.arc(jp.x,jp.y,4,0,Math.PI*2);g.fill();
+    g.fillStyle='#060f07';g.beginPath();g.arc(jp.x,jp.y,2,0,Math.PI*2);g.fill();
+    g.strokeStyle='rgba(127,255,255,.2)';g.lineWidth=.7;
+    g.beginPath();g.arc(jp.x,jp.y,7,0,Math.PI*2);g.stroke();
+    g.fillStyle='rgba(127,255,255,.28)';g.font='7px IBM Plex Mono,monospace';
+    g.fillText('CLK',jp.x+5,jp.y-4);
+  });
+}
+
+// ─── CHIPS ───────────────────────────────────────────────────────
+const chDiv=document.getElementById('chips-div'),chEls={};
+D.forEach(c=>{
+  const el=document.createElement('div');el.className='chip';el.id='ck-'+c.id;
+  el.style.cssText=`--cc:${c.col};--cg:${c.col}48;--cg2:${c.col}16`;
+  const ref=document.createElement('div');ref.className='chip-ref';ref.textContent=c.ref+' · '+c.sub;el.appendChild(ref);
+  const wrap=document.createElement('div');wrap.className='chip-wrap';
+  const pl=document.createElement('div');pl.className='pins-l';
+  c.pins.forEach(p=>{const d=document.createElement('div');d.className='pin';d.innerHTML=`<span class="plbl">${p}</span><div class="pline"></div>`;pl.appendChild(d);});
+  wrap.appendChild(pl);
+  const body=document.createElement('div');body.className='chip-body';
+  body.innerHTML=`<div class="ch-inner"><div class="ch-name">${c.name}</div><div class="ch-proj">${c.proj.length} project${c.proj.length!==1?'s':''}</div></div>`;
+  wrap.appendChild(body);
+  const pr=document.createElement('div');pr.className='pins-r';
+  c.outs.forEach(p=>{const d=document.createElement('div');d.className='pin';d.innerHTML=`<div class="pline"></div><span class="plbl">${p}</span>`;pr.appendChild(d);});
+  wrap.appendChild(pr);el.appendChild(wrap);
+  el.addEventListener('click',()=>openPanel(c));
+  chDiv.appendChild(el);chEls[c.id]=el;
+});
+function posChips(){D.forEach(c=>{const el=chEls[c.id];if(!el)return;el.style.left=c.px*W+'px';el.style.top=c.py*H+'px';});}
+
+// ─── SIGNALS ─────────────────────────────────────────────────────
+const sigs=[];
+NETS.forEach(n=>[{t:Math.random(),spd:.14+Math.random()*.08,sz:3.5+Math.random()*2},{t:(Math.random()+.5)%1,spd:.11+Math.random()*.08,sz:2.5+Math.random()*1.5}].forEach(s=>sigs.push({...s,n})));
+
+// Power rail pulses (amber dots flowing L→R along VDD)
+const pwrRailSigs=Array.from({length:7},(_,i)=>({t:i/7,spd:.055+Math.random()*.02}));
+// Power tap: VDD rail → each chip (downward)
+const pwrTapSigs=D.map(c=>({t:Math.random(),spd:.05+Math.random()*.025,id:c.id}));
+// GND tap: each chip → GND rail (downward)
+const gndTapSigs=D.map(c=>({t:Math.random(),spd:.042+Math.random()*.02,id:c.id}));
+// Clock tree: OSC1 → each chip  (4 fast pulses per branch)
+const clkTreeSigs=D.flatMap(c=>[0,.22,.44,.66].map(o=>({t:(o+Math.random()*.08)%1,spd:.48+Math.random()*.1,id:c.id})));
+function lerp(a,b,t){return a+(b-a)*t;}
+function lerpP(a,b,t){return{x:lerp(a.x,b.x,t),y:lerp(a.y,b.y,t)};}
+function ptOn(ca,cb,t){const pts=tpts(cpt(ca),cpt(cb)),n=pts.length-1,seg=Math.min(Math.floor(t*n),n-1),lt=t*n-seg;return lerpP(pts[seg],pts[seg+1],lt);}
+let lastT=0;
+function animate(ts){
+  requestAnimationFrame(animate);const dt=Math.min((ts-lastT)/1000,.05);lastT=ts;
+  fxX.clearRect(0,0,W,H);
+  sigs.forEach(s=>{
+    s.t=(s.t+s.spd*dt)%1;
+    const ca=D.find(c=>c.id===s.n.a),cb=D.find(c=>c.id===s.n.b);if(!ca||!cb)return;
+    const pt=ptOn(ca,cb,s.t);
+    const gr=fxX.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,s.sz*3.5);
+    gr.addColorStop(0,s.n.col+'ff');gr.addColorStop(.35,s.n.col+'60');gr.addColorStop(1,s.n.col+'00');
+    fxX.fillStyle=gr;fxX.beginPath();fxX.arc(pt.x,pt.y,s.sz*3.5,0,Math.PI*2);fxX.fill();
+    fxX.fillStyle='#fff';fxX.beginPath();fxX.arc(pt.x,pt.y,s.sz*.5,0,Math.PI*2);fxX.fill();
+  });
+
+  // ── VDD rail pulses (amber, left → right) ─────────────────────
+  const rVdd=72, rGnd=H-72;
+  const rl=14+10, rr=W-14-10;
+  pwrRailSigs.forEach(s=>{
+    s.t=(s.t+s.spd*dt)%1;
+    const x=rl+s.t*(rr-rl), y=rVdd;
+    const gr=fxX.createRadialGradient(x,y,0,x,y,10);
+    gr.addColorStop(0,'#c8b87aee');gr.addColorStop(.35,'#c8b87a38');gr.addColorStop(1,'#c8b87a00');
+    fxX.fillStyle=gr;fxX.beginPath();fxX.arc(x,y,10,0,Math.PI*2);fxX.fill();
+    fxX.fillStyle='#ffe8a8';fxX.beginPath();fxX.arc(x,y,1.8,0,Math.PI*2);fxX.fill();
+  });
+
+  // ── VDD tap: rail → chip (amber, downward) ─────────────────────
+  pwrTapSigs.forEach(s=>{
+    s.t=(s.t+s.spd*dt)%1;
+    const c=D.find(d=>d.id===s.id);if(!c)return;
+    const tx=c.px*W-22;
+    const y0=rVdd, y1=c.py*H-42;
+    if(y1<=y0)return;
+    const y=y0+s.t*(y1-y0);
+    const gr=fxX.createRadialGradient(tx,y,0,tx,y,5);
+    gr.addColorStop(0,'#c8b87add');gr.addColorStop(.5,'#c8b87a20');gr.addColorStop(1,'#c8b87a00');
+    fxX.fillStyle=gr;fxX.beginPath();fxX.arc(tx,y,5,0,Math.PI*2);fxX.fill();
+    fxX.fillStyle='#fff0c0';fxX.beginPath();fxX.arc(tx,y,1.2,0,Math.PI*2);fxX.fill();
+  });
+
+  // ── GND tap: chip → GND rail (dark green, downward) ───────────
+  gndTapSigs.forEach(s=>{
+    s.t=(s.t+s.spd*dt)%1;
+    const c=D.find(d=>d.id===s.id);if(!c)return;
+    const tx=c.px*W+22;
+    const y0=c.py*H+42, y1=rGnd;
+    if(y1<=y0)return;
+    const y=y0+s.t*(y1-y0);
+    const gr=fxX.createRadialGradient(tx,y,0,tx,y,4.5);
+    gr.addColorStop(0,'#2e8b57cc');gr.addColorStop(.5,'#2e8b5720');gr.addColorStop(1,'#2e8b5700');
+    fxX.fillStyle=gr;fxX.beginPath();fxX.arc(tx,y,4.5,0,Math.PI*2);fxX.fill();
+    fxX.fillStyle='#80d0a0';fxX.beginPath();fxX.arc(tx,y,1.2,0,Math.PI*2);fxX.fill();
+  });
+
+  // ── Clock tree: OSC1 → each chip (cyan, fast, 4 per branch) ───
+  const csx=W*0.11+52, csy=H*0.5;
+  clkTreeSigs.forEach(s=>{
+    s.t=(s.t+s.spd*dt)%1;
+    const c=D.find(d=>d.id===s.id);if(!c)return;
+    const src={x:csx,y:csy}, dst={x:c.px*W,y:c.py*H};
+    const pts=tpts(src,dst), n=pts.length-1;
+    const seg=Math.min(Math.floor(s.t*n),n-1), lt=s.t*n-seg;
+    const pt=lerpP(pts[seg],pts[seg+1],lt);
+    const gr=fxX.createRadialGradient(pt.x,pt.y,0,pt.x,pt.y,7);
+    gr.addColorStop(0,'rgba(127,255,255,.9)');gr.addColorStop(.3,'rgba(127,255,255,.22)');gr.addColorStop(1,'rgba(127,255,255,0)');
+    fxX.fillStyle=gr;fxX.beginPath();fxX.arc(pt.x,pt.y,7,0,Math.PI*2);fxX.fill();
+    fxX.fillStyle='#ffffff';fxX.beginPath();fxX.arc(pt.x,pt.y,1.5,0,Math.PI*2);fxX.fill();
+  });
+}
+
+// ─── SIDE PANEL ──────────────────────────────────────────────────
+const panel=document.getElementById('panel');
+let activeChip=null;
+
+function openPanel(c){
+  activeChip=c;
+  document.querySelectorAll('.chip').forEach(e=>e.classList.remove('lit'));
+  chEls[c.id]?.classList.add('lit');
+  document.getElementById('pcb-hint').style.opacity='0';
+  document.getElementById('p-ref').textContent=c.ref+' — '+c.id.toUpperCase();
+  document.getElementById('p-name').textContent=c.name;
+  const sub=document.getElementById('p-sub');sub.textContent=c.sub;sub.style.color=c.col;
+  panel.style.setProperty('--pc',c.col);
+  document.getElementById('p-projs').innerHTML=c.proj.map((p,i)=>`
+    <div class="mini-card" onclick="openProjPage(activeChip,${i})">
+      <div class="mc-num">${c.ref}.${String(i+1).padStart(2,'0')}</div>
+      <div class="mc-t">${p.t}</div>
+      <div class="mc-s">${p.s}</div>
+      <div class="mc-tags">${p.tags.slice(0,4).map(t=>`<span class="mc-tag">${t}</span>`).join('')}</div>
+      <span class="mc-btn">VIEW DETAILS →</span>
+    </div>`).join('');
+  panel.classList.add('open');
+}
+function closePanel(){panel.classList.remove('open');document.querySelectorAll('.chip').forEach(e=>e.classList.remove('lit'));activeChip=null;}
+
+// ─── FULL PROJECT PAGE ────────────────────────────────────────────
+const projPage=document.getElementById('proj-page');
+
+function openProjPage(chip,idx){
+  const p=chip.proj[idx];
+  document.getElementById('pp-nav-title').textContent=p.t;
+  document.getElementById('pp-domain').textContent=p.domain;
+  document.getElementById('pp-domain').style.color=chip.col;
+  document.getElementById('pp-title').textContent=p.t;
+  document.getElementById('pp-spec').textContent=p.s;
+  document.getElementById('pp-spec').style.color=chip.col;
+  document.getElementById('pp-tags').innerHTML=p.tags.map(t=>`<span class="pp-tag">${t}</span>`).join('');
+  projPage.style.setProperty('--ppc',chip.col);
+  document.getElementById('pp-bullets').innerHTML=p.bullets.map(b=>`<li>${b}</li>`).join('');
+  const imgsec=document.getElementById('pp-images-sec');
+  const imgGrid=document.getElementById('pp-imgs');
+  if(p.imgs&&p.imgs.length){
+    imgsec.style.display='block';
+    imgGrid.innerHTML=p.imgs.map((img,i)=>`
+      <div class="img-thumb" onclick="openLB('${IMG+img}')">
+        <img src="${IMG+img}" alt="${p.alts?.[i]||''}" loading="lazy">
+        <div class="img-cap">${p.alts?.[i]||img}</div>
+      </div>`).join('');
+  } else {
+    imgsec.style.display='none';
+  }
+  const linksEl=document.getElementById('pp-links');
+  linksEl.innerHTML=(p.links||[]).map(l=>`<a class="pp-link" href="${l.u}" target="_blank">${l.l}</a>`).join('');
+  projPage.classList.add('open');
+  projPage.scrollTop=0;
+  panel.classList.remove('open');
+}
+function closeProjPage(){
+  projPage.classList.remove('open');
+  if(activeChip)panel.classList.add('open');
+}
+
+// ─── LIGHTBOX ─────────────────────────────────────────────────────
+function openLB(src){document.getElementById('lb-img').src=src;document.getElementById('lightbox').classList.add('open');}
+function closeLB(){document.getElementById('lightbox').classList.remove('open');}
+
+// ─── SKILLS SHORTCUT ──────────────────────────────────────────────
+function openSkills(){
+  closePanel();
+  document.getElementById('skillbtn').classList.remove('visible');
+  document.getElementById('s-skills').scrollIntoView({behavior:'smooth'});
+}
+
+if(location.search.includes('from=3d'))document.getElementById('open3d').classList.add('hidden');
+const skillBtn=document.getElementById('skillbtn');
+new IntersectionObserver(([e])=>skillBtn.classList.toggle('visible',e.isIntersecting),{threshold:.1}).observe(pcbSec);
+resize();
+requestAnimationFrame(animate);
+
+// ─── TERMINAL ─────────────────────────────────────────────────────
+const tout=document.getElementById('tout');
+const tin=document.getElementById('tin');
+const projList=[
+  '8-bit CMOS Program Counter         — Cadence Virtuoso · 45nm · 906ps · 1.10GHz',
+  '8×8 6T SRAM Macro (Sky130)         — Magic 8.3 · ngspice · DRC/LVS · 130nm',
+  'AES-128 Hardware Coprocessor       — Verilog · FPGA SoC · APB · NIST verified',
+  'Custom Synchronous CPU             — VHDL · Vivado · ModelSim · RTL',
+  'FPGA Accelerator (Vivado HLS)      — Zynq SoC · pipelining · dataflow',
+  'ARINC 429 Tx/Rx                    — VHDL · Nexys A7 · FSM · aerospace protocol',
+  'Direct Polymer Extrusion 3D Printer— STM32 · Marlin · Capstone · 30–50% cost ↓',
+  'Real-Time Hot Air Plant Control    — FreeRTOS · ARM Cortex-M · PID · C',
+  'G.U.I.D.E. Wearable LiDAR System  — LiDAR · haptics · stepper · accessibility',
+  'Embedded Digital Voltmeter         — STM32 · ADC · SPI/I2C · signal conditioning',
+  'MAGLEV Control System              — MATLAB/Simulink · QUARC · PI + PID + FF',
+  'Diet Optimization (Sugarscape)     — Python · agent-based · BMR · macronutrients',
+  'System Monitoring (Glances)        — Python · UML · NVMe · JIRA · SCRUM',
+];
+const cmds={
+  help:()=>['<span class="tmut">Available commands:</span>',
+    '  <span class="tc">whoami</span>       — who is Lauai?',
+    '  <span class="tc">ls</span>           — list sections',
+    '  <span class="tc">cat projects</span> — view all projects',
+    '  <span class="tc">skills</span>       — core skill summary',
+    '  <span class="tc">contact</span>      — get in touch',
+    '  <span class="tc">honors</span>       — academic achievements',
+    '  <span class="tc">ping</span>         — test connection',
+    '  <span class="tc">clear</span>        — clear terminal'],
+  whoami:()=>['<span class="tt" style="font-weight:600">Lauai Alerfi</span>',
+    'B.Eng Engineering Systems &amp; Computing · University of Guelph (Apr 2026)',
+    'Software / Systems Developer @ ECNG Energy Group',
+    'Guelph, Ontario, Canada 🇨🇦',
+    '<span class="tmut">Open to: Full-time · On-site · Hybrid · Remote</span>'],
+  ls:()=>['about/  experience/  education/  projects/  skills/  contact/'],
+  'cat projects':()=>projList.map((p,i)=>`  <span class="tmut">${String(i+1).padStart(2,'0')}.</span> ${p}`),
+  skills:()=>['<span class="tmut">Core domains:</span>',
+    '  <span class="tc">VLSI/IC</span>    → Cadence Virtuoso · Spectre · Magic 8.3 · Sky130 · 45nm CMOS',
+    '  <span class="tc">FPGA/HDL</span>   → VHDL · Verilog · Vivado HLS · ModelSim · Quartus',
+    '  <span class="tc">Embedded</span>   → C · STM32 · FreeRTOS · ARM Cortex-M · SPI/I2C/UART',
+    '  <span class="tc">Control</span>    → MATLAB/Simulink · QUARC · PID · PI · state-space',
+    '  <span class="tc">Software</span>   → Python · C# · ASP.NET · SQL Server · Claude API · Git'],
+  contact:()=>[
+    '  Email    → <span class="tc">louayalarfi@gmail.com</span>',
+    '  Phone    → <span class="tc">+1 (519) 993-5859</span>',
+    '  LinkedIn → <span class="tc">linkedin.com/in/lauaialerfi</span>',
+    '  GitHub   → <span class="tc">github.com/Louayalarfi</span>'],
+  honors:()=>[
+    "  🏆 Dean's Honor List — Winter 2026",
+    "  🏆 Dean's Honor List — Fall 2025",
+    "  🏆 Dean's Honor List — Winter 2025",
+    "  🏆 Dean's Honor List — Winter 2024",
+    "  🎓 $8,500 Entrance Scholarship — UofG 2022",
+    "  📜 Lean Six Sigma Green Belt (SSGI, May 2024)",
+    '  📐 CSWA Mechanical Design (SolidWorks, Mar 2024)'],
+  ping:()=>[
+    'PING lauai_alerfi.dev... 64 bytes: icmp_seq=1 ttl=64 time=0.7ms',
+    '<span class="tmut">1 packets transmitted, 1 received, 0% packet loss</span>',
+    '<span style="color:#28ca41">Connection OK — Lauai is online and open to work. 🟢</span>'],
+};
+function addLine(html){
+  const d=document.createElement('div');d.className='tl';d.innerHTML=html;
+  tout.appendChild(d);tout.scrollTop=tout.scrollHeight;
+}
+function runCmd(raw){
+  const input=raw.trim();
+  addLine(`<span class="tc">lauai@guelph ~$</span> <span class="tt">${input}</span>`);
+  if(input==='clear'){tout.innerHTML='';return;}
+  const fn=cmds[input.toLowerCase()];
+  if(fn){const lines=fn();if(lines)lines.forEach(l=>addLine(l));}
+  else if(input===''){}
+  else addLine(`<span class="te">command not found: ${input} — try 'help'</span>`);
+}
+addLine('<span style="color:#28ca41">Welcome to Lauai\'s terminal. Type \'help\' for commands.</span>');
+addLine('');
+tin.addEventListener('keydown',e=>{if(e.key==='Enter'){runCmd(tin.value);tin.value='';}});
+document.getElementById('term-box').addEventListener('click',()=>tin.focus());
+
+// ─── CONTACT FORM ─────────────────────────────────────────────────
+// Uses Formspree — sign up free at formspree.io, create a form,
+// paste your form endpoint ID below (e.g. "xpzgkrjv")
+const FORMSPREE_ID = 'YOUR_FORM_ID';
+
+async function submitForm(e){
+  e.preventDefault();
+  const btn=document.getElementById('cf-btn');
+  const ok=document.getElementById('cf-ok');
+  const err=document.getElementById('cf-err');
+  ok.style.display='none';err.style.display='none';
+  btn.disabled=true;btn.textContent='[ SENDING... ]';
+  const data=new FormData(e.target);
+  // Fallback: if no Formspree ID is set, open mailto
+  if(FORMSPREE_ID==='YOUR_FORM_ID'){
+    const name=data.get('name')||'';
+    const subj=data.get('subject')||'Portfolio Contact';
+    const msg=data.get('message')||'';
+    window.location.href=`mailto:louayalarfi@gmail.com?subject=${encodeURIComponent(subj)}&body=${encodeURIComponent('From: '+name+'\n\n'+msg)}`;
+    btn.disabled=false;btn.textContent='[ SEND MESSAGE ]';
+    return;
+  }
+  try{
+    const res=await fetch(`https://formspree.io/f/${FORMSPREE_ID}`,{
+      method:'POST',body:data,headers:{Accept:'application/json'}});
+    if(res.ok){
+      ok.style.display='block';e.target.reset();btn.textContent='[ SENT ✓ ]';
+    } else {
+      throw new Error('Server error');
+    }
+  } catch(_){
+    err.style.display='block';btn.disabled=false;btn.textContent='[ SEND MESSAGE ]';
+  }
+}
+</script>
+</body>
+</html>
