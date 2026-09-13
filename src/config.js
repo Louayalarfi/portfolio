@@ -83,10 +83,7 @@ export const CONTACT = [
   ['LOCATION','Guelph, Ontario · Canada','']
 ];
 
-export const STATS = [['3x',"Dean's List"],['906ps','VLSI path'],['12+','projects'],['5yr','teaching']];
+export const STATS = [['4x',"Dean's List"],['906ps','VLSI path'],['13','projects'],['5yr','teaching']];
 
-// Where project screenshots live. Two options:
-//  1. Hot-link the existing domain (no CORS for <img>, but 3D textures need CORS):
-export const IMG_BASE = 'https://lauaialerfi.com/images/';
-//  2. Recommended for 3D: copy images into public/assets/images/ and set:
-//     export const IMG_BASE = './assets/images/';
+// Project images ship with the classic fallback, same origin, so WebGL textures need no CORS.
+export const IMG_BASE = '/classic/images/';

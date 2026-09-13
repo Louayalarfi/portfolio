@@ -20,7 +20,7 @@ uniform float uTime; uniform vec3 uColor;
 varying vec2 vUv;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);float a=hash(i),b=hash(i+vec2(1,0)),c=hash(i+vec2(0,1)),d=hash(i+vec2(1,1));vec2 u=f*f*(3.0-2.0*f);return mix(mix(a,b,u.x),mix(c,d,u.x),u.y);}
-float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.0;a*=0.5;}return v;}
+float fbm(vec2 p){float v=0.0,a=0.5;for(int i=0;i<OCTAVES;i++){v+=a*noise(p);p*=2.0;a*=0.5;}return v;}
 void main(){
   float flow=vUv.x*7.0-uTime*3.0; float g=0.0;
   for(int k=0;k<3;k++){float fk=float(k);
@@ -97,7 +97,8 @@ function buildSparkSystem(scene, haloTex, count=8) {
 }
 
 // ─── main export ──────────────────────────────────────────────────────────
-export function buildCables(scene, components, screenWorld, screenNormal, haloTex) {
+export function buildCables(scene, components, screenWorld, screenNormal, haloTex, octaves = 5) {
+  const FRAG_TIERED = `#define OCTAVES ${octaves}\n` + FRAG;
 
   // ── regular animated cables (persistent) ──
   const cables = [];
@@ -120,7 +121,7 @@ export function buildCables(scene, components, screenWorld, screenNormal, haloTe
     curve.arcLengthDivisions = 200;
     const mat = new THREE.ShaderMaterial({
       uniforms: { uTime:{value:0}, uColor:{value:new THREE.Color(REGIONS[region].color)} },
-      vertexShader: VERT, fragmentShader: FRAG,
+      vertexShader: VERT, fragmentShader: FRAG_TIERED,
       transparent:true, blending:THREE.AdditiveBlending, side:THREE.BackSide, depthWrite:false, fog:false,
     });
     const tube = new THREE.Mesh(new THREE.TubeGeometry(curve, 200, 0.5, 24, false), mat);
@@ -186,7 +187,6 @@ export function buildCables(scene, components, screenWorld, screenNormal, haloTe
 
     // spark race animation
     if (raceState && !raceState.done) {
-      raceState.t += 0.016; // approx per frame; camera.js passes real dt
       const progress = Math.min(raceState.t / raceState.duration, 1);
 
       raceSparks.forEach((s,k) => {

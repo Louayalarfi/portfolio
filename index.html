@@ -3,7 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LAUAI_ALERFI // holo-rig</title>
+  <title>Lauai Alerfi · Systems Engineer</title>
+  <meta name="description" content="Lauai Alerfi, systems engineer. Zoom into the machine: software on the monitor, FPGA and embedded boards on the desk, silicon inside the CPU." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2304060c'/%3E%3Crect x='8' y='8' width='16' height='16' rx='2' fill='none' stroke='%234fd8e0' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='3' fill='%23c8893f'/%3E%3C/svg%3E" />
+  <script>
+    // Phones and browsers without WebGL2 get the classic page. ?3d=1 forces the 3D site.
+    (function () {
+      var p = new URLSearchParams(location.search);
+      if (p.get('3d') === '1') return;
+      var gl = null;
+      try { gl = document.createElement('canvas').getContext('webgl2'); } catch (e) {}
+      var phone = matchMedia('(pointer: coarse)').matches && Math.min(screen.width, screen.height) < 700;
+      if (!gl || phone) location.replace('/classic/?from=3d');
+    })();
+  </script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
@@ -60,6 +73,12 @@
     }
     .util button:hover { color: var(--ink); border-color: var(--copper); background: rgba(200,137,63,.1); }
     .util button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; }
+    .util a.classic {
+      font-family: var(--mono); font-size: 11px; letter-spacing: .07em; text-transform: uppercase;
+      color: var(--cyan); text-decoration: none; border: 1px solid rgba(79,216,224,.35);
+      padding: 7px 11px; border-radius: 5px; transition: .18s;
+    }
+    .util a.classic:hover { background: rgba(79,216,224,.1); border-color: var(--cyan); }
 
     .hint {
       position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
@@ -127,14 +146,17 @@
 
   <header class="hud">
     <div class="hud-id">LAUAI<span class="dot">.</span>ALERFI<small>SYSTEMS ENGINEER · GUELPH CA</small></div>
-    <div class="status"><span class="led"></span>RIG ONLINE</div>
+    <div class="status"><span class="led"></span><span id="status">RIG ONLINE</span></div>
     <div class="hud-spacer"></div>
     <div class="util">
+      <button id="up" title="Esc">▲ Up</button>
       <button id="overview">⤢ Pull out</button>
       <button data-open="skills">Pinout</button>
       <button data-open="experience">Changelog</button>
       <button data-open="contact">I/O</button>
+      <button id="quality" title="Cycle quality tier">Q</button>
       <button id="reboot">⟳ Reboot</button>
+      <a class="classic" href="/classic/?from=3d">Classic site</a>
     </div>
   </header>
 
@@ -150,7 +172,7 @@
   </div>
 
   <div id="lightbox"><img alt="" id="lbimg" /></div>
-  <div id="fallback">3D engine could not load.<br>Check your connection and reload.</div>
+  <div id="fallback">3D engine could not load.<br>Check your connection and reload, or <a href="/classic/?from=3d" style="color:#4fd8e0">open the classic site</a>.</div>
 
   <script type="module" src="/src/main.js"></script>
 </body>

@@ -1,26 +1,20 @@
 import * as THREE from 'three';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 
-// Sets scene.environment (reflections) + scene.background, and adds the lights.
-// Tries to load an HDRI from public/assets/hdri/. If none is present, it bakes a
-// procedural studio environment so the scene still looks good out of the box.
-//
-// >>> TO GO PHOTOREAL: drop a .hdr into public/assets/hdri/ (see ASSETS.md) and set
-//     HDRI_FILE below. That single change is the biggest realism upgrade available.
+// Lights, shadows and the environment map. The HDRI is tiered (room_2k on high, room_1k below)
+// and preflighted, because a dev server answers a missing file with index.html and status 200,
+// which makes the RGBE parser return nothing and throw inside the loader promise.
 
-const HDRI_FILE = 'studio.hdr'; // place file at public/assets/hdri/studio.hdr
-
-export function setupEnvironment(renderer, scene) {
+export function setupEnvironment(renderer, scene, quality, loader) {
   scene.background = new THREE.Color(0x04060c);
   scene.fog = new THREE.FogExp2(0x04060c, 0.028);
 
-  // ---- lights (kept even with HDRI: HDRI handles reflections, lights cast shadow) ----
   scene.add(new THREE.HemisphereLight(0x8ea7d8, 0x0a0e16, 0.42));
 
   const key = new THREE.DirectionalLight(0xdfe8ff, 1.5);
   key.position.set(7, 12, 8);
   key.castShadow = true;
-  key.shadow.mapSize.set(2048, 2048);
+  key.shadow.mapSize.set(quality.shadowSize, quality.shadowSize);
   key.shadow.camera.near = 1; key.shadow.camera.far = 44;
   key.shadow.camera.left = -12; key.shadow.camera.right = 12;
   key.shadow.camera.top = 13; key.shadow.camera.bottom = -2;
@@ -31,31 +25,45 @@ export function setupEnvironment(renderer, scene) {
   fill.position.set(-9, 5, -7);
   scene.add(fill);
 
-  // ---- environment map ----
-  const pmrem = new THREE.PMREMGenerator(renderer);
-  pmrem.compileEquirectangularShader();
+  const state = { key, fill, hdri: null, source: 'procedural' };
+  const file = `/hdri/${quality.hdri}.hdr`;
 
-  new RGBELoader()
-    .setPath('assets/hdri/')
-    .load(
-      HDRI_FILE,
+  const useProcedural = () => {
+    scene.environment = bakeProceduralEnv(renderer);
+    state.source = 'procedural';
+  };
+
+  const loadHdri = () => {
+    const pmrem = new THREE.PMREMGenerator(renderer);
+    pmrem.compileEquirectangularShader();
+    loader.track(file, true);
+    new RGBELoader(loader.manager).load(
+      file,
       (hdr) => {
         const env = pmrem.fromEquirectangular(hdr).texture;
         scene.environment = env;
-        // Optional: also use the HDRI as the visible background:
-        // scene.background = env;
+        if (quality.hdriBackground) {
+          scene.background = env;
+          scene.backgroundBlurriness = 0.35;
+          scene.backgroundIntensity = 0.35;
+        }
         hdr.dispose(); pmrem.dispose();
-        console.log('[env] HDRI loaded:', HDRI_FILE);
+        state.hdri = file; state.source = 'hdri';
       },
       undefined,
-      () => {
-        console.warn('[env] no HDRI found, using procedural studio env. Drop a .hdr in public/assets/hdri/ for realism.');
-        scene.environment = bakeProceduralEnv(renderer);
-        pmrem.dispose();
-      }
+      () => { pmrem.dispose(); useProcedural(); }
     );
+  };
 
-  return { key, fill };
+  fetch(file, { method: 'HEAD' })
+    .then((r) => {
+      const type = r.headers.get('content-type') || '';
+      if (r.ok && !/text\/html/i.test(type)) loadHdri();
+      else useProcedural();
+    })
+    .catch(useProcedural);
+
+  return state;
 }
 
 function bakeProceduralEnv(renderer) {

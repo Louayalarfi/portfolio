@@ -16,14 +16,19 @@ import * as THREE from 'three';
 import { PROJECTS, SKILLS, EXPERIENCE, CONTACT, STATS, IMG_BASE, REGIONS } from './config.js';
 import { rrect, wrap, halo } from './ui/utils.js';
 
-export function buildHoloSystem(scene, camera, components, haloTex) {
-  const texLoader = new THREE.TextureLoader();
-  texLoader.setCrossOrigin('anonymous');
+export function buildHoloSystem(scene, camera, components, haloTex, loader) {
+  const texLoader = new THREE.TextureLoader(loader?.manager);
 
   const holoGroup = new THREE.Group();
   scene.add(holoGroup);
 
   let HOLO_PICK = [];
+  let focusIdx = -1;
+
+  function focusCard(region, idx) {
+    focusIdx = idx;
+    holoGroup.children.forEach((g) => { if (g.userData.idx !== undefined) g.userData.target = g.userData.idx === idx ? 1.14 : 0.92; });
+  }
 
   function clearHolos() {
     HOLO_PICK = [];
@@ -181,8 +186,11 @@ export function buildHoloSystem(scene, camera, components, haloTex) {
       }
 
       g.userData.spin = Math.random() * 6;
+      g.userData.idx = i;
+      g.userData.target = 1;
       holoGroup.add(g);
     });
+    focusIdx = -1;
   }
 
   // ---- info canvas (skills / experience / contact) ----
@@ -382,6 +390,10 @@ export function buildHoloSystem(scene, camera, components, haloTex) {
     holoGroup.children.forEach(g => {
       g.quaternion.copy(camera.quaternion);
       g.position.y += Math.sin(time * 1.5 + g.userData.spin) * 0.0008;
+      if (g.userData.target !== undefined) {
+        const s = g.scale.x + (g.userData.target - g.scale.x) * 0.12;
+        g.scale.setScalar(s);
+      }
     });
     if (introGroup.visible) {
       introGroup.quaternion.copy(camera.quaternion);
@@ -394,7 +406,8 @@ export function buildHoloSystem(scene, camera, components, haloTex) {
     const u = hit.userData;
     const p = PROJECTS[u.region][u.idx];
     if (p.links.length) {
-      window.open(IMG_BASE + encodeURIComponent(p.links[0].u), '_blank');
+      const u = p.links[0].u;
+      window.open(/^https?:/.test(u) ? u : IMG_BASE + encodeURIComponent(u), '_blank', 'noopener');
     } else if (p.imgs.length) {
       const lb  = document.getElementById('lightbox');
       const img = document.getElementById('lbimg');
@@ -402,5 +415,5 @@ export function buildHoloSystem(scene, camera, components, haloTex) {
     }
   }
 
-  return { buildProjectHolos, buildInfoHolo, clearHolos, animateHolos, handleHoloPick, introGroup, get HOLO_PICK() { return HOLO_PICK; } };
+  return { buildProjectHolos, buildInfoHolo, clearHolos, animateHolos, handleHoloPick, focusCard, introGroup, get HOLO_PICK() { return HOLO_PICK; } };
 }

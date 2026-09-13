@@ -103,6 +103,12 @@ export function buildTablet(scene, camera) {
     tabG.add(dot);
   }
 
+  // Every material fades with the slide so the tablet does not pop in.
+  const fadeMats = [];
+  tabG.traverse((o) => {
+    if (o.isMesh && o.material && !fadeMats.includes(o.material)) { o.material.transparent = true; fadeMats.push(o.material); }
+  });
+
   // ─── screen drawing ─────────────────────────────────────────────────────
   let currentRegion = null;
   let currentIdx    = 0;
@@ -299,15 +305,13 @@ export function buildTablet(scene, camera) {
       .add(forward.clone().multiplyScalar(CAM_OFFSET.z));
 
     tabG.position.lerp(target, Math.min(1, dt * 8));
-    tabG.opacity = slideAnim;
+    fadeMats.forEach((m) => { m.opacity = slideAnim; });
 
     // face the camera with slight inward tilt
     tabG.quaternion.copy(cam.quaternion);
     const tiltQ = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0,1,0), -0.12);
     tabG.quaternion.multiply(tiltQ);
 
-    // emissive glow on screen edge when visible
-    screenMat.opacity = slideAnim;
   }
 
   drawScreen();

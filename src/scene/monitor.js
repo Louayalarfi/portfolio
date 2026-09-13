@@ -150,5 +150,5 @@ export function buildMonitor(scene) {
     }
   }
 
-  return { monG, screenWorld, screenNormal, setMode, tick };
+  return { monG, screen, screenWorld, screenNormal, setMode, tick };
 }

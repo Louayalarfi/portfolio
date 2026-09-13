@@ -3,34 +3,53 @@ import { EffectComposer }  from 'three/examples/jsm/postprocessing/EffectCompose
 import { RenderPass }      from 'three/examples/jsm/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
 import { SSAOPass }        from 'three/examples/jsm/postprocessing/SSAOPass.js';
+import { BokehPass }       from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { OutputPass }      from 'three/examples/jsm/postprocessing/OutputPass.js';
-// BokehPass not available in all Three.js builds, use ShaderPass with a custom DOF instead
-// import { BokehPass } from 'three/examples/jsm/postprocessing/BokehPass.js';
 
-export function createComposer(renderer, scene, camera) {
+// Pass order matters: SSAO needs the raw render, bloom must not be darkened by SSAO,
+// bokeh blurs the lit result, OutputPass applies tone mapping and colour space last.
+export function createComposer(renderer, scene, camera, quality) {
+  if (!quality.passes.length) return null;
+
+  const w = innerWidth, h = innerHeight;
   const composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
-  // ── Unreal Bloom, makes neon cables / RGB glow pop ──────────────────────
-  const bloom = new UnrealBloomPass(
-    new THREE.Vector2(window.innerWidth, window.innerHeight),
-    0.85,   // strength  (raise for more glow)
-    0.55,   // radius
-    0.78    // threshold (only pixels brighter than this bloom)
-  );
-  composer.addPass(bloom);
+  let ssao = null, bloom = null, bokeh = null;
 
-  // ── SSAO, adds deep contact shadows between components ──────────────────
-  const ssao = new SSAOPass(scene, camera, window.innerWidth, window.innerHeight);
-  ssao.kernelRadius  = 0.55;
-  ssao.minDistance   = 0.002;
-  ssao.maxDistance   = 0.07;
-  ssao.output        = SSAOPass.OUTPUT.Default;
-  composer.addPass(ssao);
+  if (quality.passes.includes('ssao')) {
+    ssao = new SSAOPass(scene, camera, w, h);
+    ssao.kernelRadius = 0.55;
+    ssao.minDistance = 0.002;
+    ssao.maxDistance = 0.07;
+    ssao.output = SSAOPass.OUTPUT.Default;
+    composer.addPass(ssao);
+  }
 
-  // OutputPass keeps tone mapping + color space correct, must stay last
+  if (quality.passes.includes('bloom')) {
+    bloom = new UnrealBloomPass(new THREE.Vector2(w, h), 0.85, 0.55, 0.78);
+    composer.addPass(bloom);
+  }
+
+  if (quality.passes.includes('bokeh')) {
+    bokeh = new BokehPass(scene, camera, { focus: 11, aperture: 0.00025, maxblur: 0.008 });
+    composer.addPass(bokeh);
+  }
+
   composer.addPass(new OutputPass());
+  composer.setSize(w, h);
 
-  composer.setSize(window.innerWidth, window.innerHeight);
-  return { composer, bloom, ssao };
+  function setFocus(distance, aperture) {
+    if (!bokeh) return;
+    bokeh.uniforms.focus.value = distance;
+    if (aperture !== undefined) bokeh.uniforms.aperture.value = aperture;
+  }
+
+  function setSize(width, height) {
+    composer.setSize(width, height);
+    if (ssao) ssao.setSize(width, height);
+    if (bloom) bloom.setSize(width, height);
+  }
+
+  return { composer, bloom, ssao, bokeh, setFocus, setSize, render: () => composer.render() };
 }
