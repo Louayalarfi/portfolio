@@ -147,6 +147,7 @@
     "rotationY": -1.5707963267948966,
     "rotationX": 0,
     "scaleBy": "width",
-    "yOff": 0
+    "yOff": 0,
+    "dim": 0.55
   }
 }

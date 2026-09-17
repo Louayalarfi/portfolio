@@ -23,7 +23,13 @@ export async function placeModel(key, { loader, footprint, scaleBy, critical = f
   if (!gltf) return null;
 
   const model = gltf.scene;
-  model.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; if (o.material?.map) o.material.map.anisotropy = 4; } });
+  model.traverse((o) => {
+    if (!o.isMesh) return;
+    o.castShadow = true; o.receiveShadow = true;
+    if (o.material?.map) o.material.map.anisotropy = 4;
+    // Some low poly models ship near white flat colours that bloom out under the HDRI; dim tones them down.
+    if (entry.dim && o.material?.color) { o.material = o.material.clone(); o.material.color.multiplyScalar(entry.dim); }
+  });
 
   const wrap = new THREE.Group();
   const inner = new THREE.Group();

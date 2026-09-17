@@ -11,7 +11,8 @@ import { placeModel } from './placeModel.js';
 import { DECOR } from './decor.js';
 import { buildMonitor } from '../scene/monitor.js';
 import { buildCables } from '../scene/cables.js';
-import { GROUP_COLOR, DRAFT_DEVICES, MOUNTS, groupedMounts, unmounted } from '../content/index.js';
+import { GROUP_COLOR, DRAFT_DEVICES, MOUNTS, EXPERIENCE, groupedMounts, unmounted } from '../content/index.js';
+import { bulletsFor } from '../holo.js';
 import { buildDie } from './die.js';
 
 // The die world lives far below the desk so nothing overlaps; the dive teleports into it at the warp peak.
@@ -214,5 +215,6 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
     return { mounts: rows, unresolved, drafts };
   }
 
-  return { mounts, devices, monitor, cablesSys, rig, die, dieMount, clickables, mountAt, mountFor, blockAt, liftPanel, tick, report, unresolved };
+  const experience = EXPERIENCE.map((r) => ({ ...r, bullets: bulletsFor(r) }));
+  return { mounts, devices, monitor, cablesSys, rig, die, dieMount, clickables, experience, mountAt, mountFor, blockAt, liftPanel, tick, report, unresolved };
 }

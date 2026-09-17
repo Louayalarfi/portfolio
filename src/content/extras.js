@@ -116,3 +116,37 @@ export const EXTRAS = [
     tags: ['SolidWorks', 'CAD', '3D Printing']
   }
 ];
+
+// Bullet points behind each role on the experience card, the same wording as the resume.
+// Keyed by the start of the role title on the classic page; anything not listed falls back to its description.
+export const EXPERIENCE_BULLETS = {
+  'Software / Systems Developer': { org: 'ECNG Energy Group', bullets: [
+    'Built a Python FastAPI service on the Claude API that reads utility invoice PDFs for a production C# billing application, reaching a 97 percent match rate across 265 utilities, guarded by a 22 invoice regression suite run before every deploy',
+    'Diagnosed three production failures in Selenium Python scrapers behind two factor login, adding session reauthentication, a grid paging fix, and stale file cleanup that took a monthly run of 208 utility reports from 27 failures to zero',
+    'Automated a supplier portal monthly invoice and consumption downloads in VB.NET on .NET 8 with Playwright, covering 110 customer accounts and loading roughly 1,100 rows a month into SQL Server with zero errors',
+    'Built a Python Microsoft Graph service with certificate based application authentication that files utility reports from a shared mailbox into SQL Server and raises tracking tickets automatically',
+    'Shipped a daily IESO price alert pipeline, a VB.NET sender with a C# ASP.NET admin page for per client thresholds, running in production every day since May 2026'
+  ] },
+  'Teaching Assistant, Electric Circuits': { org: 'University of Guelph', bullets: [
+    'Led the lab section for Electric Circuits (ENGG2450), coaching students through building RLC and operational amplifier circuits on the bench',
+    'Taught oscilloscope measurement technique and guided students to diagnose their own wiring and measurement faults rather than handing them the answer',
+    'Covered nodal and mesh analysis, superposition, Thevenin and Norton equivalents, and DC, AC, op amp and first and second order circuit labs'
+  ] },
+  'Teaching Assistant, Engineering Systems Analysis': { org: 'University of Guelph', bullets: [
+    'Ran weekly tutorials for Engineering Systems Analysis (ENGG2400), teaching students to model mechanical, electrical, thermal and fluid systems',
+    'Worked through deriving transfer functions and solving step and frequency responses with Laplace methods, and supported the graded tutorial assignments'
+  ] },
+  'Co-Leader, SolidWorks User Group': { org: 'University of Guelph', bullets: [
+    'Organized workshops and tutorials to strengthen 3D modelling and CAD skills across the engineering student community',
+    'Co led the group for two academic years, Sep 2024 to Apr 2026'
+  ] },
+  'Robotics Instructor': { org: 'Exceed Robotics', bullets: [
+    'Taught SolidWorks, Inventor, LEGO Mindstorms and Arduino to students',
+    'Led students through IoT smart house projects and supervised FDM and SLA 3D printing',
+    'Coached a team to regional VEX success'
+  ] },
+  'Robotics & Mathematics Teacher': { org: 'Alwataniah Syria National School', bullets: [
+    'Taught coding, robotics and mathematics to students aged 5 to 15 for five years',
+    'Used LEGO Mindstorms, Scratch and Arduino, adjusting the approach to each class from student feedback'
+  ] }
+};

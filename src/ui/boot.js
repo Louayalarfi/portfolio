@@ -48,6 +48,25 @@ export function startBoot({ loader, skip = false, onEnter }) {
     window.__openImg = (u) => window.__openGallery([u], [], 0);
   }
 
+  // Detail overlay: a role from the experience card, or every role from the HUD button.
+  const detail = document.getElementById('detail');
+  if (detail) {
+    const body = document.getElementById('detail-body');
+    const closeD = () => detail.classList.remove('open');
+    const esc = (t) => String(t).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+    const role = (r) => `<section><div class="d-dates">${esc(r.dates || '')}</div><h3>${esc(r.title)}</h3><div class="d-sub">${esc(r.sub || '')}</div>`
+      + `<ul>${(r.bullets || []).map((b) => `<li>${esc(b)}</li>`).join('')}</ul>`
+      + (r.tags?.length ? `<div class="d-tags">${r.tags.map((t) => `<span>${esc(t)}</span>`).join('')}</div>` : '') + `</section>`;
+    detail.addEventListener('click', (e) => { if (e.target === detail) closeD(); });
+    document.getElementById('detail-close').addEventListener('click', closeD);
+    document.addEventListener('keydown', (e) => { if (detail.classList.contains('open') && e.key === 'Escape') { closeD(); e.stopImmediatePropagation(); } }, true);
+    window.__openDetail = (d) => {
+      body.innerHTML = d.roles ? `<h2>${esc(d.title)}</h2>` + d.roles.map(role).join('') : role(d);
+      body.scrollTop = 0;
+      detail.classList.add('open');
+    };
+  }
+
   let done = false;
   let linesDone = false;
   let assetsDone = false;

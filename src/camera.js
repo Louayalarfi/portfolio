@@ -11,7 +11,7 @@ const reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
 export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
   const { monitor } = world;
 
-  const home = { target: new THREE.Vector3(0.6, 1.7, 0.2), r: 13.5, theta: 0.42, phi: 0.98 };
+  const home = { target: new THREE.Vector3(0.6, 2.6, 0.2), r: 15.5, theta: 0.42, phi: 1.02 };
   const cam  = { target: home.target.clone(), r: home.r, theta: home.theta, phi: home.phi };
 
   let orbitAnim = null;
@@ -97,11 +97,13 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
       orbitTo({ target: mount.dieCenter.clone(), r: mount.dieOrbitR, theta: 0.6, phi: 1.0 }, 1.6);
       holo.buildProjectHolos(mount.projects, mount.dieCenter.clone().add(new THREE.Vector3(0, 5, 0)), mount.accent, 5);
     } else {
+      // Build the cards first so the orbit can frame the tallest one together with the device.
+      const theta = thetaToward(mount.center);
+      const maxH = holo.buildProjectHolos(mount.projects, mount.center, mount.accent, 1, theta);
       const n = mount.projects.length;
-      const target = mount.center.clone().add(new THREE.Vector3(0, 0.45, 0));
-      orbitTo({ target, r: mount.orbitR + n * 0.35, theta: thetaToward(target), phi: Math.min(1.25, Math.max(1.0, cam.phi)) }, dur, () => {
-        holo.buildProjectHolos(mount.projects, mount.center, mount.accent);
-      });
+      const target = mount.center.clone().add(new THREE.Vector3(0, 0.35 + maxH * 0.5, 0));
+      const r = Math.max(mount.orbitR + n * 0.35, 1.35 * maxH + 1.4);
+      orbitTo({ target, r, theta, phi: 1.22 }, dur);
     }
     if (tablet) tablet.showMount(mount);
     setHint('click a card for its images · the tablet pages through projects · <b>Back</b> to the desk');
@@ -167,6 +169,10 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
   // Skills, Experience and Contact panels from the HUD behave like a place you went to, so Back works.
   function showInfo(kind, label) {
     if (busy) return;
+    if (kind === 'experience') {
+      window.__openDetail?.({ title: 'Experience', roles: world.experience.map((r) => ({ title: r.title, sub: r.org, dates: r.dates, bullets: r.bullets, tags: r.tags })) });
+      return;
+    }
     holo.clearHolos();
     holo.introGroup.visible = false;
     if (tablet) tablet.hide();
@@ -221,9 +227,10 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
       }
     } else if (!busy) {
       const hH = holo.HOLO_PICK.length ? pickFrom(e.clientX, e.clientY, holo.HOLO_PICK) : [];
+      const hI = holo.introGroup.visible && holo.INTRO_PICK.length ? pickFrom(e.clientX, e.clientY, holo.INTRO_PICK) : [];
       const tabPick = tablet?.PICK?.length ? pickFrom(e.clientX, e.clientY, tablet.PICK) : [];
-      const hC = hH.length || tabPick.length ? [] : pickFrom(e.clientX, e.clientY, clickable);
-      canvas.style.cursor = (hH.length || hC.length || tabPick.length) ? 'pointer' : 'grab';
+      const hC = hH.length || hI.length || tabPick.length ? [] : pickFrom(e.clientX, e.clientY, clickable);
+      canvas.style.cursor = (hH.length || hI.length || hC.length || tabPick.length) ? 'pointer' : 'grab';
     }
   });
 
@@ -266,6 +273,11 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
 
     const hH = holo.HOLO_PICK.length ? pickFrom(e.clientX, e.clientY, holo.HOLO_PICK) : [];
     if (hH.length) { holo.handleHoloPick(hH[0].object); return; }
+
+    if (holo.introGroup.visible && holo.INTRO_PICK.length) {
+      const hI = pickFrom(e.clientX, e.clientY, holo.INTRO_PICK);
+      if (hI.length && holo.handleIntroPick(hI[0])) return;
+    }
 
     const hC = pickFrom(e.clientX, e.clientY, clickable);
     if (hC.length) {

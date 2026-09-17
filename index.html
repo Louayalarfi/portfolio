@@ -143,6 +143,32 @@
     }
     #lbcount { color: var(--copper); white-space: nowrap; }
 
+    #detail {
+      position: fixed; inset: 0; z-index: 82; background: rgba(1,2,6,.86); backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center; padding: 24px;
+    }
+    #detail.open { display: flex; }
+    #detail-panel {
+      position: relative; width: min(760px, 100%); max-height: 88vh; overflow: auto;
+      background: rgba(8,14,26,.97); border: 1px solid var(--copper); border-radius: 16px; padding: 32px 36px 28px;
+      box-shadow: 0 0 40px rgba(200,137,63,.18);
+    }
+    #detail-close {
+      position: sticky; top: 0; float: right; font-family: var(--mono); font-size: 16px; color: var(--ink);
+      background: rgba(14,24,40,.9); border: 1px solid var(--line); border-radius: 50%; width: 40px; height: 40px; cursor: pointer;
+    }
+    #detail-body h2 { font-family: var(--display); font-size: 26px; letter-spacing: .06em; color: var(--copper); margin-bottom: 18px; }
+    #detail-body section { padding: 18px 0 22px; border-top: 1px solid var(--line); }
+    #detail-body section:first-of-type { border-top: 0; padding-top: 4px; }
+    #detail-body .d-dates { font-family: var(--mono); font-size: 11px; letter-spacing: .12em; color: var(--copper); text-transform: uppercase; }
+    #detail-body h3 { font-family: var(--display); font-size: 22px; margin: 6px 0 2px; color: var(--ink); }
+    #detail-body .d-sub { font-family: var(--mono); font-size: 13px; color: #7fb1c9; margin-bottom: 14px; }
+    #detail-body ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    #detail-body li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.6; color: #c3cce0; }
+    #detail-body li::before { content: '▸'; position: absolute; left: 0; color: var(--copper); }
+    #detail-body .d-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+    #detail-body .d-tags span { font-family: var(--mono); font-size: 11px; color: var(--muted); border: 1px solid var(--line); border-radius: 6px; padding: 3px 9px; }
+
     .tags { position: fixed; inset: 0; z-index: 16; pointer-events: none; transition: opacity .3s; }
     .tags.hidden { opacity: 0; }
     .tag {
@@ -246,6 +272,12 @@
     <img alt="" id="lbimg" />
     <button id="lbnext" type="button" aria-label="Next">▶</button>
     <div id="lbbar"><span id="lbcap"></span><span id="lbcount"></span></div>
+  </div>
+  <div id="detail">
+    <div id="detail-panel">
+      <button id="detail-close" type="button" aria-label="Close">✕</button>
+      <div id="detail-body"></div>
+    </div>
   </div>
   <div id="fallback">3D engine could not load.<br>Check your connection and reload, or <a href="/classic/?from=3d" style="color:#4fd8e0">open the classic site</a>.</div>
 
