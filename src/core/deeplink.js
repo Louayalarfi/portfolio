@@ -1,6 +1,5 @@
 // URL state for screenshots and sharing.
 //   ?shot=desk                  overview, boot skipped
-//   ?shot=dive:<mount>:<t>      frozen mid dive at t in [0, 1]
 //   ?shot=board:<mount>         arrived at a device
 //   ?shot=die:<chip>            inside the die
 //   ?noboot=1                   skip the boot screen only

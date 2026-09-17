@@ -1,34 +1,43 @@
-// A single DOM label that follows the hovered mount, projected from world space each frame.
+// Always on tags over every clickable device, projected from world space each frame.
+// They are the site's affordance: a glowing pill that says what the thing is and how many projects it holds.
 import * as THREE from 'three';
 
-export function createLabels(camera) {
-  const el = document.createElement('div');
-  el.className = 'mount-label';
-  el.innerHTML = '<b></b><small></small>';
-  document.body.appendChild(el);
-  const title = el.querySelector('b'), sub = el.querySelector('small');
-  const pos = new THREE.Vector3();
-  let target = null;
+export function createTags(camera, mounts, onPick) {
+  const root = document.createElement('div');
+  root.className = 'tags';
+  document.body.appendChild(root);
 
-  function show(mount, worldPos) {
-    if (target?.mount === mount) return;
-    target = { mount, pos: worldPos.clone() };
-    title.textContent = mount.label;
+  const items = Object.values(mounts).map((mount) => {
+    const el = document.createElement('button');
+    el.className = 'tag';
+    el.type = 'button';
     const n = mount.projects.length;
-    sub.textContent = `${mount.port ? mount.portLabel + ' · ' : ''}${n} project${n === 1 ? '' : 's'}`;
+    const what = mount.kind === 'monitor' ? 'Screen' : mount.kind === 'die' ? 'CPU' : mount.label;
+    el.innerHTML = `<i></i><b>${what}</b><small>${n} project${n === 1 ? '' : 's'}</small>`;
     el.style.setProperty('--accent', mount.accent);
-    el.classList.add('on');
-  }
+    el.addEventListener('click', (e) => { e.stopPropagation(); onPick(mount); });
+    root.appendChild(el);
+    const lift = mount.kind === 'die' ? 0.15 : mount.kind === 'monitor' ? 1.1 : 0.45;
+    return { mount, el, anchor: () => mount.center.clone().add(new THREE.Vector3(0, lift, 0)) };
+  });
 
-  function hide() { target = null; el.classList.remove('on'); }
+  let visible = true;
+  const pos = new THREE.Vector3();
+
+  function setVisible(v) { visible = v; root.classList.toggle('hidden', !v); }
 
   function tick() {
-    if (!target) return;
-    pos.copy(target.pos).project(camera);
-    if (pos.z > 1) { el.style.opacity = '0'; return; }
-    el.style.opacity = '';
-    el.style.transform = `translate(${((pos.x + 1) / 2 * innerWidth).toFixed(0)}px, ${((1 - pos.y) / 2 * innerHeight).toFixed(0)}px)`;
+    if (!visible) return;
+    for (const it of items) {
+      pos.copy(it.anchor()).project(camera);
+      const behind = pos.z > 1;
+      const x = (pos.x + 1) / 2 * innerWidth, y = (1 - pos.y) / 2 * innerHeight;
+      const off = behind || x < -80 || x > innerWidth + 80 || y < 40 || y > innerHeight + 40;
+      it.el.style.opacity = off ? '0' : '';
+      it.el.style.pointerEvents = off ? 'none' : '';
+      if (!off) it.el.style.transform = `translate(${x.toFixed(0)}px, ${y.toFixed(0)}px)`;
+    }
   }
 
-  return { show, hide, tick, get current() { return target?.mount || null; } };
+  return { setVisible, tick, root };
 }

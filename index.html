@@ -34,6 +34,8 @@
     #app { position: fixed; inset: 0; }
     canvas { display: block; }
 
+    #fade { position: fixed; inset: 0; z-index: 5; pointer-events: none; background: #04060c; opacity: 0; }
+
     #warp {
       position: fixed; inset: 0; z-index: 4; pointer-events: none;
       opacity: 0; transition: opacity .25s; mix-blend-mode: screen;
@@ -82,7 +84,7 @@
     .util a.credits { color: var(--muted); border-color: var(--line); }
 
     .hint {
-      position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%);
+      position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%); max-width: 60vw;
       z-index: 15; font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
       color: var(--muted-2); text-transform: uppercase; text-align: center;
       pointer-events: none; transition: opacity .4s;
@@ -125,7 +127,59 @@
       padding: 30px; cursor: zoom-out; backdrop-filter: blur(4px);
     }
     #lightbox.open { display: flex; }
-    #lightbox img { max-width: 94vw; max-height: 90vh; border: 1px solid var(--copper); border-radius: 8px; }
+    #lightbox img { max-width: 88vw; max-height: 82vh; border: 1px solid var(--copper); border-radius: 8px; }
+    #lightbox button {
+      position: fixed; z-index: 81; font-family: var(--mono); font-size: 18px; color: var(--ink);
+      background: rgba(14,24,40,.75); border: 1px solid var(--line); border-radius: 50%;
+      width: 48px; height: 48px; cursor: pointer; transition: .15s;
+    }
+    #lightbox button:hover { border-color: var(--copper); background: rgba(200,137,63,.2); }
+    #lbclose { top: 18px; right: 18px; }
+    #lbprev { left: 18px; top: 50%; transform: translateY(-50%); }
+    #lbnext { right: 18px; top: 50%; transform: translateY(-50%); }
+    #lbbar {
+      position: fixed; left: 0; right: 0; bottom: 18px; z-index: 81; display: flex; justify-content: center; gap: 18px;
+      font-family: var(--mono); font-size: 12px; letter-spacing: .06em; color: var(--muted); padding: 0 80px; text-align: center;
+    }
+    #lbcount { color: var(--copper); white-space: nowrap; }
+
+    .tags { position: fixed; inset: 0; z-index: 16; pointer-events: none; transition: opacity .3s; }
+    .tags.hidden { opacity: 0; }
+    .tag {
+      position: absolute; top: 0; left: 0; pointer-events: auto; cursor: pointer;
+      transform: translate(-1000px, -1000px); margin: -18px 0 0 -14px;
+      display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 8px;
+      background: rgba(6,10,20,.78); border: 1px solid var(--accent, var(--cyan)); border-radius: 999px;
+      color: var(--ink); font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-align: left;
+      backdrop-filter: blur(3px); transition: opacity .2s, background .15s; white-space: nowrap;
+    }
+    .tags.hidden .tag { pointer-events: none; }
+    .tag:hover { background: rgba(6,10,20,.95); box-shadow: 0 0 18px var(--accent, var(--cyan)); }
+    .tag i { width: 9px; height: 9px; border-radius: 50%; background: var(--accent, var(--cyan)); box-shadow: 0 0 10px var(--accent, var(--cyan)); animation: pulsek 1.8s infinite; }
+    .tag b { font-family: var(--display); font-size: 12px; letter-spacing: .05em; color: var(--accent, var(--cyan)); }
+    .tag small { color: var(--muted); font-size: 10px; }
+
+    #back {
+      position: fixed; left: clamp(12px,3vw,30px); bottom: 48px; z-index: 22;
+      display: flex; align-items: center; gap: 10px; padding: 12px 18px;
+      font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: .08em; text-transform: uppercase;
+      color: var(--ink); background: rgba(200,137,63,.18); border: 1px solid var(--copper); border-radius: 999px;
+      cursor: pointer; box-shadow: 0 0 22px rgba(200,137,63,.25); transition: .15s;
+    }
+    #back[hidden] { display: none; }
+    #back:hover { background: rgba(200,137,63,.32); }
+    #back span { color: var(--copper); }
+    #crumb {
+      position: fixed; left: clamp(12px,3vw,30px); bottom: 24px; z-index: 22;
+      font-family: var(--mono); font-size: 11px; letter-spacing: .1em; color: var(--muted); text-transform: uppercase;
+    }
+    #tip {
+      position: fixed; left: 50%; top: 84px; transform: translate(-50%, -8px); z-index: 21; opacity: 0; pointer-events: none;
+      padding: 10px 16px; border-radius: 8px; background: rgba(6,10,20,.9); border: 1px solid var(--cyan);
+      font-family: var(--mono); font-size: 12px; letter-spacing: .05em; color: var(--ink); transition: opacity .4s, transform .4s;
+    }
+    #tip.on { opacity: 1; transform: translate(-50%, 0); }
+    @media (max-width: 900px) { .hint, #crumb { display: none; } }
 
     .mount-label {
       position: fixed; top: 0; left: 0; z-index: 18; pointer-events: none;
@@ -153,7 +207,7 @@
 </head>
 <body>
   <div id="app"></div>
-  <div id="warp"></div>
+  <div id="fade"></div>
   <div class="vignette"></div>
   <div class="grain"></div>
 
@@ -162,19 +216,20 @@
     <div class="status"><span class="led"></span><span id="status">RIG ONLINE</span></div>
     <div class="hud-spacer"></div>
     <div class="util">
-      <button id="up" title="Esc">▲ Up</button>
-      <button id="overview">⤢ Pull out</button>
-      <button data-open="skills">Pinout</button>
-      <button data-open="experience">Changelog</button>
-      <button data-open="contact">I/O</button>
-      <button id="quality" title="Cycle quality tier">Q</button>
-      <button id="reboot">⟳ Reboot</button>
+      <button id="overview">⌂ Desk</button>
+      <button data-open="skills">Skills</button>
+      <button data-open="experience">Experience</button>
+      <button data-open="contact">Contact</button>
+      <button id="quality" title="Cycle the graphics quality">Quality</button>
       <a class="classic" href="/classic/?from=3d">Classic site</a>
       <a class="classic credits" href="/credits.html" title="Model and HDRI credits">Credits</a>
     </div>
   </header>
 
-  <div class="hint" id="hint">drag to orbit · scroll to zoom · <b>click a component to dive through the wires</b></div>
+  <div class="hint" id="hint">drag to look around · scroll to zoom · <b>click a glowing tag to open it</b></div>
+  <button id="back" type="button" hidden><span>◀</span> Back to desk</button>
+  <div id="crumb"></div>
+  <div id="tip">The glowing tags mark everything you can open. Click one to start.</div>
 
   <div id="boot">
     <div class="boot-inner">
@@ -185,7 +240,13 @@
     </div>
   </div>
 
-  <div id="lightbox"><img alt="" id="lbimg" /></div>
+  <div id="lightbox">
+    <button id="lbclose" type="button" aria-label="Close">✕</button>
+    <button id="lbprev" type="button" aria-label="Previous">◀</button>
+    <img alt="" id="lbimg" />
+    <button id="lbnext" type="button" aria-label="Next">▶</button>
+    <div id="lbbar"><span id="lbcap"></span><span id="lbcount"></span></div>
+  </div>
   <div id="fallback">3D engine could not load.<br>Check your connection and reload, or <a href="/classic/?from=3d" style="color:#4fd8e0">open the classic site</a>.</div>
 
   <script type="module" src="/src/main.js"></script>

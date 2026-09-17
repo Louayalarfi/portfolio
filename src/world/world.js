@@ -1,9 +1,9 @@
 // Builds the scene graph from the registries and the content, and returns the mounts:
-// one per (port, device) pair, each with its cable, its dive tunnel and its projects.
+// one per (port, device) pair, each with its cable and its projects.
 import * as THREE from 'three';
 import { PORTS } from './ports.js';
 import { DEVICES } from './devices.js';
-import { routeCable, divePath } from './routing.js';
+import { routeCable } from './routing.js';
 import { buildCase } from './procedural/case.js';
 import { buildBoard } from './procedural/pcb.js';
 import { buildScope, buildPrinter, buildHeadset, buildMaglev, buildWing, buildRoom } from './procedural/props.js';
@@ -11,7 +11,6 @@ import { placeModel } from './placeModel.js';
 import { DECOR } from './decor.js';
 import { buildMonitor } from '../scene/monitor.js';
 import { buildCables } from '../scene/cables.js';
-import { makeDive } from '../scene/dive.js';
 import { GROUP_COLOR, DRAFT_DEVICES, MOUNTS, groupedMounts, unmounted } from '../content/index.js';
 import { buildDie } from './die.js';
 
@@ -68,11 +67,10 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
     const port = gm.port ? PORTS[gm.port] : null;
     if (gm.port && !port) { unresolved.push(`${gm.id}: port ${gm.port} missing`); continue; }
 
-    let cable = null, dive = null;
+    let cable = null;
     if (port && dev.jack) {
       const pts = routeCable(port, dev.jack, gm.cable, { viaBack: gm.device === 'monitor' || gm.device === 'printer', floor: !!dev.spec.floor });
       cable = cablesSys.addCable(pts, gm.cable, hex);
-      dive = makeDive(scene, divePath(pts, port, dev, dev.jack), hex, cable.radius * 9, quality.plasmaOctaves);
       if (haloAt) haloAt(hex, 0.22, port.pos[0], port.pos[1], port.pos[2], portDots);
       (gm.also || []).forEach((pid) => {
         const p2 = PORTS[pid]; if (!p2 || !dev.jack2) return;
@@ -86,7 +84,7 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
     const mount = {
       id: gm.id, label: dev.spec.label, projects: gm.projects.map((p) => ({ ...p, accent: GROUP_COLOR[p.group] })),
       accent, hex, port: gm.port, portLabel: port?.label || '', cableKind: gm.cable,
-      cable, curve: dive?.curve || null, tunnel: dive?.tunnel || null, tmat: dive?.tmat || null,
+      cable,
       device: dev, center: dev.center.clone(), orbitR: dev.spec.orbitR || 2.6,
       kind, chip: gm.chip || null, internal: !!dev.spec.internal, extras: gm.extras || []
     };
@@ -132,16 +130,6 @@ export function buildWorld(scene, { quality, haloAt, haloTex, loader }) {
       dieMount.dieCenter = centers.length
         ? centers.reduce((a, c) => a.add(c), new THREE.Vector3()).multiplyScalar(1 / centers.length)
         : die.group.position.clone();
-      const c = dieMount.dieCenter;
-      const pts = [
-        c.clone().add(new THREE.Vector3(-4, 46, -6)),
-        c.clone().add(new THREE.Vector3(-2, 34, -3)),
-        c.clone().add(new THREE.Vector3(3, 22, 5)),
-        c.clone().add(new THREE.Vector3(9, 13, 12)),
-        c.clone().add(new THREE.Vector3(13, 9, 17))
-      ];
-      const dv2 = makeDive(scene, pts, dieMount.hex, 2.6, quality.plasmaOctaves);
-      dieMount.curve2 = dv2.curve; dieMount.tunnel2 = dv2.tunnel; dieMount.tmat2 = dv2.tmat;
       dieMount.dieOrbitR = 26;
     }
   }

@@ -161,5 +161,5 @@ export function buildMonitor(scene, spec) {
   }
 
   draw();
-  return { monG, bodyG, screen, screenWorld, screenNormal, setMode, setProjects, handleScreenClick, useModel, tick, get mode() { return mode; }, get projects() { return projects; } };
+  return { monG, bodyG, screen, screenWorld, screenNormal, setMode, setProjects, handleScreenClick, useModel, tick, get mode() { return mode; }, get appIdx() { return appIdx; }, get projects() { return projects; } };
 }

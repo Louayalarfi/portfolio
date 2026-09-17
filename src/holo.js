@@ -52,7 +52,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
       g.fillStyle = '#90a0c0'; g.fillText(t, tx + 11, ty);
       tx += w + 8;
     });
-    const foot = p.links?.length ? '▸ OPEN ' + p.links[0].label.toUpperCase() : (p.imgs?.length ? '▣ TAP TO VIEW IMAGES' : '');
+    const foot = p.imgs?.length ? `▣ CLICK TO VIEW ${p.imgs.length} IMAGE${p.imgs.length === 1 ? '' : 'S'}` : (p.links?.length ? '▸ CLICK TO OPEN ' + p.links[0].label.toUpperCase() : '');
     if (foot) { g.fillStyle = accent; g.font = "600 15px 'IBM Plex Mono',monospace"; g.fillText(foot, 30, 468); }
     const t = new THREE.CanvasTexture(c); t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = 4;
     return t;
@@ -78,18 +78,6 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
       const hb = halo(THREE, haloTex, accent, 0.26 * scale, 0, -ch / 2, 0.02, g);
       hb.material.opacity = 0.5;
 
-      if (p.imgs?.length) {
-        const ip = new THREE.Mesh(new THREE.PlaneGeometry(cw, cw * 0.52), new THREE.MeshBasicMaterial({ color: 0x0a121f, transparent: true, opacity: 0, depthWrite: false, side: THREE.DoubleSide }));
-        ip.position.y = ch / 2 + cw * 0.52 / 2 + 0.08; ip.visible = false;
-        ip.userData = { idx: i, project: p };
-        g.add(ip); HOLO_PICK.push(ip);
-        texLoader.load(p.imgs[0], (tex) => {
-          tex.colorSpace = THREE.SRGBColorSpace;
-          ip.material.map = tex; ip.material.color.set(0xffffff); ip.material.opacity = 1; ip.material.needsUpdate = true; ip.visible = true;
-          const frm = new THREE.Mesh(new THREE.PlaneGeometry(cw + 0.04, cw * 0.52 + 0.04), new THREE.MeshBasicMaterial({ color: col, transparent: true, opacity: 0.25, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
-          frm.position.set(0, ip.position.y, -0.01); g.add(frm);
-        }, undefined, () => { ip.visible = false; });
-      }
       g.userData.spin = Math.random() * 6; g.userData.idx = i; g.userData.target = 1;
       holoGroup.add(g);
     });
@@ -187,14 +175,51 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
       });
       introTex.needsUpdate = true;
     }
-    const w = 5.2, h = w * 760 / 1400;
+    const w = 4.7, h = w * 760 / 1400;
     const panel = new THREE.Mesh(new THREE.PlaneGeometry(w, h), new THREE.MeshBasicMaterial({ map: introTex, transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+    panel.position.x = -1.95;
     introGroup.add(panel);
     const fr = new THREE.Mesh(new THREE.PlaneGeometry(w + 0.1, h + 0.1), new THREE.MeshBasicMaterial({ color: 0x4fd8e0, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
-    fr.position.z = -0.01; introGroup.add(fr);
-    halo(THREE, haloTex, 0x4fd8e0, 0.8, -w / 2, h / 2, 0.02, introGroup);
-    halo(THREE, haloTex, 0x4fd8e0, 0.8, w / 2, -h / 2, 0.02, introGroup);
-    introGroup.position.set(1.4, 4.9, -1.2);
+    fr.position.set(-1.95, 0, -0.01); introGroup.add(fr);
+    halo(THREE, haloTex, 0x4fd8e0, 0.8, -1.95 - w / 2, h / 2, 0.02, introGroup);
+    halo(THREE, haloTex, 0x4fd8e0, 0.8, -1.95 + w / 2, -h / 2, 0.02, introGroup);
+
+    // Experience timeline beside the intro, so the career is on screen before anything is clicked.
+    const ec = document.createElement('canvas'); ec.width = 1000; ec.height = 760;
+    const eg = ec.getContext('2d');
+    const expTex = new THREE.CanvasTexture(ec); expTex.colorSpace = THREE.SRGBColorSpace; expTex.anisotropy = 4;
+    function drawExperience() {
+      eg.clearRect(0, 0, 1000, 760);
+      eg.fillStyle = 'rgba(7,13,24,.62)'; rrect(eg, 8, 8, 984, 744, 26); eg.fill();
+      eg.lineWidth = 2.5; eg.strokeStyle = 'rgba(200,137,63,.6)'; rrect(eg, 8, 8, 984, 744, 26); eg.stroke();
+      eg.fillStyle = '#c8893f'; eg.font = "600 30px 'IBM Plex Mono',monospace"; eg.fillText('// experience.log', 52, 84);
+      eg.fillStyle = '#e9eefb'; eg.font = "700 56px 'Chakra Petch',sans-serif"; eg.fillText('EXPERIENCE', 50, 148);
+      let y = 214;
+      const rail = 66;
+      eg.strokeStyle = 'rgba(200,137,63,.35)'; eg.lineWidth = 2;
+      eg.beginPath(); eg.moveTo(rail, y - 20); eg.lineTo(rail, 720); eg.stroke();
+      EXPERIENCE.forEach((r, i) => {
+        if (y > 700) return;
+        eg.fillStyle = i === 0 ? '#a7d96a' : '#c8893f';
+        eg.beginPath(); eg.arc(rail, y - 9, 8, 0, Math.PI * 2); eg.fill();
+        eg.fillStyle = '#c8893f'; eg.font = "500 21px 'IBM Plex Mono',monospace"; eg.fillText(r.dates.toUpperCase(), 96, y - 26);
+        eg.fillStyle = '#e9eefb'; eg.font = "700 31px 'Chakra Petch',sans-serif";
+        eg.fillText(r.title, 96, y + 8);
+        eg.fillStyle = '#7fb1c9'; eg.font = "400 22px 'IBM Plex Mono',monospace"; eg.fillText(r.org, 96, y + 38);
+        y += 92;
+      });
+      expTex.needsUpdate = true;
+    }
+    const ew = 3.35, eh = ew * 760 / 1000;
+    const epanel = new THREE.Mesh(new THREE.PlaneGeometry(ew, eh), new THREE.MeshBasicMaterial({ map: expTex, transparent: true, depthWrite: false, side: THREE.DoubleSide }));
+    epanel.position.x = 2.2;
+    introGroup.add(epanel);
+    const efr = new THREE.Mesh(new THREE.PlaneGeometry(ew + 0.1, eh + 0.1), new THREE.MeshBasicMaterial({ color: 0xc8893f, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
+    efr.position.set(2.2, 0, -0.01); introGroup.add(efr);
+    halo(THREE, haloTex, 0xc8893f, 0.7, 2.2 + ew / 2, eh / 2, 0.02, introGroup);
+    introGroup.position.set(0.9, 5.15, -1.2);
+    drawExperience();
+    if (document.fonts?.ready) document.fonts.ready.then(drawExperience);
     drawIntro();
     if (document.fonts?.ready) document.fonts.ready.then(drawIntro);
   }
@@ -207,15 +232,15 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
     });
     if (introGroup.visible) {
       introGroup.quaternion.copy(camera.quaternion);
-      introGroup.position.y = 4.9 + Math.sin(time * 0.8) * 0.08;
+      introGroup.position.y = 5.15 + Math.sin(time * 0.8) * 0.08;
     }
   }
 
   function handleHoloPick(hit) {
     const p = hit.userData.project; if (!p) return;
     focusCard(hit.userData.idx);
-    if (p.links?.length) window.open(p.links[0].url, '_blank', 'noopener');
-    else if (p.imgs?.length) window.__openImg?.(p.imgs[0]);
+    if (p.imgs?.length) window.__openGallery?.(p.imgs, p.alts || [], 0, p.title);
+    else if (p.links?.length) window.open(p.links[0].url, '_blank', 'noopener');
   }
 
   return { buildProjectHolos, buildInfoHolo, clearHolos, animateHolos, handleHoloPick, focusCard, introGroup, get HOLO_PICK() { return HOLO_PICK; } };

@@ -9,7 +9,7 @@ import { buildTablet }       from './scene/tablet.js';
 import { buildHoloSystem }   from './holo.js';
 import { buildCamera }       from './camera.js';
 import { createComposer }    from './postprocessing/composer.js';
-import { createLabels }      from './ui/labels.js';
+import { createTags }        from './ui/labels.js';
 import { startBoot }         from './ui/boot.js';
 import { makeHaloTexture, halo } from './ui/utils.js';
 
@@ -54,23 +54,17 @@ function build() {
 
   const holoSys = buildHoloSystem(scene, camera, haloTex, loader);
   const tablet  = buildTablet(scene, camera);
-  const labels  = createLabels(camera);
   const post    = createComposer(renderer, scene, camera, quality);
-  const cam     = buildCamera(camera, renderer, world, holoSys, tablet, labels, post);
+  let cam = null;
+  const tags    = createTags(camera, world.mounts, (m) => cam && cam.goTo(m));
+  cam = buildCamera(camera, renderer, world, holoSys, tablet, tags, post);
 
   document.getElementById('overview').addEventListener('click', () => cam.goOverview());
-  document.getElementById('reboot').addEventListener('click',   () => cam.goOverview());
-  document.getElementById('up').addEventListener('click',       () => cam.goUp());
   document.querySelectorAll('[data-open]').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      cam.cancelDive();
-      holoSys.introGroup.visible = false;
-      tablet.hide();
-      holoSys.buildInfoHolo(btn.dataset.open, cam.orbitTo);
-    });
+    btn.addEventListener('click', () => cam.showInfo(btn.dataset.open, btn.textContent.trim()));
   });
   const qBtn = document.getElementById('quality');
-  qBtn.textContent = 'Q: ' + quality.tier.toUpperCase();
+  qBtn.textContent = 'Quality: ' + quality.tier;
   qBtn.title = quality.gpu;
   qBtn.addEventListener('click', () => setQuality(nextTier(quality.tier)));
   document.getElementById('status').textContent = 'RIG ONLINE · ' + quality.tier.toUpperCase();
@@ -117,6 +111,8 @@ function build() {
       skip: SKIP_BOOT,
       onEnter: () => {
         app.start();
+        const tip = document.getElementById('tip');
+        if (tip && !SKIP_BOOT) { tip.classList.add('on'); setTimeout(() => tip.classList.remove('on'), 7000); }
         if (DEEP_LINK) app.loader.whenIdle().then(() => { app.cam.shot(DEEP_LINK); app.frame(); });
       }
     });
