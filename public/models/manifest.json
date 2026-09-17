@@ -1,0 +1,153 @@
+{
+  "monitor": {
+    "file": "monitor.glb",
+    "source": "https://poly.pizza/m/Qyw8JFtZF0",
+    "title": "Monitor",
+    "author": "Zsky",
+    "license": "CC BY 3.0",
+    "nativeWHD": [
+      0.909,
+      0.688,
+      0.279
+    ],
+    "minY": -0.198,
+    "tris": 136,
+    "rotationY": 0,
+    "rotationX": 0,
+    "scaleBy": "width",
+    "yOff": 0,
+    "screen": {
+      "w": 3.423,
+      "h": 1.852,
+      "y": 1.738,
+      "z": 0.018
+    }
+  },
+  "keyboard": {
+    "file": "keyboard.glb",
+    "source": "https://poly.pizza/m/3oFfQCSsUmQ",
+    "title": "Keyboard",
+    "author": "Poly by Google",
+    "license": "CC BY 3.0",
+    "nativeWHD": [
+      414.75,
+      15.645,
+      155.25
+    ],
+    "minY": 1.23,
+    "tris": 1972,
+    "rotationY": 0,
+    "rotationX": 0,
+    "scaleBy": "width",
+    "yOff": 0
+  },
+  "mouse": {
+    "file": "mouse.glb",
+    "source": "https://poly.pizza/m/6ikB7PIRVyd",
+    "title": "Computer mouse",
+    "author": "Poly by Google",
+    "license": "CC BY 3.0",
+    "nativeWHD": [
+      2.422,
+      1.47,
+      4.212
+    ],
+    "minY": 0,
+    "tris": 209,
+    "rotationY": 0,
+    "rotationX": 0,
+    "scaleBy": "depth",
+    "yOff": 0
+  },
+  "chair": {
+    "file": "chair.glb",
+    "source": "https://poly.pizza/m/dCEsSsJJ1Md",
+    "title": "Office Chair",
+    "author": "CMHT Oculus",
+    "license": "CC BY 3.0",
+    "nativeWHD": [
+      24.174,
+      45.174,
+      24.047
+    ],
+    "minY": 0.01,
+    "tris": 2222,
+    "rotationY": 0,
+    "rotationX": 0,
+    "scaleBy": "width",
+    "yOff": 0
+  },
+  "lamp": {
+    "file": "lamp.glb",
+    "source": "https://poly.pizza/m/uJDWrSJGVH",
+    "title": "Light Desk",
+    "author": "Quaternius",
+    "license": "CC0",
+    "nativeWHD": [
+      0.252,
+      0.573,
+      0.453
+    ],
+    "minY": 0,
+    "tris": 356,
+    "rotationY": 0,
+    "rotationX": 0,
+    "scaleBy": "height",
+    "yOff": 0
+  },
+  "plant": {
+    "file": "plant.glb",
+    "source": "https://poly.pizza/m/bfLOqIV5uP",
+    "title": "Houseplant",
+    "author": "Quaternius",
+    "license": "CC0",
+    "nativeWHD": [
+      1.166,
+      0.882,
+      1.22
+    ],
+    "minY": 0.002,
+    "tris": 449,
+    "rotationY": 0,
+    "rotationX": 0,
+    "scaleBy": "height",
+    "yOff": 0
+  },
+  "bookshelf": {
+    "file": "bookshelf.glb",
+    "source": "https://poly.pizza/m/tACDGJ4CGW",
+    "title": "Bookcase with Books",
+    "author": "Quaternius",
+    "license": "CC0",
+    "nativeWHD": [
+      1.842,
+      3.371,
+      0.664
+    ],
+    "minY": -0.018,
+    "tris": 10948,
+    "rotationY": 0,
+    "rotationX": 0,
+    "scaleBy": "width",
+    "yOff": 0
+  },
+  "headset": {
+    "file": "headset.glb",
+    "source": "https://poly.pizza/m/raCB2tOkk3",
+    "title": "VR Headset",
+    "author": "J-Toastie",
+    "license": "CC BY 3.0",
+    "nativeWHD": [
+      1.447,
+      0.677,
+      1.17
+    ],
+    "minY": -0.106,
+    "tris": 1586,
+    "rotationY": -1.5707963267948966,
+    "rotationX": 0,
+    "scaleBy": "width",
+    "yOff": 0,
+    "dim": 0.55
+  }
+}

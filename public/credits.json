@@ -1,0 +1,92 @@
+[
+  {
+    "kind": "hdri",
+    "id": "artist_workshop",
+    "name": "Artist Workshop",
+    "authors": [
+      "Oliksiy Yakovlyev"
+    ],
+    "license": "CC0",
+    "url": "https://polyhaven.com/a/artist_workshop"
+  },
+  {
+    "kind": "model",
+    "id": "monitor",
+    "name": "Monitor",
+    "authors": [
+      "Zsky"
+    ],
+    "license": "CC BY 3.0",
+    "url": "https://poly.pizza/m/Qyw8JFtZF0"
+  },
+  {
+    "kind": "model",
+    "id": "keyboard",
+    "name": "Keyboard",
+    "authors": [
+      "Poly by Google"
+    ],
+    "license": "CC BY 3.0",
+    "url": "https://poly.pizza/m/3oFfQCSsUmQ"
+  },
+  {
+    "kind": "model",
+    "id": "mouse",
+    "name": "Computer mouse",
+    "authors": [
+      "Poly by Google"
+    ],
+    "license": "CC BY 3.0",
+    "url": "https://poly.pizza/m/6ikB7PIRVyd"
+  },
+  {
+    "kind": "model",
+    "id": "chair",
+    "name": "Office Chair",
+    "authors": [
+      "CMHT Oculus"
+    ],
+    "license": "CC BY 3.0",
+    "url": "https://poly.pizza/m/dCEsSsJJ1Md"
+  },
+  {
+    "kind": "model",
+    "id": "lamp",
+    "name": "Light Desk",
+    "authors": [
+      "Quaternius"
+    ],
+    "license": "CC0",
+    "url": "https://poly.pizza/m/uJDWrSJGVH"
+  },
+  {
+    "kind": "model",
+    "id": "plant",
+    "name": "Houseplant",
+    "authors": [
+      "Quaternius"
+    ],
+    "license": "CC0",
+    "url": "https://poly.pizza/m/bfLOqIV5uP"
+  },
+  {
+    "kind": "model",
+    "id": "bookshelf",
+    "name": "Bookcase with Books",
+    "authors": [
+      "Quaternius"
+    ],
+    "license": "CC0",
+    "url": "https://poly.pizza/m/tACDGJ4CGW"
+  },
+  {
+    "kind": "model",
+    "id": "headset",
+    "name": "VR Headset",
+    "authors": [
+      "J-Toastie"
+    ],
+    "license": "CC BY 3.0",
+    "url": "https://poly.pizza/m/raCB2tOkk3"
+  }
+]
