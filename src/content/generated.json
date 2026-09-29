@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-29T23:01:20.566Z",
+  "generatedAt": "2026-09-29T23:03:52.506Z",
   "source": "public/classic/index.html",
   "hero": {
     "name": "LAUAI ALERFI",
@@ -422,7 +422,7 @@
           "spec": "716 mV SNM · DRC/LVS-clean · AI-agent driven · 130nm",
           "domain": "VLSI · Physical Design · SkyWater",
           "bullets": [
-            "Designed a full-custom 6T SRAM macro (64-bit, 8×8) from scratch in SkyWater Sky130 130nm PDK, every transistor hand-placed in Magic, no standard cells",
+            "Designed a full-custom 6T SRAM macro (64-bit, 8×8) from scratch in SkyWater Sky130 130nm PDK, every transistor placed in Magic by AI agents I directed, no standard cells",
             "Built and verified the complete cell library bottom-up: 6T bit cell, 3-to-8 row decoder, precharge/equalize, write driver, and cross-coupled sense amplifier, all DRC-clean, LVS-matched, and SPICE-verified",
             "Integrated decoder + 8×8 array + read/write data-path periphery into a single DRC-clean macro; characterized static noise margin via butterfly curves (716 mV hold / 311 mV read)",
             "Used Claude AI agents as the execution layer, directing them to author Magic/ngspice scripts and run DRC checks, layout extractions, and SPICE simulations in parallel across background jobs, iterating far faster than a manual GUI flow while steering the architecture and verification calls",
@@ -911,7 +911,7 @@
       "spec": "716 mV SNM · DRC/LVS-clean · AI-agent driven · 130nm",
       "domain": "VLSI · Physical Design · SkyWater",
       "bullets": [
-        "Designed a full-custom 6T SRAM macro (64-bit, 8×8) from scratch in SkyWater Sky130 130nm PDK, every transistor hand-placed in Magic, no standard cells",
+        "Designed a full-custom 6T SRAM macro (64-bit, 8×8) from scratch in SkyWater Sky130 130nm PDK, every transistor placed in Magic by AI agents I directed, no standard cells",
         "Built and verified the complete cell library bottom-up: 6T bit cell, 3-to-8 row decoder, precharge/equalize, write driver, and cross-coupled sense amplifier, all DRC-clean, LVS-matched, and SPICE-verified",
         "Integrated decoder + 8×8 array + read/write data-path periphery into a single DRC-clean macro; characterized static noise margin via butterfly curves (716 mV hold / 311 mV read)",
         "Used Claude AI agents as the execution layer, directing them to author Magic/ngspice scripts and run DRC checks, layout extractions, and SPICE simulations in parallel across background jobs, iterating far faster than a manual GUI flow while steering the architecture and verification calls",

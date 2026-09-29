@@ -60,6 +60,15 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
     }
   }
 
+  // Where the depth of field should focus: the middle of the cards on show, or nothing when there are none.
+  const focusV = new THREE.Vector3();
+  function focusPoint() {
+    if (!HOLO_PICK.length) return null;
+    focusV.set(0, 0, 0);
+    for (const p of HOLO_PICK) focusV.add(p.getWorldPosition(new THREE.Vector3()));
+    return focusV.multiplyScalar(1 / HOLO_PICK.length);
+  }
+
   function focusCard(idx) {
     holoGroup.children.forEach((g) => { if (g.userData.idx !== undefined) g.userData.target = g.userData.idx === idx ? 1.14 : 0.92; });
   }
@@ -350,7 +359,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
   }
 
   return {
-    buildProjectHolos, buildInfoHolo, clearHolos, animateHolos, handleHoloPick, handleIntroPick, focusCard, introGroup,
+    buildProjectHolos, buildInfoHolo, clearHolos, animateHolos, handleHoloPick, handleIntroPick, focusCard, focusPoint, introGroup,
     get HOLO_PICK() { return HOLO_PICK; }, get INTRO_PICK() { return INTRO_PICK; }
   };
 }
