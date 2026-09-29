@@ -6,7 +6,7 @@ import { DEEP_LINK, SKIP_BOOT } from './core/deeplink.js';
 import { setupEnvironment }  from './scene/environment.js';
 import { buildWorld }        from './world/world.js';
 import { buildTablet }       from './scene/tablet.js';
-import { buildHoloSystem }   from './holo.js';
+import { buildHoloSystem, OVERLAY_LAYER } from './holo.js';
 import { buildCamera }       from './camera.js';
 import { createComposer }    from './postprocessing/composer.js';
 import { createTags }        from './ui/labels.js';
@@ -84,7 +84,16 @@ function build() {
     pMag.intensity  = 5.0 + 1.2 * Math.cos(time * 1.2);
     pAmb.intensity  = 2.5 + 0.8 * Math.sin(time * 0.9 + 1);
     holoSys.animateHolos(time);
+    // The world goes through the composer; the holograms are drawn on top afterwards, untouched by bokeh or bloom.
+    camera.layers.set(0);
     if (post) post.render(); else renderer.render(scene, camera);
+    camera.layers.set(OVERLAY_LAYER);
+    const bg = scene.background; scene.background = null;
+    renderer.autoClear = false;
+    renderer.render(scene, camera);
+    renderer.autoClear = true;
+    scene.background = bg;
+    camera.layers.enableAll();
     if (running) requestAnimationFrame(frame);
   }
 

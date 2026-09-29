@@ -340,11 +340,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
     }
     applyOrbit();
     tags.tick();
-    if (post) {
-      // Keep whatever cards are showing on the focal plane; they float in front of the orbit target.
-      const fp = holo.focusPoint();
-      post.setFocus(fp ? camera.position.distanceTo(fp) : cam.r, focus ? 0.0007 : 0.00025);
-    }
+    if (post) post.setFocus(cam.r, focus ? 0.0007 : 0.00025);
   }
 
   applyOrbit();

@@ -24,9 +24,14 @@ function texOf(c) {
   return t;
 }
 
-// Holograms are drawn last with no depth test, so a tall card never clips into the case or the monitor.
+// Holograms live on the overlay layer: main.js draws that layer after post processing, so the depth
+// of field and bloom never touch them, and no depth test means a tall card never clips into the case.
+export const OVERLAY_LAYER = 1;
 function onTop(obj, order = 20) {
-  obj.traverse((o) => { if (o.material) { o.material.depthTest = false; o.material.depthWrite = false; o.renderOrder = order; } });
+  obj.traverse((o) => {
+    o.layers.set(OVERLAY_LAYER);
+    if (o.material) { o.material.depthTest = false; o.material.depthWrite = false; o.renderOrder = order; }
+  });
   return obj;
 }
 
@@ -44,6 +49,7 @@ export function bulletsFor(role) {
 
 export function buildHoloSystem(scene, camera, haloTex, loader) {
   const holoGroup = new THREE.Group();
+  holoGroup.layers.set(OVERLAY_LAYER);
   scene.add(holoGroup);
 
   let HOLO_PICK = [];
@@ -58,15 +64,6 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
       });
       holoGroup.remove(c);
     }
-  }
-
-  // Where the depth of field should focus: the middle of the cards on show, or nothing when there are none.
-  const focusV = new THREE.Vector3();
-  function focusPoint() {
-    if (!HOLO_PICK.length) return null;
-    focusV.set(0, 0, 0);
-    for (const p of HOLO_PICK) focusV.add(p.getWorldPosition(new THREE.Vector3()));
-    return focusV.multiplyScalar(1 / HOLO_PICK.length);
   }
 
   function focusCard(idx) {
@@ -218,6 +215,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
 
   // Landing view: the intro panel and the experience timeline, both sized to their text.
   const introGroup = new THREE.Group();
+  introGroup.layers.set(OVERLAY_LAYER);
   scene.add(introGroup);
   let INTRO_PICK = [];
   let expRows = [];
@@ -359,7 +357,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
   }
 
   return {
-    buildProjectHolos, buildInfoHolo, clearHolos, animateHolos, handleHoloPick, handleIntroPick, focusCard, focusPoint, introGroup,
+    buildProjectHolos, buildInfoHolo, clearHolos, animateHolos, handleHoloPick, handleIntroPick, focusCard, introGroup,
     get HOLO_PICK() { return HOLO_PICK; }, get INTRO_PICK() { return INTRO_PICK; }
   };
 }
