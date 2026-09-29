@@ -16,6 +16,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
 
   let orbitAnim = null;
   let focus = null;
+  let curBlock = null;
   let busy = false;
   const depth = [];
 
@@ -86,6 +87,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
   function arrive(mount, dur = 1.4) {
     depth.push(mount.id);
     focus = mount;
+    curBlock = null;
     if (mount.kind === 'monitor') {
       const sw = monitor.screenWorld, n = monitor.screenNormal;
       orbitTo({ target: sw.clone(), r: mount.orbitR, theta: Math.atan2(n.x, n.z), phi: 1.45 }, dur);
@@ -110,12 +112,18 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
     updateNav();
   }
 
+  // Zoom to one block of the die and frame its card the way a device view frames its cards.
   function focusBlock(block) {
     if (!block || !focus) return;
-    orbitTo({ target: block.center.clone().add(new THREE.Vector3(0, 1.5, 0)), r: block.orbitR, theta: cam.theta, phi: 0.95 }, 0.8);
-    holo.buildProjectHolos([block.project], block.center.clone().add(new THREE.Vector3(0, 1.6, 0)), focus.accent, 2.4);
+    curBlock = block;
+    const scale = 2.4;
+    const base = block.center.clone().add(new THREE.Vector3(0, 1.6, 0));
+    const maxH = holo.buildProjectHolos([block.project], base, focus.accent, scale);
+    const target = base.clone().add(new THREE.Vector3(0, 0.55 * scale + maxH * 0.5, 0));
+    const r = Math.max(1.35 * maxH + 1.4, 5);
+    orbitTo({ target, r, theta: cam.theta, phi: 1.05 }, 0.9);
     if (tablet) tablet.select(block.idx);
-    setHint(`<b>${block.label || block.project.title}</b> · click the other block to switch`);
+    setHint(`<b>${block.label || block.project.title}</b> · click the card for its images · click the other block to switch`);
   }
 
   async function goTo(mountId) {
@@ -141,7 +149,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
     if (busy) return;
     const fromDie = focus?.kind === 'die';
     busy = true;
-    focus = null; depth.length = 0;
+    focus = null; depth.length = 0; curBlock = null;
     holo.clearHolos();
     monitor.setMode('home');
     if (tablet) tablet.hide();
@@ -213,6 +221,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
   const canvas = renderer.domElement;
   canvas.style.touchAction = 'none';
   const ray = new THREE.Raycaster(), ndc = new THREE.Vector2();
+  ray.layers.enableAll(); // holograms live on the overlay layer and must still be clickable
 
   function pickFrom(x, y, list) {
     ndc.x = (x / innerWidth) * 2 - 1; ndc.y = -(y / innerHeight) * 2 + 1;
@@ -280,7 +289,16 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
 
     // Cards float in front of everything, so they are tested before the die and the devices.
     const hH = holo.HOLO_PICK.length ? pickFrom(e.clientX, e.clientY, holo.HOLO_PICK) : [];
-    if (hH.length) { holo.handleHoloPick(hH[0].object); return; }
+    if (hH.length) {
+      const obj = hH[0].object;
+      if (focus?.kind === 'die' && focus.blocks) {
+        const slug = obj.userData.project?.slug;
+        const block = Object.values(focus.blocks).find((b) => b.project.slug === slug);
+        if (block && block !== curBlock) { focusBlock(block); return; }
+      }
+      holo.handleHoloPick(obj);
+      return;
+    }
 
     if (holo.introGroup.visible && holo.INTRO_PICK.length) {
       const hI = pickFrom(e.clientX, e.clientY, holo.INTRO_PICK);
