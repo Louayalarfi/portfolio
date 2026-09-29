@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-17T04:07:09.304Z",
+  "generatedAt": "2026-09-29T23:01:20.566Z",
   "source": "public/classic/index.html",
   "hero": {
     "name": "LAUAI ALERFI",
@@ -33,7 +33,7 @@
     {
       "accent": "green",
       "dates": "MAY 2025 to PRESENT",
-      "title": "Software / Systems Developer",
+      "title": "Software Developer",
       "org": "ECNG Energy Group",
       "desc": "AI invoice extraction service (Python, FastAPI, Claude API) feeding a C# billing app, 97% match across 265 utilities with a 22 invoice regression suite; daily IESO price alert pipeline with per client thresholds, in production since May 2026; Playwright portal automation across 110 customer accounts with zero errors; Selenium scraper fixes taking 208 monthly reports from 27 failures to zero; Microsoft Graph mailbox service filing utility reports into SQL Server.",
       "tags": [

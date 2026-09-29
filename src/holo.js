@@ -251,7 +251,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
       const paint = (measureOnly) => {
         g.fillStyle = '#c8893f'; g.font = "600 30px 'IBM Plex Mono',monospace"; g.fillText('// experience.log', 52, 84);
         g.fillStyle = '#e9eefb'; g.font = "700 56px 'Chakra Petch',sans-serif"; g.fillText('EXPERIENCE', 50, 148);
-        g.fillStyle = '#7286a8'; g.font = "400 22px 'IBM Plex Mono',monospace"; g.fillText('click a role for the details', 52, 186);
+        g.fillStyle = '#7286a8'; g.font = "400 22px 'IBM Plex Mono',monospace"; g.fillText('click the panel to zoom, a role for the details', 52, 186);
         let y = 250;
         const rail = 66, top = y - 30;
         EXPERIENCE.forEach((r, i) => {
@@ -297,7 +297,7 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
     const ix = -(ew + gapX) / 2, ex = (iw + gapX) / 2;
 
     const ip = new THREE.Mesh(new THREE.PlaneGeometry(iw, ih), new THREE.MeshBasicMaterial({ map: texOf(ic), transparent: true, depthWrite: false, side: THREE.DoubleSide }));
-    ip.position.set(ix, (ih - H) / 2, 0); introGroup.add(ip);
+    ip.position.set(ix, (ih - H) / 2, 0); ip.userData.intro = true; introGroup.add(ip); INTRO_PICK.push(ip);
     const ifr = new THREE.Mesh(new THREE.PlaneGeometry(iw + 0.1, ih + 0.1), new THREE.MeshBasicMaterial({ color: 0x4fd8e0, transparent: true, opacity: 0.12, blending: THREE.AdditiveBlending, depthWrite: false, side: THREE.DoubleSide }));
     ifr.position.set(ix, (ih - H) / 2, -0.01); introGroup.add(ifr);
     halo(THREE, haloTex, 0x4fd8e0, 0.8, ix - iw / 2, (ih - H) / 2 + ih / 2, 0.02, introGroup);
@@ -315,14 +315,20 @@ export function buildHoloSystem(scene, camera, haloTex, loader) {
   buildIntro();
   if (document.fonts?.ready) document.fonts.ready.then(buildIntro);
 
+  // A role row opens its details. Anywhere else on a landing panel asks the camera to zoom to that panel.
   function handleIntroPick(hit) {
-    if (!hit.object.userData.experience || !hit.uv) return false;
-    const y = (1 - hit.uv.y) * (expRows[0]?.h || 1);
-    const row = expRows.find((r) => y >= r.top && y <= r.bottom);
-    if (!row) return false;
-    const r = row.role;
-    window.__openDetail?.({ title: r.title, sub: r.org, dates: r.dates, bullets: bulletsFor(r), tags: r.tags });
-    return true;
+    const ud = hit.object.userData;
+    if (ud.experience && hit.uv) {
+      const y = (1 - hit.uv.y) * (expRows[0]?.h || 1);
+      const row = expRows.find((r) => y >= r.top && y <= r.bottom);
+      if (row) {
+        const r = row.role;
+        window.__openDetail?.({ title: r.title, sub: r.org, dates: r.dates, bullets: bulletsFor(r), tags: r.tags });
+        return true;
+      }
+    }
+    if (ud.experience || ud.intro) return { zoom: hit.object };
+    return false;
   }
 
   function animateHolos(time) {

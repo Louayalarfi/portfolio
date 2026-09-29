@@ -120,7 +120,7 @@ export const EXTRAS = [
 // Bullet points behind each role on the experience card, the same wording as the resume.
 // Keyed by the start of the role title on the classic page; anything not listed falls back to its description.
 export const EXPERIENCE_BULLETS = {
-  'Software / Systems Developer': { org: 'ECNG Energy Group', bullets: [
+  'Software Developer': { org: 'ECNG Energy Group', bullets: [
     'Built a Python FastAPI service on the Claude API that reads utility invoice PDFs for a production C# billing application, reaching a 97 percent match rate across 265 utilities, guarded by a 22 invoice regression suite run before every deploy',
     'Diagnosed three production failures in Selenium Python scrapers behind two factor login, adding session reauthentication, a grid paging fix, and stale file cleanup that took a monthly run of 208 utility reports from 27 failures to zero',
     'Automated a supplier portal monthly invoice and consumption downloads in VB.NET on .NET 8 with Playwright, covering 110 customer accounts and loading roughly 1,100 rows a month into SQL Server with zero errors',

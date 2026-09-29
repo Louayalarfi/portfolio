@@ -23,7 +23,7 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
   const hintEl = document.getElementById('hint');
   const backEl = document.getElementById('back');
   const crumbEl = document.getElementById('crumb');
-  const HOME_HINT = 'drag to look around · scroll to zoom · <b>click a glowing tag to open it</b>';
+  const HOME_HINT = 'drag to look around · scroll to zoom · <b>click a glowing tag or a panel to open it</b>';
 
   // The Back pill and the breadcrumb always say where you are and what Back will do.
   function updateNav() {
@@ -183,6 +183,20 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
     updateNav();
   }
 
+  // A click on one of the landing panels flies the camera up to it so the text is readable.
+  function zoomPanel(mesh) {
+    if (busy) return;
+    const v = new THREE.Vector3(); mesh.getWorldPosition(v);
+    const { width: w, height: h } = mesh.geometry.parameters;
+    const half = Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2);
+    const r = Math.max(1.5, (h / 2) / half * 1.15, (w / 2) / half / camera.aspect * 1.15);
+    const isExp = !!mesh.userData.experience;
+    focus = { id: 'intro:' + (isExp ? 'experience' : 'about'), kind: 'info', label: isExp ? 'Experience' : 'About' };
+    orbitTo({ target: v, r, theta: cam.theta, phi: cam.phi }, 0.9);
+    setHint(isExp ? 'click a role for its details · <b>Back</b> returns to the desk' : '<b>Back</b> returns to the desk');
+    updateNav();
+  }
+
   // Deep links: jump to a state and settle it so a screenshot is deterministic.
   function shot(link) {
     if (!link) return;
@@ -264,19 +278,24 @@ export function buildCamera(camera, renderer, world, holo, tablet, tags, post) {
       }
     }
 
-    if (focus?.kind === 'die' && world.die) {
-      ndc.x = (e.clientX / innerWidth) * 2 - 1; ndc.y = -(e.clientY / innerHeight) * 2 + 1;
-      ray.setFromCamera(ndc, camera);
-      const hits = ray.intersectObject(world.die.group, true);
-      if (hits.length) { focusBlock(world.blockAt(hits[0].point)); return; }
-    }
-
+    // Cards float in front of everything, so they are tested before the die and the devices.
     const hH = holo.HOLO_PICK.length ? pickFrom(e.clientX, e.clientY, holo.HOLO_PICK) : [];
     if (hH.length) { holo.handleHoloPick(hH[0].object); return; }
 
     if (holo.introGroup.visible && holo.INTRO_PICK.length) {
       const hI = pickFrom(e.clientX, e.clientY, holo.INTRO_PICK);
-      if (hI.length && holo.handleIntroPick(hI[0])) return;
+      if (hI.length) {
+        const r = holo.handleIntroPick(hI[0]);
+        if (r === true) return;
+        if (r?.zoom) { zoomPanel(r.zoom); return; }
+      }
+    }
+
+    if (focus?.kind === 'die' && world.die) {
+      ndc.x = (e.clientX / innerWidth) * 2 - 1; ndc.y = -(e.clientY / innerHeight) * 2 + 1;
+      ray.setFromCamera(ndc, camera);
+      const hits = ray.intersectObject(world.die.group, true);
+      if (hits.length) { const b = world.blockAt(hits[0].point); if (b) focusBlock(b); return; }
     }
 
     const hC = pickFrom(e.clientX, e.clientY, clickable);
